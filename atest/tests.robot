@@ -6,6 +6,7 @@ ${LIBRARY}    DynamicLibrary
 
 *** Test Cases ***
 Keyword names
+    Keyword in main
     Function
     FUNCTION
     Method

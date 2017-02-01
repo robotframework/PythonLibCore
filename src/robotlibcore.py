@@ -20,9 +20,10 @@ PY2 = sys.version_info < (3,)
 class HybridCore(object):
 
     def __init__(self, libraries):
-        self.keywords = dict(self._find_keywords(libraries))
+        self.keywords = dict(self._find_keywords(*libraries))
+        self.keywords.update(self._find_keywords(self))
 
-    def _find_keywords(self, libraries):
+    def _find_keywords(self, *libraries):
         for library in libraries:
             for name, func in self._get_members(library):
                 if callable(func) and hasattr(func, 'robot_name'):

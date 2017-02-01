@@ -22,6 +22,10 @@ class Names(object):
     def not_keyword(self):
         pass
 
+    @keyword
+    def keyword_in_main(self):
+        raise AssertionError('Should be overridden by the main library!')
+
 
 class Arguments(object):
 
