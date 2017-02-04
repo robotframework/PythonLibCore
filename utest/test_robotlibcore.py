@@ -33,6 +33,7 @@ def test_dir():
                 'get_keyword_arguments',
                 'get_keyword_documentation',
                 'get_keyword_names',
+                'get_keyword_tags',
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
@@ -47,6 +48,7 @@ def test_dir():
     assert [a for a in dir(DynamicLibrary()) if a[0] != '_'] == expected
     expected = [e for e in expected if e not in ('get_keyword_arguments',
                                                  'get_keyword_documentation',
+                                                 'get_keyword_tags',
                                                  'run_keyword')]
     assert [a for a in dir(HybridLibrary()) if a[0] != '_'] == expected
 
@@ -83,7 +85,17 @@ def test_get_keyword_documentation():
     assert doc('__init__') == 'Library init doc.'
 
 
-def test_tags():
+def test_embed_tags_to_doc_when_get_keyword_tags_is_not_called():
     doc = DynamicLibrary().get_keyword_documentation
     assert doc('tags') == 'Tags: tag, another tag'
     assert doc('doc_and_tags') == 'I got doc!\n\nTags: tag'
+
+
+def test_get_keyword_tags():
+    lib = DynamicLibrary()
+    tags = lib.get_keyword_tags
+    doc = lib.get_keyword_documentation
+    assert tags('tags') == ['tag', 'another tag']
+    assert tags('doc_and_tags') == ['tag']
+    assert doc('tags') == ''
+    assert doc('doc_and_tags') == 'I got doc!'
