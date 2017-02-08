@@ -93,3 +93,9 @@ class DynamicCore(HybridCore):
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
+
+
+class StaticCore(HybridCore):
+
+    def __init__(self):
+        HybridCore.__init__(self, [])

@@ -12,7 +12,7 @@ curdir = dirname(abspath(__file__))
 outdir = join(curdir, 'results')
 tests = join(curdir, 'tests.robot')
 sys.path.insert(0, join(curdir, '..', 'src'))
-for variant in ['Hybrid', 'Dynamic']:
+for variant in ['Hybrid', 'Dynamic', 'Static']:
     output = join(outdir, variant + '.xml')
     rc = run(tests, name=variant, variable='LIBRARY:%sLibrary' % variant,
              output=output, report=None, log=None)
@@ -20,7 +20,9 @@ for variant in ['Hybrid', 'Dynamic']:
         sys.exit(rc)
     process_output(output, verbose=False)
 print('\nCombining results.')
-rc = rebot(join(outdir, 'Hybrid.xml'), join(outdir, 'Dynamic.xml'),
+rc = rebot(join(outdir, 'Hybrid.xml'),
+           join(outdir, 'Dynamic.xml'),
+           join(outdir, 'Static.xml'),
            name='Acceptance Tests', outputdir=outdir)
 if rc == 0:
     print('\nAll tests passed/failed as expected.')
