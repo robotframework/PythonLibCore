@@ -26,6 +26,10 @@ class Names(object):
     def keyword_in_main(self):
         raise AssertionError('Should be overridden by the main library!')
 
+    @property
+    def dont_touch_property(self):
+        raise RuntimeError('Should not touch property!!')
+
 
 class Arguments(object):
 

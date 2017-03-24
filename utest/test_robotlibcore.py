@@ -1,4 +1,8 @@
+import sys
+
 import pytest
+
+from robotlibcore import HybridCore
 
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
@@ -60,9 +64,9 @@ def test_getattr():
         assert lib.function() == 1
         assert lib.method() == 2
         assert getattr(lib, 'Custom name')() == 3
-        with pytest.raises(AttributeError) as excinfo:
+        with pytest.raises(AttributeError) as exc_info:
             lib.attribute
-        assert str(excinfo.value) == \
+        assert str(exc_info.value) == \
             "'%s' object has no attribute 'attribute'" % type(lib).__name__
 
 
@@ -99,3 +103,20 @@ def test_get_keyword_tags():
     assert tags('doc_and_tags') == ['tag']
     assert doc('tags') == ''
     assert doc('doc_and_tags') == 'I got doc!'
+
+
+def test_library_cannot_be_class():
+    with pytest.raises(TypeError) as exc_info:
+        HybridCore([HybridLibrary])
+    assert str(exc_info.value) == \
+        "Libraries must be modules or instances, got class 'HybridLibrary' instead."
+
+
+@pytest.mark.skipif(sys.version_info[0] > 2, reason='Only applicable on Py 2')
+def test_library_cannot_be_old_style_class_instance():
+    class OldStyle:
+        pass
+    with pytest.raises(TypeError) as exc_info:
+        HybridCore([OldStyle()])
+    assert str(exc_info.value) == \
+           "Libraries must be modules or new-style class instances, got old-style class 'OldStyle' instead."
