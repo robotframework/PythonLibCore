@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Generic test library core for Robot Framework.
+
+Main usage is easing creating larger test libraries. For more information and
+examples see the project pages at
+https://github.com/robotframework/PythonLibCore
+"""
+
 import inspect
 import sys
 
@@ -29,6 +36,8 @@ except ImportError:  # Support RF < 2.9
 
 
 PY2 = sys.version_info < (3,)
+
+__version__ = '1.0rc1'
 
 
 class HybridCore(object):

@@ -4,7 +4,8 @@ Python Library Core
 Tools to ease creating larger test libraries for `Robot Framework`_ using
 Python.
 
-At the moment work-in-progress. Planned to be used with Selenium2Library.
+Code ought to be pretty much ready and it is already used by Selenium2Library.
+Better documentation and packaging still to do.
 
 Example
 -------
