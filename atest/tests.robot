@@ -12,6 +12,8 @@ Keyword names
     Method
     Custom name
     Cust omna me
+    Run Keyword If    $LIBRARY == "ExtendExistingLibrary"
+    ...    Keyword in extending library
 
 Method without @keyword are not keyowrds
     [Documentation]    FAIL    No keyword with name 'Not keyword' found.

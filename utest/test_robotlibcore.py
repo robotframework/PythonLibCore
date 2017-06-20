@@ -29,6 +29,7 @@ def test_keyword_names():
 def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
+                'add_library_components',
                 'all_arguments',
                 'class_attribute',
                 'defaults',
