@@ -16,7 +16,7 @@ class Names(object):
         return 2
 
     @keyword('Custom name')
-    def _whatever(self):
+    def _custom_name(self):
         return 3
 
     def not_keyword(self):

@@ -29,11 +29,18 @@ def test_keyword_names():
 def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
+                '_custom_name',
+                '_get_arg_spec',
+                '_get_keyword_tags_supported',
+                '_get_members',
+                '_get_members_from_instance',
                 'add_library_components',
                 'all_arguments',
+                'attributes',
                 'class_attribute',
                 'defaults',
                 'doc_and_tags',
+                'embedded',
                 'function',
                 'get_keyword_arguments',
                 'get_keyword_documentation',
@@ -50,12 +57,14 @@ def test_dir():
                 'run_keyword',
                 'tags',
                 'varargs_and_kwargs']
-    assert [a for a in dir(DynamicLibrary()) if a[0] != '_'] == expected
-    expected = [e for e in expected if e not in ('get_keyword_arguments',
+    assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
+    expected = [e for e in expected if e not in ('_get_arg_spec',
+                                                 '_get_keyword_tags_supported',
+                                                 'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
                                                  'run_keyword')]
-    assert [a for a in dir(HybridLibrary()) if a[0] != '_'] == expected
+    assert [a for a in dir(HybridLibrary()) if a[:2] != '__'] == expected
 
 
 def test_getattr():
@@ -64,11 +73,12 @@ def test_getattr():
         assert lib.instance_attribute == 'not keyword'
         assert lib.function() == 1
         assert lib.method() == 2
+        assert lib._custom_name() == 3
         assert getattr(lib, 'Custom name')() == 3
         with pytest.raises(AttributeError) as exc_info:
-            lib.attribute
+            lib.non_existing
         assert str(exc_info.value) == \
-            "'%s' object has no attribute 'attribute'" % type(lib).__name__
+            "'%s' object has no attribute 'non_existing'" % type(lib).__name__
 
 
 def test_get_keyword_arguments():
