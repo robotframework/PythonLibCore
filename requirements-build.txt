@@ -1,0 +1,8 @@
+# Requirements needed when generating releases. See BUILD.rst for details.
+invoke >= 0.20
+rellu >= 0.6
+twine
+wheel
+
+# Include other dev dependencies from requirements-dev.txt.
+-r requirements-dev.txt
