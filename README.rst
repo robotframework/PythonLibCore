@@ -4,7 +4,7 @@ Python Library Core
 Tools to ease creating larger test libraries for `Robot Framework`_ using
 Python.
 
-Code ought to be pretty much ready and it is already used by Selenium2Library.
+Code is stable and version 1.0 is already used by SeleniumLibrary_.
 Better documentation and packaging still to do.
 
 Example
@@ -61,3 +61,4 @@ Example
 
 
 .. _Robot Framework: http://robotframework.org
+.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/
