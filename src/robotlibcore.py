@@ -98,8 +98,8 @@ class HybridCore(object):
 class DynamicCore(HybridCore):
     _get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
 
-    def run_keyword(self, name, args, kwargs):
-        return self.keywords[name](*args, **kwargs)
+    def run_keyword(self, name, args, kwargs=None):
+        return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
         kw = self.keywords[name] if name != '__init__' else self.__init__
