@@ -100,6 +100,9 @@ class DynamicCore(HybridCore):
 
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
+    
+    def get_keyword_types(self, name):
+        return getattr(self, name).robot_types
 
     def get_keyword_arguments(self, name):
         kw = self.keywords[name] if name != '__init__' else self.__init__
