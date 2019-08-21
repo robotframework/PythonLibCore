@@ -11,7 +11,8 @@ class HybridLibrary(HybridCore):
         components = [librarycomponents,
                       librarycomponents.Names(),
                       librarycomponents.Arguments(),
-                      librarycomponents.DocsAndTags()]
+                      librarycomponents.DocsAndTags(),
+                      librarycomponents.RobotTypes()]
         HybridCore.__init__(self, components)
         self.instance_attribute = 'not keyword'
 

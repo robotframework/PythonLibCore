@@ -82,3 +82,18 @@ class DocsAndTags(object):
     @keyword(tags=['tag'])
     def doc_and_tags(self):
         """I got doc!"""
+
+
+class RobotTypes(object):
+
+    @keyword
+    def no_types(self):
+        pass
+
+    @keyword(types={'arg1': int})
+    def double_int_arg(self, arg1):
+        return arg1 * 2
+
+    @keyword(types={'arg1': float})
+    def double_float_arg(self, arg1):
+        return arg1 * 2

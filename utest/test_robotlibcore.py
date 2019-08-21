@@ -14,11 +14,14 @@ def test_keyword_names():
                 'all_arguments',
                 'defaults',
                 'doc_and_tags',
+                'double_float_arg',
+                'double_int_arg',
                 'function',
                 'keyword_in_main',
                 'mandatory',
                 'method',
                 'multi_line_doc',
+                'no_types',
                 'one_line_doc',
                 'tags',
                 'varargs_and_kwargs']
@@ -40,18 +43,22 @@ def test_dir():
                 'class_attribute',
                 'defaults',
                 'doc_and_tags',
+                'double_float_arg',
+                'double_int_arg',
                 'embedded',
                 'function',
                 'get_keyword_arguments',
                 'get_keyword_documentation',
                 'get_keyword_names',
                 'get_keyword_tags',
+                'get_keyword_types',
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
                 'mandatory',
                 'method',
                 'multi_line_doc',
+                'no_types',
                 'not_keyword_in_main',
                 'one_line_doc',
                 'run_keyword',
@@ -63,6 +70,7 @@ def test_dir():
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
+                                                 'get_keyword_types',
                                                  'run_keyword')]
     assert [a for a in dir(HybridLibrary()) if a[:2] != '__'] == expected
 
@@ -88,6 +96,13 @@ def test_get_keyword_arguments():
     assert args('varargs_and_kwargs') == ['*args', '**kws']
     assert args('all_arguments') == ['mandatory', 'default=value', '*varargs', '**kwargs']
     assert args('__init__') == ['arg=None']
+
+
+def test_get_keyword_types():
+    types = DynamicLibrary().get_keyword_types
+    assert types('no_types') == ()
+    assert types('double_int_arg') == {'arg1': int}
+    assert types('double_float_arg') == {'arg1': float}
 
 
 def test_get_keyword_documentation():

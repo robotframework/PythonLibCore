@@ -12,7 +12,8 @@ class DynamicLibrary(DynamicCore):
         components = [librarycomponents,
                       librarycomponents.Names(),
                       librarycomponents.Arguments(),
-                      librarycomponents.DocsAndTags()]
+                      librarycomponents.DocsAndTags(),
+                      librarycomponents.RobotTypes()]
         DynamicCore.__init__(self, components)
         self.instance_attribute = 'not keyword'
 
