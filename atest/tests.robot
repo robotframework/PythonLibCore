@@ -24,13 +24,13 @@ Arguments
     'foo', 'bar'           Mandatory    foo    bar
     'foo', 'default', 3    Defaults     foo
     'foo', 2, 3            Defaults     foo    ${2}
-    'a', 'b', 'c'          Defaults     a    b    c
+    'a', 'b', 3            Defaults     a    b    3
 
 Named arguments
     [Template]    Return value should be
     'foo', 'bar'           Mandatory    foo    arg2=bar
     '1', 2                 Mandatory    arg2=${2}    arg1=1
-    'x', 'default', 'y'    Defaults     x    arg3=y
+    'x', 'default', 4      Defaults     x    arg3=4
 
 Varargs and kwargs
     [Template]    Return value should be

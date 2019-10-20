@@ -6,6 +6,21 @@ from robotlibcore import HybridCore
 
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
+from DynamicLibraryAnnotations import DynamicLibraryAnnotations
+if sys.version_info[0] == 3:
+    from DynamicLibraryAnnotationPY3 import DynamicLibraryAnnotationsPY3
+else:
+    DynamicLibraryAnnotationsPY3 = object
+
+
+@pytest.fixture()
+def annotation_lib():
+    return DynamicLibraryAnnotations()
+
+
+@pytest.fixture()
+def annotation_lib_py3():
+    return DynamicLibraryAnnotationsPY3()
 
 
 def test_keyword_names():
@@ -31,6 +46,7 @@ def test_dir():
                 'Embedded arguments "${here}"',
                 '_custom_name',
                 '_get_arg_spec',
+                '_get_default_types',
                 '_get_keyword_tags_supported',
                 '_get_members',
                 '_get_members_from_instance',
@@ -46,6 +62,7 @@ def test_dir():
                 'get_keyword_documentation',
                 'get_keyword_names',
                 'get_keyword_tags',
+                'get_keyword_types',
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
@@ -64,6 +81,8 @@ def test_dir():
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
                                                  'run_keyword')]
+    expected.remove('get_keyword_types')
+    expected.remove('_get_default_types')
     assert [a for a in dir(HybridLibrary()) if a[:2] != '__'] == expected
 
 
@@ -121,6 +140,60 @@ def test_library_cannot_be_class():
         HybridCore([HybridLibrary])
     assert str(exc_info.value) == \
         "Libraries must be modules or instances, got class 'HybridLibrary' instead."
+
+
+@pytest.mark.skipif(sys.version_info[0] == 2, reason='Only applicable on Py 3')
+def test_get_keyword_types_typing(annotation_lib_py3):
+    types = annotation_lib_py3.get_keyword_types('kw_annotated_type')
+    assert types == {'arg': int}
+
+
+def test_get_keyword_types_no_args(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_no_args')
+    assert types == {}
+
+
+def test_get_keyword_types_no_type(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_no_type')
+    assert types == {}
+
+
+def test_get_keyword_types_from_deco_as_list(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_types_from_deco_as_list')
+    assert types == [int, list]
+
+
+def test_get_keyword_types_from_deco_as_dict(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_types_from_deco_as_dict')
+    assert types == {'arg1': int, 'arg2': bool}
+
+
+def test_get_keyword_types_from_default_type(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_types_from_default_type')
+    assert types == {'arg1': bool, 'arg2': type(None)}
+
+
+def test_get_keyword_types_from_default_varargs(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_types_from_varargs')
+    assert types == {'arg': bool, 'varargs': list}
+    assert False, 'Talk with Pekka about the correct type.'
+
+def test_get_keyword_types_from_default_kwargs(annotation_lib):
+    types = annotation_lib.get_keyword_types('kw_types_from_kwargs')
+    assert types == {'kwargs': dict}
+    assert False, 'Talk with Pekka about the correct type.'
+
+
+@pytest.mark.skipif(sys.version_info[0] == 2, reason='Only applicable on Py 3')
+def test_get_keyword_types_deco_and_typing(annotation_lib_py3):
+    types = annotation_lib_py3.get_keyword_types('kw_types_from_deco_and_annotation')
+    assert types == {'arg1': bool, 'arg2': bool}
+
+
+@pytest.mark.skipif(sys.version_info[0] == 2, reason='Only applicable on Py 3')
+def test_get_keyword_types_typing_and_default(annotation_lib_py3):
+    types = annotation_lib_py3.get_keyword_types('kw_annotated_type_with_default')
+    assert types == {'arg': str}
 
 
 @pytest.mark.skipif(sys.version_info[0] > 2, reason='Only applicable on Py 2')

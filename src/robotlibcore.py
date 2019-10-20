@@ -22,17 +22,7 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import sys
 
-try:
-    from robot.api.deco import keyword
-except ImportError:  # Support RF < 2.9
-    def keyword(name=None, tags=()):
-        if callable(name):
-            return keyword()(name)
-        def decorator(func):
-            func.robot_name = name
-            func.robot_tags = tags
-            return func
-        return decorator
+from robot.api.deco import keyword
 
 
 PY2 = sys.version_info < (3,)
@@ -140,6 +130,29 @@ class DynamicCore(HybridCore):
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
+
+    def get_keyword_types(self, name):
+        kw = self.keywords[name]
+        if hasattr(kw, 'robot_types'):
+            robot_types = getattr(kw, 'robot_types')
+            if robot_types:
+                return robot_types
+        default_types = self._get_default_types(kw)
+        if default_types:
+            return default_types
+        return {} if PY2 else kw.__annotations__
+
+    def _get_default_types(self, kw):
+        args, defaults, varargs, kwargs = self._get_arg_spec(kw)
+        default_types = {}
+        for name, value in defaults:
+            default_types[name] = type(value)
+        if varargs:
+            default_types[varargs] = list
+        if kwargs:
+            default_types[kwargs] = dict
+        if default_types:
+            return default_types
 
 
 class StaticCore(HybridCore):
