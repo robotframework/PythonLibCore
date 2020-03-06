@@ -26,3 +26,7 @@ jobs:
     - name: Run acceptance  tests
       run: |
         python atest/run.py
+    - uses: actions/upload-artifact@v1
+      with:
+        name: atest_results
+        path: atest/results
