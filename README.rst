@@ -7,7 +7,8 @@ Python.
 Code is stable and version 1.0 is already used by SeleniumLibrary_.
 Better documentation and packaging still to do.
 
-https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg
+.. image:: https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg
+   :target: https://github.com/robotframework/PythonLibCore
 
 Example
 -------
