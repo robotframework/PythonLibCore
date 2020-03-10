@@ -22,17 +22,19 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import sys
 
-try:
-    from robot.api.deco import keyword
-except ImportError:  # Support RF < 2.9
-    def keyword(name=None, tags=()):
+from robot.api.deco import keyword
+
+if not hasattr(keyword, 'robot_types'):
+    def keyword(name=None, tags=(), types=()):
         if callable(name):
             return keyword()(name)
 
         def decorator(func):
             func.robot_name = name
             func.robot_tags = tags
+            func.robot_types = types
             return func
+
         return decorator
 
 
@@ -141,6 +143,11 @@ class DynamicCore(HybridCore):
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
+
+    def get_keyword_types(self, keyword):
+        method = self.keywords.get(keyword)
+        if hasattr(method, 'robot_types'):
+            return method.robot_types
 
 
 class StaticCore(HybridCore):

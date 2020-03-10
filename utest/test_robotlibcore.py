@@ -46,6 +46,7 @@ def test_dir():
                 'get_keyword_documentation',
                 'get_keyword_names',
                 'get_keyword_tags',
+                'get_keyword_types',
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
@@ -63,7 +64,8 @@ def test_dir():
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
-                                                 'run_keyword')]
+                                                 'run_keyword',
+                                                 'get_keyword_types')]
     assert [a for a in dir(HybridLibrary()) if a[:2] != '__'] == expected
 
 
