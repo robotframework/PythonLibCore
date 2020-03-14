@@ -22,6 +22,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
         pip install robotframework==${{ matrix.rf-version }}
+    - name: Run flake8
+      run: |
+        flake8 --max-line-length=110 src/
     - name: Run unit tests
       run: |
         python utest/run.py
