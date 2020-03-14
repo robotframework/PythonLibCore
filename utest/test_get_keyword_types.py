@@ -69,7 +69,12 @@ def test_keyword_with_default_type(lib):
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_new_type(lib_types):
-    # UserId = NewType('UserId', int)
     types = lib_types.get_keyword_types('keyword_new_type')
     assert len(types) == 1
     assert types['arg']
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_retunr_type(lib_types):
+    types = lib_types.get_keyword_types('keyword_define_return_type')
+    assert types == {'arg': str}

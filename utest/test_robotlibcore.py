@@ -30,6 +30,7 @@ def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
                 '_custom_name',
+                '_get_annotations',
                 '_get_arg_spec',
                 '_get_keyword_tags_supported',
                 '_get_members',
@@ -60,7 +61,8 @@ def test_dir():
                 'tags',
                 'varargs_and_kwargs']
     assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
-    expected = [e for e in expected if e not in ('_get_arg_spec',
+    expected = [e for e in expected if e not in ('_get_annotations',
+                                                 '_get_arg_spec',
                                                  '_get_keyword_tags_supported',
                                                  '_get_robot_types',
                                                  'get_keyword_arguments',

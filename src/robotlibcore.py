@@ -140,9 +140,7 @@ class DynamicCore(HybridCore):
             if robot_types is None:
                 return {}
             return robot_types
-        if PY2:
-            return {}
-        return method.__annotations__
+        return self._get_annotations(method)
 
     def _get_robot_types(self, method):
         if hasattr(method, 'robot_types'):
@@ -150,6 +148,13 @@ class DynamicCore(HybridCore):
             if robot_types == tuple():
                 return False
             return robot_types
+
+    def _get_annotations(self, method):
+        if PY2:
+            return {}
+        annotations = method.__annotations__
+        annotations.pop('return', None)
+        return annotations
 
 
 class StaticCore(HybridCore):

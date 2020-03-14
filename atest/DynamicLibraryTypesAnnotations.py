@@ -1,5 +1,6 @@
 from typing import List, Union, NewType
 
+from robot.api import logger
 from robotlibcore import DynamicCore, keyword
 
 UserId = NewType('UserId', int)
@@ -27,3 +28,8 @@ class DynamicLibraryTypesAnnotations(DynamicCore):
     @keyword
     def keyword_new_type(self, arg: UserId):
         return arg
+
+    @keyword
+    def keyword_define_return_type(self, arg: str) -> None:
+        logger.info(arg)
+        return None
