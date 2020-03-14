@@ -1,8 +1,4 @@
-from typing import List
-
 from robotlibcore import DynamicCore, keyword
-
-import librarycomponents
 
 
 class DynamicLibraryTypes(DynamicCore):
@@ -27,11 +23,3 @@ class DynamicLibraryTypes(DynamicCore):
     @keyword
     def keyword_with_no_args(self):
         return False
-
-    @keyword
-    def keyword_with_one_annotation(self, arg: str):
-        return arg
-
-    @keyword
-    def keyword_with_multiple_annotations(self, arg1: str, arg2: List):
-        return arg1, arg2

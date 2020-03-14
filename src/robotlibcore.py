@@ -23,18 +23,7 @@ import inspect
 import sys
 
 
-def keyword(name=None, tags=(), types=()):  # TODO remove and import from RF when minimum RF version is 3.1
-    if callable(name):
-        return keyword()(name)
-
-    def decorator(func):
-        func.robot_name = name
-        func.robot_tags = tags
-        func.robot_types = types
-        return func
-
-    return decorator
-
+from robot.api.deco import keyword
 
 PY2 = sys.version_info < (3,)
 
@@ -144,13 +133,18 @@ class DynamicCore(HybridCore):
 
     def get_keyword_types(self, keyword):
         method = self.keywords.get(keyword)
+        robot_types = self._get_robot_types(method)
+        if not PY2 and robot_types is None:
+            return method.__annotations__
+        return robot_types
+
+    def _get_robot_types(self, method):
         if hasattr(method, 'robot_types'):
             robot_types = method.robot_types
             if robot_types == tuple():
-                return method.__annotations__
-            if robot_types is None:
-                return {}
+                return None
             return robot_types
+        return None
 
 
 class StaticCore(HybridCore):

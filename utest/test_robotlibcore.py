@@ -34,6 +34,7 @@ def test_dir():
                 '_get_keyword_tags_supported',
                 '_get_members',
                 '_get_members_from_instance',
+                '_get_robot_types',
                 'add_library_components',
                 'all_arguments',
                 'attributes',
@@ -61,6 +62,7 @@ def test_dir():
     assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
     expected = [e for e in expected if e not in ('_get_arg_spec',
                                                  '_get_keyword_tags_supported',
+                                                 '_get_robot_types',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
