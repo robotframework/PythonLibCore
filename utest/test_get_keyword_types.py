@@ -75,6 +75,12 @@ def test_keyword_new_type(lib_types):
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_retunr_type(lib_types):
+def test_keyword_return_type(lib_types):
     types = lib_types.get_keyword_types('keyword_define_return_type')
     assert types == {'arg': str}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_forward_references(lib_types):
+    types = lib_types.get_keyword_types('keyword_forward_references')
+    assert types == {'arg': 'WebDriver'}

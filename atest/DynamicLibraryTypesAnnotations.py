@@ -33,3 +33,7 @@ class DynamicLibraryTypesAnnotations(DynamicCore):
     def keyword_define_return_type(self, arg: str) -> None:
         logger.info(arg)
         return None
+
+    @keyword
+    def keyword_forward_references(self, arg: 'WebDriver'):
+        return arg
