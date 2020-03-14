@@ -154,6 +154,13 @@ class DynamicCore(HybridCore):
             return {}
         annotations = method.__annotations__
         annotations.pop('return', None)
+        if annotations == {}:
+            args, defaults, varargs, kwargs = self._get_arg_spec(method)
+            for default in defaults:
+                if default[1] is None:
+                    annotations[default[0]] = default[1]
+                else:
+                    annotations[default[0]] = type(default[1])
         return annotations
 
 

@@ -30,3 +30,7 @@ class DynamicLibraryTypes(DynamicCore):
     @keyword
     def keyword_default_types(self, arg=None):
         return arg
+
+    @keyword
+    def keyword_many_default_types(self, arg1=1, arg2='Foobar'):
+        return arg1, arg2

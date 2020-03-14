@@ -1,6 +1,8 @@
 from typing import List, Union, NewType
 
 from robot.api import logger
+from selenium.webdriver.chrome.webdriver import WebDriver
+
 from robotlibcore import DynamicCore, keyword
 
 UserId = NewType('UserId', int)
@@ -36,4 +38,12 @@ class DynamicLibraryTypesAnnotations(DynamicCore):
 
     @keyword
     def keyword_forward_references(self, arg: 'WebDriver'):
+        return arg
+
+    @keyword
+    def keyword_with_annotations_and_default(self, arg: str = 'Foobar'):
+        return arg
+
+    @keyword
+    def keyword_with_webdriver(self, arg: WebDriver):
         return arg

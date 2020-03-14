@@ -1,4 +1,5 @@
 import pytest
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from robotlibcore import PY2
 
@@ -64,7 +65,7 @@ def test_multiple_types(lib_types):
 
 def test_keyword_with_default_type(lib):
     types = lib.get_keyword_types('keyword_default_types')
-    assert types == {}
+    assert types == {'arg': None}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -84,3 +85,19 @@ def test_keyword_return_type(lib_types):
 def test_keyword_forward_references(lib_types):
     types = lib_types.get_keyword_types('keyword_forward_references')
     assert types == {'arg': 'WebDriver'}
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_annotation_and_default(lib_types):
+    types = lib_types.get_keyword_types('keyword_with_annotations_and_default')
+    assert types == {'arg': str}
+
+
+def test_keyword_with_many_defaults(lib):
+    types = lib.get_keyword_types('keyword_many_default_types')
+    assert types == {'arg1': int, 'arg2': str}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_annotation_and_default(lib_types):
+    types = lib_types.get_keyword_types('keyword_with_webdriver')
+    assert types == {'arg': WebDriver}
