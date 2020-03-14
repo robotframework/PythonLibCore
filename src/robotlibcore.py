@@ -23,7 +23,7 @@ import inspect
 import sys
 
 
-from robot.api.deco import keyword
+from robot.api.deco import keyword  # noqa F401
 
 PY2 = sys.version_info < (3,)
 
@@ -131,8 +131,8 @@ class DynamicCore(HybridCore):
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
 
-    def get_keyword_types(self, keyword):
-        method = self.keywords.get(keyword)
+    def get_keyword_types(self, keyword_name):
+        method = self.keywords.get(keyword_name)
         robot_types = self._get_robot_types(method)
         if not PY2 and robot_types is None:
             return method.__annotations__
