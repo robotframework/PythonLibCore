@@ -133,6 +133,8 @@ class DynamicCore(HybridCore):
 
     def get_keyword_types(self, keyword_name):
         method = self.keywords.get(keyword_name)
+        if not method:
+            raise ValueError('%s is not keyword.' % keyword_name)
         robot_types = self._get_robot_types(method)
         if not PY2 and robot_types is None:
             return method.__annotations__
@@ -144,7 +146,6 @@ class DynamicCore(HybridCore):
             if robot_types == tuple():
                 return None
             return robot_types
-        return None
 
 
 class StaticCore(HybridCore):

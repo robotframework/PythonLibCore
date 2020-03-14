@@ -39,6 +39,11 @@ def test_keyword_no_args(lib):
     assert types == {}
 
 
+def test_not_keyword(lib):
+    with pytest.raises(ValueError):
+        lib.get_keyword_types('not_keyword')
+
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_single_annotation(lib_types):
     types = lib_types.get_keyword_types('keyword_with_one_annotation')

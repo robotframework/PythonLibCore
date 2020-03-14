@@ -23,3 +23,6 @@ class DynamicLibraryTypes(DynamicCore):
     @keyword
     def keyword_with_no_args(self):
         return False
+
+    def not_keyword(self):
+        return False
