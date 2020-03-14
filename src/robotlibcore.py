@@ -136,15 +136,19 @@ class DynamicCore(HybridCore):
         if not method:
             raise ValueError('%s is not keyword.' % keyword_name)
         robot_types = self._get_robot_types(method)
-        if not PY2 and robot_types is None:
-            return method.__annotations__
-        return robot_types
+        if robot_types is not False:
+            if robot_types is None:
+                return {}
+            return robot_types
+        if PY2:
+            return {}
+        return method.__annotations__
 
     def _get_robot_types(self, method):
         if hasattr(method, 'robot_types'):
             robot_types = method.robot_types
             if robot_types == tuple():
-                return None
+                return False
             return robot_types
 
 

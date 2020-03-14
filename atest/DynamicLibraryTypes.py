@@ -26,3 +26,7 @@ class DynamicLibraryTypes(DynamicCore):
 
     def not_keyword(self):
         return False
+
+    @keyword
+    def keyword_default_types(self, arg=None):
+        return arg

@@ -3,7 +3,7 @@ import pytest
 from robotlibcore import PY2
 
 if not PY2:
-    from typing import List
+    from typing import List, Union
     from DynamicLibraryTypesAnnotations import DynamicLibraryTypesAnnotations
 
 from DynamicLibraryTypes import DynamicLibraryTypes
@@ -54,3 +54,22 @@ def test_single_annotation(lib_types):
 def test_multiple_annotations(lib_types):
     types = lib_types.get_keyword_types('keyword_with_multiple_annotations')
     assert types == {'arg1': str, 'arg2': List}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_multiple_types(lib_types):
+    types = lib_types.get_keyword_types('keyword_multiple_types')
+    assert types == {'arg': Union[List, None]}
+
+
+def test_keyword_with_default_type(lib):
+    types = lib.get_keyword_types('keyword_default_types')
+    assert types == {}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_new_type(lib_types):
+    # UserId = NewType('UserId', int)
+    types = lib_types.get_keyword_types('keyword_new_type')
+    assert len(types) == 1
+    assert types['arg']

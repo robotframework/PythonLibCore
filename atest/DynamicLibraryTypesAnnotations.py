@@ -1,6 +1,8 @@
-from typing import List
+from typing import List, Union, NewType
 
 from robotlibcore import DynamicCore, keyword
+
+UserId = NewType('UserId', int)
 
 
 class DynamicLibraryTypesAnnotations(DynamicCore):
@@ -17,3 +19,11 @@ class DynamicLibraryTypesAnnotations(DynamicCore):
     @keyword
     def keyword_with_multiple_annotations(self, arg1: str, arg2: List):
         return arg1, arg2
+
+    @keyword
+    def keyword_multiple_types(self, arg: Union[List, None]):
+        return arg
+
+    @keyword
+    def keyword_new_type(self, arg: UserId):
+        return arg
