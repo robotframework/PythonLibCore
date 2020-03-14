@@ -25,6 +25,7 @@ jobs:
     - name: Run flake8
       run: |
         flake8 --max-line-length=110 src/
+      if: matrix.python-version != '2.7'
     - name: Run unit tests
       run: |
         python utest/run.py
