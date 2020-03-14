@@ -16,7 +16,7 @@ Keyword names
     ...    Keyword in extending library
 
 Method without @keyword are not keyowrds
-    [Documentation]    FAIL    No keyword with name 'Not keyword' found.
+    [Documentation]    FAIL GLOB:    No keyword with name 'Not keyword' found.*
     Not keyword
 
 Arguments
