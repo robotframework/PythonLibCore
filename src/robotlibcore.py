@@ -151,9 +151,10 @@ class DynamicCore(HybridCore):
 
     def _get_annotations(self, method):
         if PY2:
-            return {}
-        annotations = method.__annotations__
-        annotations.pop('return', None)
+            annotations = {}
+        else:
+            annotations = method.__annotations__
+            annotations.pop('return', None)
         if annotations == {}:
             args, defaults, varargs, kwargs = self._get_arg_spec(method)
             for default in defaults:
