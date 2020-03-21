@@ -21,6 +21,10 @@ https://github.com/robotframework/PythonLibCore
 
 import inspect
 import sys
+try:
+    import typing
+except ImportError:
+    typing = None
 
 
 from robot.api.deco import keyword  # noqa F401
@@ -153,7 +157,7 @@ class DynamicCore(HybridCore):
         if PY2:
             annotations = {}
         else:
-            annotations = method.__annotations__
+            annotations = typing.get_type_hints(method)
             annotations.pop('return', None)
         if annotations == {}:
             args, defaults, varargs, kwargs = self._get_arg_spec(method)
