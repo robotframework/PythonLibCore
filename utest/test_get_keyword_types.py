@@ -7,12 +7,12 @@ if not PY2:
     from typing import List, Union
     from DynamicLibraryTypesAnnotations import DynamicLibraryTypesAnnotations
 
-from DynamicLibraryTypes import DynamicLibraryTypes
+from DynamicTypesLibrary import DynamicTypesLibrary
 
 
 @pytest.fixture(scope='module')
 def lib():
-    return DynamicLibraryTypes()
+    return DynamicTypesLibrary()
 
 
 @pytest.fixture(scope='module')
@@ -45,6 +45,16 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
+def test_keyword_booleans(lib):
+    types = lib.get_keyword_types('keyword_booleans')
+    assert types == {'arg1': bool, 'arg2': bool}
+
+
+def test_keyword_none(lib):
+    types = lib.get_keyword_types('keyword_none')
+    assert types == {}
+
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_single_annotation(lib_types):
     types = lib_types.get_keyword_types('keyword_with_one_annotation')
@@ -65,7 +75,7 @@ def test_multiple_types(lib_types):
 
 def test_keyword_with_default_type(lib):
     types = lib.get_keyword_types('keyword_default_types')
-    assert types == {'arg': None}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -86,6 +96,7 @@ def test_keyword_forward_references(lib_types):
     types = lib_types.get_keyword_types('keyword_forward_references')
     assert types == {'arg': 'WebDriver'}
 
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_with_annotation_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_with_annotations_and_default')
@@ -94,7 +105,7 @@ def test_keyword_with_annotation_and_default(lib_types):
 
 def test_keyword_with_many_defaults(lib):
     types = lib.get_keyword_types('keyword_many_default_types')
-    assert types == {'arg1': int, 'arg2': str}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')

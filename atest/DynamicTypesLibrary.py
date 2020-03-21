@@ -1,7 +1,7 @@
 from robotlibcore import DynamicCore, keyword
 
 
-class DynamicLibraryTypes(DynamicCore):
+class DynamicTypesLibrary(DynamicCore):
 
     def __init__(self, arg=None):
         DynamicCore.__init__(self, [])
@@ -34,3 +34,11 @@ class DynamicLibraryTypes(DynamicCore):
     @keyword
     def keyword_many_default_types(self, arg1=1, arg2='Foobar'):
         return arg1, arg2
+
+    @keyword
+    def keyword_booleans(self, arg1=True, arg2=False):
+        return arg1, arg2
+
+    @keyword
+    def keyword_none(self, arg=None):
+        return arg
