@@ -8,7 +8,7 @@ from robotlibcore import DynamicCore, keyword
 UserId = NewType('UserId', int)
 
 
-class DynamicLibraryTypesAnnotations(DynamicCore):
+class DynamicTypesAnnotationsLibrary(DynamicCore):
 
     def __init__(self, arg=None):
         DynamicCore.__init__(self, [])

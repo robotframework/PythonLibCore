@@ -1,3 +1,5 @@
+import sys
+
 from robotlibcore import DynamicCore, keyword
 
 
@@ -42,3 +44,7 @@ class DynamicTypesLibrary(DynamicCore):
     @keyword
     def keyword_none(self, arg=None):
         return '%s: %s' % (arg, type(arg))
+
+    @keyword
+    def is_python_3(self):
+        return sys.version_info >= (3,)

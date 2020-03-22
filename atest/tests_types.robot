@@ -1,5 +1,6 @@
 *** Settings ***
 Library        DynamicTypesLibrary.py
+Suite Setup    Import DynamicTypesAnnotationsLibrary In Python 3 Only
 
 *** Test Cases ***
 Keyword Default Argument As Abject None
@@ -25,3 +26,24 @@ Keyword Default As Booleans With Strings
 Keyword Default As Booleans With Objects
     ${return} =    DynamicTypesLibrary.Keyword Booleans    ${False}    ${True}
     Should Match Regexp    ${return}    False: <(class|type) 'bool'>, True: <(class|type) 'bool'>
+
+Keyword Annonations And Bool Defaults Using Default
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    42
+    Should Match Regexp    ${return}    42: <(class|type) 'int'>, False: <(class|type) 'bool'>
+
+Keyword Annonations And Bool Defaults Defining All Arguments
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    1    true
+    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+
+Keyword Annonations And Bool Defaults Defining All Arguments And With Number
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    ${1}    true
+    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+
+*** Keywords ***
+Import DynamicTypesAnnotationsLibrary In Python 3 Only
+    ${py3} =    DynamicTypesLibrary.Is Python 3
+    Run Keyword If     ${py3}
+    ...    Import Library      DynamicTypesAnnotationsLibrary.py

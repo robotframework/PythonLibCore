@@ -5,7 +5,7 @@ from robotlibcore import PY2
 
 if not PY2:
     from typing import List, Union
-    from DynamicLibraryTypesAnnotations import DynamicLibraryTypesAnnotations
+    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 from DynamicTypesLibrary import DynamicTypesLibrary
 
@@ -17,7 +17,7 @@ def lib():
 
 @pytest.fixture(scope='module')
 def lib_types():
-    return DynamicLibraryTypesAnnotations()
+    return DynamicTypesAnnotationsLibrary()
 
 
 def test_using_keyword_types(lib):
