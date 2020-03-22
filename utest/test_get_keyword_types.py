@@ -109,6 +109,12 @@ def test_keyword_with_many_defaults(lib):
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_with_annotation_and_default(lib_types):
+def test_keyword_with_annotation_external_class(lib_types):
     types = lib_types.get_keyword_types('keyword_with_webdriver')
     assert types == {'arg': WebDriver}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_annotation_and_default(lib_types):
+    types = lib_types.get_keyword_types('keyword_default_and_annotation')
+    assert types == {'arg1': int, 'arg2': bool}

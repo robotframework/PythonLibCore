@@ -47,3 +47,7 @@ class DynamicLibraryTypesAnnotations(DynamicCore):
     @keyword
     def keyword_with_webdriver(self, arg: WebDriver):
         return arg
+
+    @keyword
+    def keyword_default_and_annotation(self, arg1: int, arg2=False) -> str:
+        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))

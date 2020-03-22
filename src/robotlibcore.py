@@ -159,10 +159,10 @@ class DynamicCore(HybridCore):
         else:
             annotations = typing.get_type_hints(method)
             annotations.pop('return', None)
-        if annotations == {}:
-            args, defaults, varargs, kwargs = self._get_arg_spec(method)
-            for default in defaults:
-                if default[1] is False or default[1] is True or default[1] is None:
+        args, defaults, varargs, kwargs = self._get_arg_spec(method)
+        for default in defaults:
+            if default[1] is False or default[1] is True or default[1] is None:
+                if default[0] not in annotations:
                     annotations[default[0]] = type(default[1])
         return annotations
 
