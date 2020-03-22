@@ -4,15 +4,15 @@ Library        DynamicTypesLibrary.py
 *** Test Cases ***
 Keyword Default Argument As Abject None
     ${return} =    DynamicTypesLibrary.Keyword None    ${None}
-    Should Be Equal    ${return}    ${None}
+    Should Be Equal    ${return}    None: <class 'NoneType'>
 
 Keyword Default Argument As Abject None Default Value
     ${return} =    DynamicTypesLibrary.Keyword None
-    Should Be Equal    ${return}    ${None}
+    Should Be Equal    ${return}    None: <class 'NoneType'>
 
 Keyword Default Argument As String None
     ${return} =    DynamicTypesLibrary.Keyword None    None
-    Should Be Equal    ${return}    None
+    Should Be Equal    ${return}    None: <class 'NoneType'>
 
 Keyword Default As Booleans With Defaults
     ${arg1}    ${arg2} =    DynamicTypesLibrary.Keyword Booleans

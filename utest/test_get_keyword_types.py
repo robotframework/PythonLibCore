@@ -52,7 +52,7 @@ def test_keyword_booleans(lib):
 
 def test_keyword_none(lib):
     types = lib.get_keyword_types('keyword_none')
-    assert types == {}
+    assert types == {'arg': type(None)}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -75,7 +75,7 @@ def test_multiple_types(lib_types):
 
 def test_keyword_with_default_type(lib):
     types = lib.get_keyword_types('keyword_default_types')
-    assert types == {}
+    assert types == {'arg': type(None)}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')

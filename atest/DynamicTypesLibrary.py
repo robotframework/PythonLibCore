@@ -41,4 +41,4 @@ class DynamicTypesLibrary(DynamicCore):
 
     @keyword
     def keyword_none(self, arg=None):
-        return arg
+        return '%s: %s' % (arg, type(arg))

@@ -162,7 +162,7 @@ class DynamicCore(HybridCore):
         if annotations == {}:
             args, defaults, varargs, kwargs = self._get_arg_spec(method)
             for default in defaults:
-                if default[1] is False or default[1] is True:
+                if default[1] is False or default[1] is True or default[1] is None:
                     annotations[default[0]] = type(default[1])
         return annotations
 
