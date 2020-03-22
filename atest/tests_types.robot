@@ -15,16 +15,13 @@ Keyword Default Argument As String None
     Should Match Regexp    ${return}    None: <(class|type) 'NoneType'>
 
 Keyword Default As Booleans With Defaults
-    ${arg1}    ${arg2} =    DynamicTypesLibrary.Keyword Booleans
-    Should Be Equal    ${arg1}    ${True}
-    Should Be Equal    ${arg2}    ${False}
+    ${return}    DynamicTypesLibrary.Keyword Booleans
+    Should Match Regexp    ${return}    True: <(class|type) 'bool'>, False: <(class|type) 'bool'>
 
 Keyword Default As Booleans With Strings
-    ${arg1}    ${arg2} =    DynamicTypesLibrary.Keyword Booleans    False    True
-    Should Be Equal    ${arg1}    ${False}
-    Should Be Equal    ${arg2}    ${True}
+    ${return} =    DynamicTypesLibrary.Keyword Booleans    False    True
+    Should Match Regexp    ${return}    False: <(class|type) 'bool'>, True: <(class|type) 'bool'>
 
 Keyword Default As Booleans With Objects
-    ${arg1}    ${arg2} =    DynamicTypesLibrary.Keyword Booleans    ${False}    ${True}
-    Should Be Equal    ${arg1}    ${False}
-    Should Be Equal    ${arg2}    ${True}
+    ${return} =    DynamicTypesLibrary.Keyword Booleans    ${False}    ${True}
+    Should Match Regexp    ${return}    False: <(class|type) 'bool'>, True: <(class|type) 'bool'>

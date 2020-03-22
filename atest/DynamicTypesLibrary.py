@@ -37,7 +37,7 @@ class DynamicTypesLibrary(DynamicCore):
 
     @keyword
     def keyword_booleans(self, arg1=True, arg2=False):
-        return arg1, arg2
+        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
 
     @keyword
     def keyword_none(self, arg=None):
