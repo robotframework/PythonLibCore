@@ -51,7 +51,7 @@ Keyword Annonations And Robot Types Disbales Argument Conversion
 Keyword Annonations And Robot Types Defined
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types And Bool Defaults    tidii    111
-    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+    Should Match Regexp    ${return}    tidii: <(class|type) 'str'>, 111: <(class|type) 'str'>
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
