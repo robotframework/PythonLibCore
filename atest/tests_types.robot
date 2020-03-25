@@ -42,6 +42,17 @@ Keyword Annonations And Bool Defaults Defining All Arguments And With Number
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    ${1}    true
     Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
 
+Keyword Annonations And Robot Types Disbales Argument Conversion
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types Disabled And Annotations    111
+    Should Match Regexp    ${return}    111: <(class|type) 'str'>
+
+
+Keyword Annonations And Robot Types Defined
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types And Bool Defaults    tidii    111
+    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3
