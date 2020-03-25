@@ -1,11 +1,17 @@
 from typing import List, Union, NewType
 
 from robot.api import logger
-from selenium.webdriver.chrome.webdriver import WebDriver
 
 from robotlibcore import DynamicCore, keyword
 
 UserId = NewType('UserId', int)
+
+
+class CustomObject(object):
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 
 class DynamicTypesAnnotationsLibrary(DynamicCore):
@@ -37,7 +43,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return None
 
     @keyword
-    def keyword_forward_references(self, arg: 'WebDriver'):
+    def keyword_forward_references(self, arg: 'CustomObject'):
         return arg
 
     @keyword
@@ -45,9 +51,21 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return arg
 
     @keyword
-    def keyword_with_webdriver(self, arg: WebDriver):
+    def keyword_with_webdriver(self, arg: CustomObject):
         return arg
 
     @keyword
     def keyword_default_and_annotation(self, arg1: int, arg2=False) -> str:
+        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
+
+    @keyword(types={'arg': str})
+    def keyword_robot_types_and_annotations(self, arg: int):
+        return '%s: %s' % (arg, type(arg))
+
+    @keyword(types=None)
+    def keyword_robot_types_disabled_and_annotations(self, arg: int):
+        return '%s: %s' % (arg, type(arg))
+
+    @keyword(types={'arg1': str})
+    def keyword_robot_types_and_bool_defaults(self, arg1, arg2=False):
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))

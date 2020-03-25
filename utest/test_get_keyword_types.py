@@ -1,11 +1,12 @@
 import pytest
-from selenium.webdriver.chrome.webdriver import WebDriver
+
 
 from robotlibcore import PY2
 
 if not PY2:
     from typing import List, Union
     from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
+    from DynamicTypesAnnotationsLibrary import CustomObject
 
 from DynamicTypesLibrary import DynamicTypesLibrary
 
@@ -27,7 +28,12 @@ def test_using_keyword_types(lib):
 
 def test_types_disabled(lib):
     types = lib.get_keyword_types('keyword_with_disabled_types')
-    assert types == {}
+    assert types is None
+
+
+def test_keyword_types_and_bool_default(lib):
+    types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
+    assert types == {'arg1': str, 'arg2': bool}
 
 
 def test_one_keyword_type_defined(lib):
@@ -94,7 +100,7 @@ def test_keyword_return_type(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_forward_references(lib_types):
     types = lib_types.get_keyword_types('keyword_forward_references')
-    assert types == {'arg': WebDriver}
+    assert types == {'arg': CustomObject}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -111,10 +117,28 @@ def test_keyword_with_many_defaults(lib):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_with_annotation_external_class(lib_types):
     types = lib_types.get_keyword_types('keyword_with_webdriver')
-    assert types == {'arg': WebDriver}
+    assert types == {'arg': CustomObject}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_with_annotation_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_default_and_annotation')
     assert types == {'arg1': int, 'arg2': bool}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_robot_types_and_annotations(lib_types):
+    types = lib_types.get_keyword_types('keyword_robot_types_and_annotations')
+    assert types == {'arg': str}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_robot_types_and_annotations(lib_types):
+    types = lib_types.get_keyword_types('keyword_robot_types_disabled_and_annotations')
+    assert types is None
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_robot_types_and_annotations(lib_types):
+    types = lib_types.get_keyword_types('keyword_robot_types_and_bool_defaults')
+    assert types == {'arg1': str, 'arg2': bool}

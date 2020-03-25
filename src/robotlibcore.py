@@ -139,27 +139,24 @@ class DynamicCore(HybridCore):
         method = self.keywords.get(keyword_name)
         if not method:
             raise ValueError('%s is not keyword.' % keyword_name)
-        robot_types = self._get_robot_types(method)
-        if robot_types is not False:
-            if robot_types is None:
-                return {}
+        robot_types = getattr(method, 'robot_types', ())
+        if robot_types is None:
             return robot_types
-        return self._get_annotations(method)
-
-    def _get_robot_types(self, method):
-        if hasattr(method, 'robot_types'):
-            robot_types = method.robot_types
-            if robot_types == tuple():
-                return False
-            return robot_types
+        annotations = self._get_annotations(method)
+        types = self._join_defaults_with_annotations(method, annotations)
+        if robot_types:
+            types.update(robot_types)
+        return types
 
     def _get_annotations(self, method):
         if PY2:
-            annotations = {}
-        else:
-            annotations = typing.get_type_hints(method)
-            annotations.pop('return', None)
-        args, defaults, varargs, kwargs = self._get_arg_spec(method)
+            return {}
+        annotations = typing.get_type_hints(method)
+        annotations.pop('return', None)
+        return annotations
+
+    def _join_defaults_with_annotations(self, method, annotations):
+        _, defaults, _, _ = self._get_arg_spec(method)
         for default in defaults:
             if default[1] is False or default[1] is True or default[1] is None:
                 if default[0] not in annotations:

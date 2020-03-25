@@ -14,6 +14,10 @@ class DynamicTypesLibrary(DynamicCore):
     def keyword_with_types(self, arg1):
         return arg1
 
+    @keyword(types={'arg1': str})
+    def keyword_robot_types_and_bool_default(self, arg1, arg2=False):
+        return arg1, arg2
+
     @keyword(types=None)
     def keyword_with_disabled_types(self, arg1):
         return arg1
