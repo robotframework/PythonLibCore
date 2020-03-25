@@ -5,7 +5,7 @@ from robotlibcore import DynamicCore, keyword
 
 class DynamicTypesLibrary(DynamicCore):
 
-    def __init__(self, arg=None):
+    def __init__(self, arg=False):
         DynamicCore.__init__(self, [])
         self.instance_attribute = 'not keyword'
         self.arg = arg

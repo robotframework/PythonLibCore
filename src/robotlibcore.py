@@ -137,6 +137,10 @@ class DynamicCore(HybridCore):
 
     def get_keyword_types(self, keyword_name):
         method = self.keywords.get(keyword_name)
+        if keyword_name == '__init__':
+            method = self.__init__
+        elif keyword_name.startswith('__') and keyword_name.endswith('__'):
+            return {}
         if not method:
             raise ValueError('%s is not keyword.' % keyword_name)
         robot_types = getattr(method, 'robot_types', ())

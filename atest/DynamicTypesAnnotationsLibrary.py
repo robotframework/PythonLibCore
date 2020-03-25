@@ -16,7 +16,7 @@ class CustomObject(object):
 
 class DynamicTypesAnnotationsLibrary(DynamicCore):
 
-    def __init__(self, arg=None):
+    def __init__(self, arg: str):
         DynamicCore.__init__(self, [])
         self.instance_attribute = 'not keyword'
         self.arg = arg

@@ -18,7 +18,7 @@ def lib():
 
 @pytest.fixture(scope='module')
 def lib_types():
-    return DynamicTypesAnnotationsLibrary()
+    return DynamicTypesAnnotationsLibrary('aaa')
 
 
 def test_using_keyword_types(lib):
@@ -142,3 +142,19 @@ def test_keyword_with_robot_types_and_annotations(lib_types):
 def test_keyword_with_robot_types_and_annotations(lib_types):
     types = lib_types.get_keyword_types('keyword_robot_types_and_bool_defaults')
     assert types == {'arg1': str, 'arg2': bool}
+
+
+def test_init_args(lib):
+    types = lib.get_keyword_types('__init__')
+    assert types == {'arg': bool}
+
+
+def test_dummy_magic_method(lib):
+    types = lib.get_keyword_types('__foobar__')
+    assert types == {}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_init_args_with_annotation(lib_types):
+    types = lib_types.get_keyword_types('__init__')
+    assert types == {'arg': str}
