@@ -136,13 +136,9 @@ class DynamicCore(HybridCore):
         return doc
 
     def get_keyword_types(self, keyword_name):
-        method = self.keywords.get(keyword_name)
-        if keyword_name == '__init__':
-            method = self.__init__
-        elif keyword_name.startswith('__') and keyword_name.endswith('__'):
-            return {}
-        if not method:
-            raise ValueError('Keyword "%s" not found.' % keyword_name)
+        method = self.__get_keyword(keyword_name)
+        if method == {}:
+            return method
         types = getattr(method, 'robot_types', ())
         if types is None:
             return types
@@ -150,6 +146,16 @@ class DynamicCore(HybridCore):
             types = self.__get_typing_hints(method)
         types = self.__join_defaults_with_types(method, types)
         return types
+
+    def __get_keyword(self, keyword_name):
+        if keyword_name == '__init__':
+            return self.__init__
+        if keyword_name.startswith('__') and keyword_name.endswith('__'):
+            return {}
+        method = self.keywords.get(keyword_name)
+        if not method:
+            raise ValueError('Keyword "%s" not found.' % keyword_name)
+        return method
 
     def __get_typing_hints(self, method):
         if PY2:

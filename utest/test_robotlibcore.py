@@ -30,6 +30,7 @@ def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
                 '_DynamicCore__get_arg_spec',
+                '_DynamicCore__get_keyword',
                 '_DynamicCore__get_keyword_tags_supported',
                 '_DynamicCore__get_typing_hints',
                 '_DynamicCore__join_defaults_with_types',
@@ -63,6 +64,7 @@ def test_dir():
     assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
     expected = [e for e in expected if e not in ('_DynamicCore__get_typing_hints',
                                                  '_DynamicCore__get_arg_spec',
+                                                 '_DynamicCore__get_keyword',
                                                  '_DynamicCore__get_keyword_tags_supported',
                                                  '_DynamicCore__join_defaults_with_types',
                                                  'get_keyword_arguments',
