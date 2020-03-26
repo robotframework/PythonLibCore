@@ -161,13 +161,12 @@ class DynamicCore(HybridCore):
         hints.pop('return', None)
         return hints
 
-    def __join_defaults_with_types(self, method, annotations):
+    def __join_defaults_with_types(self, method, types):
         _, defaults, _, _ = self.__get_arg_spec(method)
-        for default in defaults:
-            if default[1] is False or default[1] is True or default[1] is None:
-                if default[0] not in annotations:
-                    annotations[default[0]] = type(default[1])
-        return annotations
+        for name, value in defaults:
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
+        return types
 
 
 class StaticCore(HybridCore):
