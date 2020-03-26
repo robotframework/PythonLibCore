@@ -142,7 +142,7 @@ class DynamicCore(HybridCore):
         elif keyword_name.startswith('__') and keyword_name.endswith('__'):
             return {}
         if not method:
-            raise ValueError('%s is not keyword.' % keyword_name)
+            raise ValueError('Keyword "%s" not found.' % keyword_name)
         types = getattr(method, 'robot_types', ())
         if types is None:
             return types
