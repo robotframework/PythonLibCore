@@ -154,7 +154,10 @@ class DynamicCore(HybridCore):
     def __get_typing_hints(self, method):
         if PY2:
             return {}
-        hints = typing.get_type_hints(method)
+        try:
+            hints = typing.get_type_hints(method)
+        except Exception:
+            hints = method.__annotations__
         hints.pop('return', None)
         return hints
 

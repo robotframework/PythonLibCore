@@ -133,13 +133,13 @@ def test_keyword_with_robot_types_and_annotations(lib_types):
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_with_robot_types_and_annotations(lib_types):
+def test_keyword_with_robot_types_disbaled_and_annotations(lib_types):
     types = lib_types.get_keyword_types('keyword_robot_types_disabled_and_annotations')
     assert types is None
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_with_robot_types_and_annotations(lib_types):
+def test_keyword_with_robot_types_and_bool_annotations(lib_types):
     types = lib_types.get_keyword_types('keyword_robot_types_and_bool_defaults')
     assert types == {'arg1': str, 'arg2': bool}
 
@@ -158,3 +158,9 @@ def test_dummy_magic_method(lib):
 def test_init_args_with_annotation(lib_types):
     types = lib_types.get_keyword_types('__init__')
     assert types == {'arg': str}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_exception_in_annotations(lib_types):
+    types = lib_types.get_keyword_types('keyword_exception_annotations')
+    assert types == {'arg': 'NotHere'}

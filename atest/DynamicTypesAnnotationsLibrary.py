@@ -69,3 +69,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword(types={'arg1': str})
     def keyword_robot_types_and_bool_defaults(self, arg1, arg2=False):
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
+
+    @keyword
+    def keyword_exception_annotations(self, arg: 'NotHere'):
+        return arg
