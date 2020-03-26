@@ -147,16 +147,16 @@ class DynamicCore(HybridCore):
         if types is None:
             return types
         if not types:
-            types = self.__get_annotations(method)
+            types = self.__get_typing_hints(method)
         types = self.__join_defaults_with_types(method, types)
         return types
 
-    def __get_annotations(self, method):
+    def __get_typing_hints(self, method):
         if PY2:
             return {}
-        annotations = typing.get_type_hints(method)
-        annotations.pop('return', None)
-        return annotations
+        hints = typing.get_type_hints(method)
+        hints.pop('return', None)
+        return hints
 
     def __join_defaults_with_types(self, method, annotations):
         _, defaults, _, _ = self.__get_arg_spec(method)
