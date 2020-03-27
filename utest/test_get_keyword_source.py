@@ -38,19 +38,19 @@ def test_location_in_class_custom_keyword_name(lib, lib_path_components):
 
 
 def test_no_line_number(lib, lib_path, when):
-    when(lib)._DynamicCore__get_keyword_line(Any()).thenReturn('')
+    when(lib)._DynamicCore__get_keyword_line(Any()).thenReturn(None)
     source = lib.get_keyword_source('keyword_in_main')
     assert source == lib_path
 
 
 def test_no_path(lib, when):
-    when(lib)._DynamicCore__get_keyword_path(Any()).thenReturn('')
+    when(lib)._DynamicCore__get_keyword_path(Any()).thenReturn(None)
     source = lib.get_keyword_source('keyword_in_main')
     assert source == ':20'
 
 
 def test_no_path_and_no_line_number(lib, when):
-    when(lib)._DynamicCore__get_keyword_path(Any()).thenReturn('')
-    when(lib)._DynamicCore__get_keyword_line(Any()).thenReturn('')
+    when(lib)._DynamicCore__get_keyword_path(Any()).thenReturn(None)
+    when(lib)._DynamicCore__get_keyword_line(Any()).thenReturn(None)
     source = lib.get_keyword_source('keyword_in_main')
     assert source is None
