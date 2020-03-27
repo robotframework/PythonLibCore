@@ -20,6 +20,7 @@ https://github.com/robotframework/PythonLibCore
 """
 
 import inspect
+import os
 import sys
 try:
     import typing
@@ -173,6 +174,25 @@ class DynamicCore(HybridCore):
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
         return types
+
+    def get_keyword_source(self, keyword_name):
+        method = self.__get_keyword(keyword_name)
+        try:
+            path = os.path.normpath(inspect.getfile(method))
+        except TypeError:
+            path = ''
+        nro = self.__get_keyword_line(method)
+        return '%s:%s' % (path, nro)
+
+    def __get_keyword_line(self, method):
+        try:
+            source, nro = inspect.getsourcelines(method)
+        except OSError:
+            return ''
+        for line in source:
+            if 'def' in line:
+                return nro
+            nro += 1
 
 
 class StaticCore(HybridCore):
