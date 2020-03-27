@@ -21,20 +21,13 @@ https://github.com/robotframework/PythonLibCore
 
 import inspect
 import sys
-
 try:
-    from robot.api.deco import keyword
-except ImportError:  # Support RF < 2.9
-    def keyword(name=None, tags=()):
-        if callable(name):
-            return keyword()(name)
+    import typing
+except ImportError:
+    typing = None
 
-        def decorator(func):
-            func.robot_name = name
-            func.robot_tags = tags
-            return func
-        return decorator
 
+from robot.api.deco import keyword  # noqa F401
 
 PY2 = sys.version_info < (3,)
 
@@ -51,7 +44,7 @@ class HybridCore(object):
 
     def add_library_components(self, library_components):
         for component in library_components:
-            for name, func in self._get_members(component):
+            for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, 'robot_name'):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
@@ -60,7 +53,7 @@ class HybridCore(object):
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
 
-    def _get_members(self, component):
+    def __get_members(self, component):
         if inspect.ismodule(component):
             return inspect.getmembers(component)
         if inspect.isclass(component):
@@ -70,9 +63,9 @@ class HybridCore(object):
             raise TypeError('Libraries must be modules or new-style class '
                             'instances, got old-style class {!r} instead.'
                             .format(component.__class__.__name__))
-        return self._get_members_from_instance(component)
+        return self.__get_members_from_instance(component)
 
-    def _get_members_from_instance(self, instance):
+    def __get_members_from_instance(self, instance):
         # Avoid calling properties by getting members from class, not instance.
         cls = type(instance)
         for name in dir(instance):
@@ -97,14 +90,14 @@ class HybridCore(object):
 
 
 class DynamicCore(HybridCore):
-    _get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
+    __get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
 
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
         kw = self.keywords[name] if name != '__init__' else self.__init__
-        args, defaults, varargs, kwargs = self._get_arg_spec(kw)
+        args, defaults, varargs, kwargs = self.__get_arg_spec(kw)
         args += ['{}={}'.format(name, value) for name, value in defaults]
         if varargs:
             args.append('*{}'.format(varargs))
@@ -112,7 +105,7 @@ class DynamicCore(HybridCore):
             args.append('**{}'.format(kwargs))
         return args
 
-    def _get_arg_spec(self, kw):
+    def __get_arg_spec(self, kw):
         if PY2:
             spec = inspect.getargspec(kw)
             keywords = spec.keywords
@@ -127,7 +120,7 @@ class DynamicCore(HybridCore):
         return mandatory, defaults, spec.varargs, keywords
 
     def get_keyword_tags(self, name):
-        self._get_keyword_tags_supported = True
+        self.__get_keyword_tags_supported = True
         return self.keywords[name].robot_tags
 
     def get_keyword_documentation(self, name):
@@ -137,10 +130,49 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self.__init__) or ''
         kw = self.keywords[name]
         doc = inspect.getdoc(kw) or ''
-        if kw.robot_tags and not self._get_keyword_tags_supported:
+        if kw.robot_tags and not self.__get_keyword_tags_supported:
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
+
+    def get_keyword_types(self, keyword_name):
+        method = self.__get_keyword(keyword_name)
+        if method == {}:
+            return method
+        types = getattr(method, 'robot_types', ())
+        if types is None:
+            return types
+        if not types:
+            types = self.__get_typing_hints(method)
+        types = self.__join_defaults_with_types(method, types)
+        return types
+
+    def __get_keyword(self, keyword_name):
+        if keyword_name == '__init__':
+            return self.__init__
+        if keyword_name.startswith('__') and keyword_name.endswith('__'):
+            return {}
+        method = self.keywords.get(keyword_name)
+        if not method:
+            raise ValueError('Keyword "%s" not found.' % keyword_name)
+        return method
+
+    def __get_typing_hints(self, method):
+        if PY2:
+            return {}
+        try:
+            hints = typing.get_type_hints(method)
+        except Exception:
+            hints = method.__annotations__
+        hints.pop('return', None)
+        return hints
+
+    def __join_defaults_with_types(self, method, types):
+        _, defaults, _, _ = self.__get_arg_spec(method)
+        for name, value in defaults:
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
+        return types
 
 
 class StaticCore(HybridCore):

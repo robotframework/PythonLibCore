@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 import platform
 from os.path import abspath, dirname, join
 import sys
@@ -13,12 +14,20 @@ xunit_report = join(atest_dir, 'results', 'xunit-python-%s-robot%s.xml' % (pytho
 src = join(curdir, '..', 'src')
 sys.path.insert(0, src)
 sys.path.insert(0, atest_dir)
-pytest_args = sys.argv[1:] + [
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--no-cov', dest='cov', action='store_false')
+parser.add_argument('--cov', dest='cov', action='store_true')
+parser.set_defaults(cov=True)
+args = parser.parse_args()
+
+pytest_args = [
     '-p', 'no:cacheprovider',
     '--junitxml=%s' % xunit_report,
     '-o', 'junit_family=xunit2',
-    '--cov=%s' % src,
     curdir
 ]
+if args.cov:
+    pytest_args.insert(0, '--cov=%s' % src)
 rc = pytest.main(pytest_args)
 sys.exit(rc)

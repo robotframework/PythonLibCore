@@ -29,11 +29,14 @@ def test_keyword_names():
 def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
+                '_DynamicCore__get_arg_spec',
+                '_DynamicCore__get_keyword',
+                '_DynamicCore__get_keyword_tags_supported',
+                '_DynamicCore__get_typing_hints',
+                '_DynamicCore__join_defaults_with_types',
+                '_HybridCore__get_members',
+                '_HybridCore__get_members_from_instance',
                 '_custom_name',
-                '_get_arg_spec',
-                '_get_keyword_tags_supported',
-                '_get_members',
-                '_get_members_from_instance',
                 'add_library_components',
                 'all_arguments',
                 'attributes',
@@ -46,6 +49,7 @@ def test_dir():
                 'get_keyword_documentation',
                 'get_keyword_names',
                 'get_keyword_tags',
+                'get_keyword_types',
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
@@ -58,12 +62,16 @@ def test_dir():
                 'tags',
                 'varargs_and_kwargs']
     assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
-    expected = [e for e in expected if e not in ('_get_arg_spec',
-                                                 '_get_keyword_tags_supported',
+    expected = [e for e in expected if e not in ('_DynamicCore__get_typing_hints',
+                                                 '_DynamicCore__get_arg_spec',
+                                                 '_DynamicCore__get_keyword',
+                                                 '_DynamicCore__get_keyword_tags_supported',
+                                                 '_DynamicCore__join_defaults_with_types',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_tags',
-                                                 'run_keyword')]
+                                                 'run_keyword',
+                                                 'get_keyword_types')]
     assert [a for a in dir(HybridLibrary()) if a[:2] != '__'] == expected
 
 
