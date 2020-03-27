@@ -151,7 +151,7 @@ def test_init_args(lib):
 
 def test_dummy_magic_method(lib):
     types = lib.get_keyword_types('__foobar__')
-    assert types == {}
+    assert types is None
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
