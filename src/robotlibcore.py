@@ -177,22 +177,31 @@ class DynamicCore(HybridCore):
 
     def get_keyword_source(self, keyword_name):
         method = self.__get_keyword(keyword_name)
-        try:
-            path = os.path.normpath(inspect.getfile(method))
-        except TypeError:
-            path = ''
-        nro = self.__get_keyword_line(method)
-        return '%s:%s' % (path, nro)
+        path = self.__get_keyword_path(method)
+        line_number = self.__get_keyword_line(method)
+        if not path and not line_number:
+            return None
+        if not path:
+            return ':%s' % line_number
+        if not line_number:
+            return path
+        return '%s:%s' % (path, line_number)
 
     def __get_keyword_line(self, method):
         try:
-            source, nro = inspect.getsourcelines(method)
-        except OSError:
-            return ''
+            source, line_number = inspect.getsourcelines(method)
+        except (OSError, IOError):
+            return None
         for line in source:
             if 'def' in line:
-                return nro
-            nro += 1
+                return line_number
+            line_number += 1
+
+    def __get_keyword_path(self, method):
+        try:
+            return os.path.normpath(inspect.getfile(method))
+        except TypeError:
+            return None
 
 
 class StaticCore(HybridCore):
