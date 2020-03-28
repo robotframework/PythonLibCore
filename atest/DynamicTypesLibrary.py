@@ -3,6 +3,10 @@ import sys
 from robotlibcore import DynamicCore, keyword
 
 
+def def_deco(func):
+    return func
+
+
 class DynamicTypesLibrary(DynamicCore):
 
     def __init__(self, arg=False):
@@ -52,3 +56,8 @@ class DynamicTypesLibrary(DynamicCore):
     @keyword
     def is_python_3(self):
         return sys.version_info >= (3,)
+
+    @keyword
+    @def_deco
+    def keyword_with_def_deco(self):
+        return 1

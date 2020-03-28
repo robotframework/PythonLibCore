@@ -2,6 +2,7 @@ from os import path
 
 import pytest
 from DynamicLibrary import DynamicLibrary
+from DynamicTypesLibrary import DynamicTypesLibrary
 from mockito.matchers import Any
 
 
@@ -54,3 +55,11 @@ def test_no_path_and_no_line_number(lib, when):
     when(lib)._DynamicCore__get_keyword_line(Any()).thenReturn(None)
     source = lib.get_keyword_source('keyword_in_main')
     assert source is None
+
+
+def test_def_in_decorator():
+    cur_dir = path.dirname(__file__)
+    lib_path = path.normpath(path.join(cur_dir, '..', 'atest', 'DynamicTypesLibrary.py'))
+    lib = DynamicTypesLibrary()
+    source = lib.get_keyword_source('keyword_with_def_deco')
+    assert source == '%s:62' % lib_path

@@ -193,7 +193,7 @@ class DynamicCore(HybridCore):
         except (OSError, IOError):
             return None
         for line in source:
-            if 'def' in line:
+            if line.strip().startswith('def'):
                 return line_number
             line_number += 1
 
