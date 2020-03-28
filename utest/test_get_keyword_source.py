@@ -12,15 +12,27 @@ def lib():
 
 
 @pytest.fixture(scope='module')
-def lib_path():
-    cur_dir = path.dirname(__file__)
+def lib_types():
+    return DynamicTypesLibrary()
+
+
+@pytest.fixture(scope='module')
+def cur_dir():
+    return path.dirname(__file__)
+
+@pytest.fixture(scope='module')
+def lib_path(cur_dir):
     return path.normpath(path.join(cur_dir, '..', 'atest', 'DynamicLibrary.py'))
 
 
 @pytest.fixture(scope='module')
-def lib_path_components():
-    cur_dir = path.dirname(__file__)
+def lib_path_components(cur_dir):
     return path.normpath(path.join(cur_dir, '..', 'atest', 'librarycomponents.py'))
+
+
+@pytest.fixture(scope='module')
+def lib_path_types(cur_dir):
+    return path.normpath(path.join(cur_dir, '..', 'atest', 'DynamicTypesLibrary.py'))
 
 
 def test_location_in_main(lib, lib_path):
@@ -57,9 +69,6 @@ def test_no_path_and_no_line_number(lib, when):
     assert source is None
 
 
-def test_def_in_decorator():
-    cur_dir = path.dirname(__file__)
-    lib_path = path.normpath(path.join(cur_dir, '..', 'atest', 'DynamicTypesLibrary.py'))
-    lib = DynamicTypesLibrary()
-    source = lib.get_keyword_source('keyword_with_def_deco')
-    assert source == '%s:62' % lib_path
+def test_def_in_decorator(lib_types, lib_path_types):
+    source = lib_types.get_keyword_source('keyword_with_def_deco')
+    assert source == '%s:62' % lib_path_types
