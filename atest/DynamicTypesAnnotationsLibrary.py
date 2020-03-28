@@ -73,3 +73,13 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     def keyword_exception_annotations(self, arg: 'NotHere'):
         return arg
+
+    @keyword
+    def keyword_kwargs_only(self, **kwargs):
+        string = ''
+        for key, value in kwargs.items():
+            if not string:
+                string = '%s: %s' % (key, value)
+            else:
+                string = '%s, %s: %s' % (string, key, value)
+        return string

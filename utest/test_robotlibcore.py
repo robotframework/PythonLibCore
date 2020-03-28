@@ -3,9 +3,12 @@ import sys
 import pytest
 from robot import __version__ as robot__version
 
+from robotlibcore import PY2
 from robotlibcore import HybridCore
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
+if not PY2:
+    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 def test_keyword_names():
@@ -98,6 +101,7 @@ def test_getattr():
         assert str(exc_info.value) == \
             "'%s' object has no attribute 'non_existing'" % type(lib).__name__
 
+
 @pytest.mark.skipif(robot__version >= '3.2', reason='For RF 3.1')
 def test_get_keyword_arguments_rf31():
     args = DynamicLibrary().get_keyword_arguments
@@ -161,3 +165,16 @@ def test_library_cannot_be_old_style_class_instance():
         HybridCore([OldStyle()])
     assert str(exc_info.value) == \
            "Libraries must be modules or new-style class instances, got old-style class 'OldStyle' instead."
+
+
+@pytest.mark.skipif(robot__version >= '3.2', reason='For RF 3.1')
+def test_keyword_only_arguments():
+    lib = DynamicTypesAnnotationsLibrary(11)
+    args = lib.get_keyword_arguments('keyword_kwargs_only')
+    assert args == ['**kwargs']
+
+@pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.1')
+def test_keyword_only_arguments():
+    lib = DynamicTypesAnnotationsLibrary(11)
+    args = lib.get_keyword_arguments('keyword_kwargs_only')
+    assert args == [('**kwargs', )]

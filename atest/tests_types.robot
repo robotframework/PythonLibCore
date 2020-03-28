@@ -53,6 +53,17 @@ Keyword Annonations And Robot Types Defined
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types And Bool Defaults    tidii    111
     Should Match Regexp    ${return}    tidii: <(class|type) 'str'>, 111: <(class|type) 'str'>
 
+Keyword Arguments Only As String
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Kwargs Only    k1=1    k2=2
+    Should Be Equal    ${return}    k1: 1, k2: 2
+
+Keyword Arguments Only As Dictionary
+    [Tags]    py3
+    ${args}        Create Dictionary   k1=1    k2=2
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Kwargs Only    &{args}
+    Should Be Equal    ${return}    k1: 1, k2: 2
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3
