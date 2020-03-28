@@ -190,7 +190,7 @@ class DynamicCore(HybridCore):
     def __get_keyword_line(self, method):
         try:
             source, line_number = inspect.getsourcelines(method)
-        except (OSError, IOError):
+        except (OSError, IOError, TypeError):
             return None
         for line in source:
             if line.strip().startswith('def'):

@@ -1,3 +1,4 @@
+import inspect
 from os import path
 
 import pytest
@@ -72,3 +73,15 @@ def test_no_path_and_no_line_number(lib, when):
 def test_def_in_decorator(lib_types, lib_path_types):
     source = lib_types.get_keyword_source('keyword_with_def_deco')
     assert source == '%s:62' % lib_path_types
+
+
+def test_error_in_getfile(lib, when):
+    when(inspect).getfile(Any()).thenRaise(TypeError('Some message'))
+    source = lib.get_keyword_source('keyword_in_main')
+    assert source is None
+
+
+def test_error_in_line_number(lib, when, lib_path):
+    when(inspect).getsourcelines(Any()).thenRaise(IOError('Some message'))
+    source = lib.get_keyword_source('keyword_in_main')
+    assert source == lib_path
