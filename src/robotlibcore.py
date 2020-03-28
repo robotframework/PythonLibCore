@@ -179,13 +179,13 @@ class DynamicCore(HybridCore):
         method = self.__get_keyword(keyword_name)
         path = self.__get_keyword_path(method)
         line_number = self.__get_keyword_line(method)
-        if not path and not line_number:
-            return None
-        if not path:
-            return ':%s' % line_number
-        if not line_number:
+        if path and line_number:
+            return '%s:%s' % (path, line_number)
+        if path:
             return path
-        return '%s:%s' % (path, line_number)
+        if line_number:
+            return ':%s' % line_number
+        return None
 
     def __get_keyword_line(self, method):
         try:
