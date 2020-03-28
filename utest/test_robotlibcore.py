@@ -167,12 +167,15 @@ def test_library_cannot_be_old_style_class_instance():
            "Libraries must be modules or new-style class instances, got old-style class 'OldStyle' instead."
 
 
+@pytest.mark.skipif(sys.version_info[0] == 2, reason='Only applicable on Py 3')
 @pytest.mark.skipif(robot__version >= '3.2', reason='For RF 3.1')
 def test_keyword_only_arguments():
     lib = DynamicTypesAnnotationsLibrary(11)
     args = lib.get_keyword_arguments('keyword_kwargs_only')
     assert args == ['**kwargs']
 
+
+@pytest.mark.skipif(sys.version_info[0] == 2, reason='Only applicable on Py 3')
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.1')
 def test_keyword_only_arguments():
     lib = DynamicTypesAnnotationsLibrary(11)
