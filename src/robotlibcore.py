@@ -29,6 +29,7 @@ except ImportError:
 
 
 from robot.api.deco import keyword  # noqa F401
+from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
 
@@ -97,7 +98,27 @@ class DynamicCore(HybridCore):
         return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
-        kw = self.keywords[name] if name != '__init__' else self.__init__
+        if robot_version >= '3.2':
+            return self.__new_arg_spec(name)
+        return self.__old_arg_spec(name)
+
+    def __new_arg_spec(self, keyword_name):
+        kw = self.__get_keyword(keyword_name)
+        if kw is None:
+            return [tuple(), ]
+        args, defaults, varargs, kwargs = self.__get_arg_spec(kw)
+        args = [(arg, ) for arg in args]
+        args += [(name, value) for name, value in defaults]
+        if varargs:
+            args.append(('*{}'.format(varargs), ))
+        if kwargs:
+            args.append(('**{}'.format(kwargs), ))
+        return args
+
+    def __old_arg_spec(self, keyword_name):
+        kw = self.__get_keyword(keyword_name)
+        if kw is None:
+            return []
         args, defaults, varargs, kwargs = self.__get_arg_spec(kw)
         args += ['{}={}'.format(name, value) for name, value in defaults]
         if varargs:
