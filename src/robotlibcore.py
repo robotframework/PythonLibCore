@@ -101,28 +101,22 @@ class DynamicCore(HybridCore):
         kw_method = self.__get_keyword(name)
         if kw_method is None:
             return None
+        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
         if robot_version >= '3.2':
-            return self.__new_arg_spec(kw_method)
-        return self.__old_arg_spec(kw_method)
-
-    def __new_arg_spec(self, kw_method):
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
-        args = [(arg, ) for arg in args]
-        args += [(name, value) for name, value in defaults]
+            args += self.__new_default_spec(defaults)
+        else:
+            args += self.__old_default_spec(defaults)
         if varargs:
-            args.append(('*{}'.format(varargs), ))
+            args.append('*%s' % varargs)
         if kwargs:
-            args.append(('**{}'.format(kwargs), ))
+            args.append('**%s' % kwargs)
         return args
 
-    def __old_arg_spec(self, kw_method):
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
-        args += ['{}={}'.format(name, value) for name, value in defaults]
-        if varargs:
-            args.append('*{}'.format(varargs))
-        if kwargs:
-            args.append('**{}'.format(kwargs))
-        return args
+    def __new_default_spec(self, defaults):
+        return [(name, value) for name, value in defaults]
+
+    def __old_default_spec(self, defaults):
+        return ['{}={}'.format(name, value) for name, value in defaults]
 
     def __get_arg_spec(self, kw):
         if PY2:

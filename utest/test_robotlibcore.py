@@ -37,8 +37,8 @@ def test_dir():
                 '_DynamicCore__get_keyword_tags_supported',
                 '_DynamicCore__get_typing_hints',
                 '_DynamicCore__join_defaults_with_types',
-                '_DynamicCore__new_arg_spec',
-                '_DynamicCore__old_arg_spec',
+                '_DynamicCore__new_default_spec',
+                '_DynamicCore__old_default_spec',
                 '_HybridCore__get_members',
                 '_HybridCore__get_members_from_instance',
                 '_custom_name',
@@ -76,8 +76,8 @@ def test_dir():
                                                  '_DynamicCore__get_keyword_path',
                                                  '_DynamicCore__get_keyword_tags_supported',
                                                  '_DynamicCore__join_defaults_with_types',
-                                                 '_DynamicCore__new_arg_spec',
-                                                 '_DynamicCore__old_arg_spec',
+                                                 '_DynamicCore__new_default_spec',
+                                                 '_DynamicCore__old_default_spec',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_source',
@@ -115,10 +115,11 @@ def test_get_keyword_arguments_rf31():
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
 def test_get_keyword_arguments_rf32():
     args = DynamicLibrary().get_keyword_arguments
-    assert args('mandatory') == [('arg1', ), ('arg2', )]
-    assert args('defaults') == [('arg1', ), ('arg2', 'default'), ('arg3', 3)]
-    assert args('varargs_and_kwargs') == [('*args', ), ('**kws', )]
-    assert args('all_arguments') == [('mandatory', ), ('default', 'value'), ('*varargs', ), ('**kwargs', )]
+    assert args('mandatory') == ['arg1', 'arg2']
+    assert args('defaults') == ['arg1', ('arg2', 'default'), ('arg3', 3)]
+    assert args('varargs_and_kwargs') == ['*args', '**kws']
+    assert args('kwargs_only') == ['**kws']
+    assert args('all_arguments') == ['mandatory', ('default', 'value'), '*varargs', '**kwargs']
     assert args('__init__') == [('arg', None)]
     assert args('__foobar__') is None
 
