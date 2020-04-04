@@ -98,15 +98,15 @@ class DynamicCore(HybridCore):
         return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
+        kw_method = self.__get_keyword(name)
+        if kw_method is None:
+            return None
         if robot_version >= '3.2':
-            return self.__new_arg_spec(name)
-        return self.__old_arg_spec(name)
+            return self.__new_arg_spec(kw_method)
+        return self.__old_arg_spec(kw_method)
 
-    def __new_arg_spec(self, keyword_name):
-        kw = self.__get_keyword(keyword_name)
-        if kw is None:
-            return [tuple(), ]
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw)
+    def __new_arg_spec(self, kw_method):
+        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
         args = [(arg, ) for arg in args]
         args += [(name, value) for name, value in defaults]
         if varargs:
@@ -115,11 +115,8 @@ class DynamicCore(HybridCore):
             args.append(('**{}'.format(kwargs), ))
         return args
 
-    def __old_arg_spec(self, keyword_name):
-        kw = self.__get_keyword(keyword_name)
-        if kw is None:
-            return []
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw)
+    def __old_arg_spec(self, kw_method):
+        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
         args += ['{}={}'.format(name, value) for name, value in defaults]
         if varargs:
             args.append('*{}'.format(varargs))

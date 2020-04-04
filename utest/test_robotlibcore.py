@@ -16,6 +16,7 @@ def test_keyword_names():
                 'doc_and_tags',
                 'function',
                 'keyword_in_main',
+                'kwargs_only',
                 'mandatory',
                 'method',
                 'multi_line_doc',
@@ -58,6 +59,7 @@ def test_dir():
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
+                'kwargs_only',
                 'mandatory',
                 'method',
                 'multi_line_doc',
@@ -104,9 +106,10 @@ def test_get_keyword_arguments_rf31():
     assert args('mandatory') == ['arg1', 'arg2']
     assert args('defaults') == ['arg1', 'arg2=default', 'arg3=3']
     assert args('varargs_and_kwargs') == ['*args', '**kws']
+    assert args('kwargs_only') == ['**kws']
     assert args('all_arguments') == ['mandatory', 'default=value', '*varargs', '**kwargs']
     assert args('__init__') == ['arg=None']
-    assert args('__foobar__') == []
+    assert args('__foobar__') is None
 
 
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
@@ -117,7 +120,7 @@ def test_get_keyword_arguments_rf32():
     assert args('varargs_and_kwargs') == [('*args', ), ('**kws', )]
     assert args('all_arguments') == [('mandatory', ), ('default', 'value'), ('*varargs', ), ('**kwargs', )]
     assert args('__init__') == [('arg', None)]
-    assert args('__foobar__') == [()]
+    assert args('__foobar__') is None
 
 
 def test_get_keyword_documentation():
