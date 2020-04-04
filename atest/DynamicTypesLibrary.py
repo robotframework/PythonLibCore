@@ -1,3 +1,4 @@
+import functools
 import sys
 
 from robotlibcore import DynamicCore, keyword
@@ -5,6 +6,13 @@ from robotlibcore import DynamicCore, keyword
 
 def def_deco(func):
     return func
+
+
+def deco_wraps(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
 
 
 class DynamicTypesLibrary(DynamicCore):
@@ -61,3 +69,9 @@ class DynamicTypesLibrary(DynamicCore):
     @def_deco
     def keyword_with_def_deco(self):
         return 1
+
+    @deco_wraps
+    @keyword
+    @deco_wraps
+    def keyword_wrapped(self, number=1, arg=''):
+        return number, arg
