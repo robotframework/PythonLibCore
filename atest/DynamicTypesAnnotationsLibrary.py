@@ -81,3 +81,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     def keyword_only_arguments_many(self, *varargs, some='value', other=None):
         return f'{some}: {type(some)}, {other}: {type(other)}, {varargs}: {type(varargs)}'
+
+    @keyword
+    def keyword_mandatory_and_keyword_only_arguments(self, arg: int, *vararg, some=True):
+        return f'{arg}, {vararg}, {some}'

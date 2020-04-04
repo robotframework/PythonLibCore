@@ -204,10 +204,14 @@ class DynamicCore(HybridCore):
         return hints
 
     def __join_defaults_with_types(self, method, types):
-        _, defaults, _, _, _ = self.__get_arg_spec(method)
+        _, defaults, _, _, kwonlydefaults = self.__get_arg_spec(method)
         for name, value in defaults:
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
+        if kwonlydefaults:
+            for name, value in kwonlydefaults.items():
+                if name not in types and isinstance(value, (bool, type(None))):
+                    types[name] = type(value)
         return types
 
     def get_keyword_source(self, keyword_name):
