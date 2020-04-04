@@ -47,11 +47,15 @@ Keyword Annonations And Robot Types Disbales Argument Conversion
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types Disabled And Annotations    111
     Should Match Regexp    ${return}    111: <(class|type) 'str'>
 
-
 Keyword Annonations And Robot Types Defined
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types And Bool Defaults    tidii    111
     Should Match Regexp    ${return}    tidii: <(class|type) 'str'>, 111: <(class|type) 'str'>
+
+Keyword Annonations And Keyword Only Arguments
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments    1    ${1}    some=222
+    Should Match    ${return}    ('1', 1): <class 'tuple'>, 222: <class 'int'>
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
