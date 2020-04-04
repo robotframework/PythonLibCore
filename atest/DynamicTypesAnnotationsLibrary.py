@@ -73,3 +73,11 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     def keyword_exception_annotations(self, arg: 'NotHere'):
         return arg
+
+    @keyword
+    def keyword_only_arguments(self, *varargs, some='value'):
+        return f'{some}: {type(some)}, {varargs}: {type(varargs)}'
+
+    @keyword
+    def keyword_only_arguments_many(self, *varargs, some='value', other=None):
+        return f'{some}: {type(some)}, {other}: {type(other)}, {varargs}: {type(varargs)}'

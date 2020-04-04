@@ -101,16 +101,22 @@ class DynamicCore(HybridCore):
         kw_method = self.__get_keyword(name)
         if kw_method is None:
             return None
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
-        if robot_version >= '3.2':
-            args += self.__new_default_spec(defaults)
-        else:
+        args, defaults, varargs, kwargs, kwonlydefaults = self.__get_arg_spec(kw_method)
+        if self.__rf_31:
             args += self.__old_default_spec(defaults)
+        else:
+            args += self.__new_default_spec(defaults)
         if varargs:
             args.append('*%s' % varargs)
         if kwargs:
             args.append('**%s' % kwargs)
+        if kwonlydefaults:
+            args += self.__kwonlydefaults_spec(kwonlydefaults)
         return args
+
+    @property
+    def __rf_31(self):
+        return robot_version < '3.2'
 
     def __new_default_spec(self, defaults):
         return [(name, value) for name, value in defaults]
@@ -118,19 +124,36 @@ class DynamicCore(HybridCore):
     def __old_default_spec(self, defaults):
         return ['{}={}'.format(name, value) for name, value in defaults]
 
+    def __kwonlydefaults_spec(self, kwonlydefaults):
+        args = []
+        for argument, default_value in kwonlydefaults.items():
+            if self.__rf_31:
+                args.append(self.__old_kwonlydefaults_spec(argument, default_value))
+            else:
+                args.append(self.__new_kwonlydefaults_spec(argument, default_value))
+        return args
+
+    def __new_kwonlydefaults_spec(self, argument, default_value):
+        return (argument, default_value)
+
+    def __old_kwonlydefaults_spec(self, argument, default_value):
+        return '%s=%s' % (argument, default_value)
+
     def __get_arg_spec(self, kw):
         if PY2:
             spec = inspect.getargspec(kw)
             keywords = spec.keywords
+            kwonlydefaults = {}
         else:
             spec = inspect.getfullargspec(kw)
             keywords = spec.varkw
+            kwonlydefaults = spec.kwonlydefaults
         args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
         defaults = spec.defaults or ()
         nargs = len(args) - len(defaults)
         mandatory = args[:nargs]
         defaults = zip(args[nargs:], defaults)
-        return mandatory, defaults, spec.varargs, keywords
+        return mandatory, defaults, spec.varargs, keywords, kwonlydefaults
 
     def get_keyword_tags(self, name):
         self.__get_keyword_tags_supported = True
@@ -181,7 +204,7 @@ class DynamicCore(HybridCore):
         return hints
 
     def __join_defaults_with_types(self, method, types):
-        _, defaults, _, _ = self.__get_arg_spec(method)
+        _, defaults, _, _, _ = self.__get_arg_spec(method)
         for name, value in defaults:
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)

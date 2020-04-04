@@ -3,9 +3,11 @@ import sys
 import pytest
 from robot import __version__ as robot__version
 
-from robotlibcore import HybridCore
+from robotlibcore import HybridCore, PY2
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
+if not PY2:
+    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 def test_keyword_names():
@@ -37,8 +39,12 @@ def test_dir():
                 '_DynamicCore__get_keyword_tags_supported',
                 '_DynamicCore__get_typing_hints',
                 '_DynamicCore__join_defaults_with_types',
+                '_DynamicCore__kwonlydefaults_spec',
                 '_DynamicCore__new_default_spec',
+                '_DynamicCore__new_kwonlydefaults_spec',
                 '_DynamicCore__old_default_spec',
+                '_DynamicCore__old_kwonlydefaults_spec',
+                '_DynamicCore__rf_31',
                 '_HybridCore__get_members',
                 '_HybridCore__get_members_from_instance',
                 '_custom_name',
@@ -76,8 +82,12 @@ def test_dir():
                                                  '_DynamicCore__get_keyword_path',
                                                  '_DynamicCore__get_keyword_tags_supported',
                                                  '_DynamicCore__join_defaults_with_types',
+                                                 '_DynamicCore__kwonlydefaults_spec',
                                                  '_DynamicCore__new_default_spec',
+                                                 '_DynamicCore__new_kwonlydefaults_spec',
                                                  '_DynamicCore__old_default_spec',
+                                                 '_DynamicCore__old_kwonlydefaults_spec',
+                                                 '_DynamicCore__rf_31',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_source',
@@ -122,6 +132,22 @@ def test_get_keyword_arguments_rf32():
     assert args('all_arguments') == ['mandatory', ('default', 'value'), '*varargs', '**kwargs']
     assert args('__init__') == [('arg', None)]
     assert args('__foobar__') is None
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
+def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
+    args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
+    assert args('keyword_only_arguments') == ['*varargs', ('some', 'value')]
+    assert args('keyword_only_arguments_many') == ['*varargs', ('some', 'value'), ('other', None)]
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(robot__version > '3.2', reason='For RF 3.1')
+def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
+    args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
+    assert args('keyword_only_arguments') == ['*varargs', 'some=value']
+    assert args('keyword_only_arguments_many') == ['*varargs', 'some=value', 'other=None']
 
 
 def test_get_keyword_documentation():
