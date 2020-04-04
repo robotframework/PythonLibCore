@@ -154,6 +154,11 @@ def test_dummy_magic_method(lib):
     assert types is None
 
 
+def test_varargs(lib):
+    types = lib.get_keyword_types('varargs_and_kwargs')
+    assert types == {}
+
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_init_args_with_annotation(lib_types):
     types = lib_types.get_keyword_types('__init__')

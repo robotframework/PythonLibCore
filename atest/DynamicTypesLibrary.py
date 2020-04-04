@@ -75,3 +75,7 @@ class DynamicTypesLibrary(DynamicCore):
     @deco_wraps
     def keyword_wrapped(self, number=1, arg=''):
         return number, arg
+
+    @keyword
+    def varargs_and_kwargs(self, *args, **kwargs):
+        return '%s, %s' % (args, kwargs)
