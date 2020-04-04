@@ -2,9 +2,11 @@ import inspect
 from os import path
 
 import pytest
+from mockito.matchers import Any
+
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
-from mockito.matchers import Any
+from robotlibcore import PY2
 
 
 @pytest.fixture(scope='module')
@@ -20,6 +22,7 @@ def lib_types():
 @pytest.fixture(scope='module')
 def cur_dir():
     return path.dirname(__file__)
+
 
 @pytest.fixture(scope='module')
 def lib_path(cur_dir):
@@ -44,6 +47,12 @@ def test_location_in_main(lib, lib_path):
 def test_location_in_class(lib, lib_path_components):
     source = lib.get_keyword_source('method')
     assert source == '%s:15' % lib_path_components
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_decorator_wrapper(lib_types, lib_path_types):
+    source = lib_types.get_keyword_source('keyword_wrapped')
+    assert source == '%s:76' % lib_path_types
 
 
 def test_location_in_class_custom_keyword_name(lib, lib_path_components):
@@ -72,7 +81,7 @@ def test_no_path_and_no_line_number(lib, when):
 
 def test_def_in_decorator(lib_types, lib_path_types):
     source = lib_types.get_keyword_source('keyword_with_def_deco')
-    assert source == '%s:62' % lib_path_types
+    assert source == '%s:70' % lib_path_types
 
 
 def test_error_in_getfile(lib, when):

@@ -210,13 +210,13 @@ class DynamicCore(HybridCore):
 
     def __get_keyword_line(self, method):
         try:
-            source, line_number = inspect.getsourcelines(method)
+            lines, line_number = inspect.getsourcelines(method)
         except (OSError, IOError, TypeError):
             return None
-        for line in source:
-            if line.strip().startswith('def'):
-                return line_number
-            line_number += 1
+        for increment, line in enumerate(lines):
+            if line.strip().startswith('def '):
+                return line_number + increment
+        return line_number
 
     def __get_keyword_path(self, method):
         try:
