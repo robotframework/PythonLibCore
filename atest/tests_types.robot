@@ -55,7 +55,7 @@ Keyword Annonations And Robot Types Defined
 Keyword Annonations And Keyword Only Arguments
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments    1    ${1}    some=222
-    Should Match    ${return}    ('1', 1): <class 'tuple'>, 222: <class 'int'>
+    Should Match Regexp    ${return}    \\('1', 1\\): <class 'tuple'>, 222: <class '(int|str)'>
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
