@@ -46,6 +46,10 @@ class Arguments(object):
         return self.format_args(*args, **kws)
 
     @keyword
+    def kwargs_only(self, **kws):
+        return self.format_args(**kws)
+
+    @keyword
     def all_arguments(self, mandatory, default='value', *varargs, **kwargs):
         return self.format_args(mandatory, default, *varargs, **kwargs)
 
