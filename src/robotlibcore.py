@@ -247,3 +247,39 @@ class StaticCore(HybridCore):
 
     def __init__(self):
         HybridCore.__init__(self, [])
+
+
+class ArgumentSpec(object):
+
+    def __init__(self, positional=None,  varargs=None, kwonlyargs=None, kwargs=None, defaults=None):
+            self.positional = positional or []
+            self.varargs = varargs
+            self.kwonlyargs = kwonlyargs or []
+            self.kwargs = kwargs
+            self.defaults = defaults or {}
+
+    @classmethod
+    def from_function(cls, function):
+        spec = inspect.getfullargspec(function)
+        args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
+        defaults = cls._get_defaults(spec)
+        positional = cls._remove_defaults_from_positional(args, defaults)
+        return cls(positional=positional,
+                   defaults=defaults,
+                   varargs=spec.varargs,
+                   kwargs=spec.varkw)
+
+    @classmethod
+    def _get_defaults(cls, spec):
+        if not spec.defaults:
+            return {}
+        names = spec.args[-len(spec.defaults):]
+        return dict(zip(names, spec.defaults))
+
+    @classmethod
+    def _remove_defaults_from_positional(cls, args, defaults):
+        positional = []
+        for argument in args:
+            if argument not in defaults:
+                positional.append(argument)
+        return positional
