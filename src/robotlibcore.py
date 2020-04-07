@@ -22,11 +22,11 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 import sys
+
 try:
     import typing
 except ImportError:
     typing = None
-
 
 from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
@@ -251,13 +251,14 @@ class StaticCore(HybridCore):
 
 class ArgumentSpec(object):
 
-    def __init__(self, positional=None,  varargs=None, kwonlyargs=None, kwonlydefaults=None, kwargs=None, defaults=None):
-            self.positional = positional or []
-            self.defaults = defaults or {}
-            self.varargs = varargs
-            self.kwonlyargs = kwonlyargs or []
-            self.kwonlydefaults = kwonlydefaults or {}
-            self.kwargs = kwargs
+    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
+                 kwonlydefaults=None, kwargs=None):
+        self.positional = positional or []
+        self.defaults = defaults or {}
+        self.varargs = varargs
+        self.kwonlyargs = kwonlyargs or []
+        self.kwonlydefaults = kwonlydefaults or {}
+        self.kwargs = kwargs
 
     @classmethod
     def from_function(cls, function):
@@ -295,5 +296,6 @@ class ArgumentSpec(object):
     def _get_kw_args(cls, spec):
         if PY2:
             return None, None, spec.keywords
-        kwonlyargs = cls._remove_defaults_from_positional(spec.kwonlyargs, spec.kwonlydefaults or [])
+        kwonlydefaults = spec.kwonlydefaults or []
+        kwonlyargs = cls._remove_defaults_from_positional(spec.kwonlyargs, kwonlydefaults)
         return kwonlyargs, spec.kwonlydefaults, spec.varkw
