@@ -44,12 +44,6 @@ def test_dir():
                 '_DynamicCore__get_keyword_tags_supported',
                 '_DynamicCore__get_typing_hints',
                 '_DynamicCore__join_defaults_with_types',
-                '_DynamicCore__kwonlydefaults_spec',
-                '_DynamicCore__new_default_spec',
-                '_DynamicCore__new_kwonlydefaults_spec',
-                '_DynamicCore__old_default_spec',
-                '_DynamicCore__old_kwonlydefaults_spec',
-                '_DynamicCore__rf_31',
                 '_HybridCore__get_members',
                 '_HybridCore__get_members_from_instance',
                 '_custom_name',
@@ -87,12 +81,6 @@ def test_dir():
                                                  '_DynamicCore__get_keyword_path',
                                                  '_DynamicCore__get_keyword_tags_supported',
                                                  '_DynamicCore__join_defaults_with_types',
-                                                 '_DynamicCore__kwonlydefaults_spec',
-                                                 '_DynamicCore__new_default_spec',
-                                                 '_DynamicCore__new_kwonlydefaults_spec',
-                                                 '_DynamicCore__old_default_spec',
-                                                 '_DynamicCore__old_kwonlydefaults_spec',
-                                                 '_DynamicCore__rf_31',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
                                                  'get_keyword_source',
@@ -114,6 +102,7 @@ def test_getattr():
             lib.non_existing
         assert str(exc_info.value) == \
             "'%s' object has no attribute 'non_existing'" % type(lib).__name__
+
 
 @pytest.mark.skipif(robot__version >= '3.2', reason='For RF 3.1')
 def test_get_keyword_arguments_rf31():
@@ -239,6 +228,10 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
     assert args('keyword_only_arguments') == ['*varargs', ('some', 111)]
     assert args('keyword_only_arguments_many') == ['*varargs', ('some', 'value'), ('other', None)]
+    assert args('keyword_only_arguments_no_default') == ['*varargs', 'other']
+    assert args('keyword_only_arguments_default_and_no_default') == ['*varargs', 'other', ('value', False)]
+    all_args = [ 'mandatory', ('positional', 1), '*varargs', 'other', ('value', False), '**kwargs']
+    assert args('keyword_all_args') == all_args
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
@@ -247,7 +240,10 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
     assert args('keyword_only_arguments') == ['*varargs', 'some=111']
     assert args('keyword_only_arguments_many') == ['*varargs', 'some=value', 'other=None']
-
+    assert args('keyword_only_arguments_no_default') == ['*varargs', 'other']
+    assert args('keyword_only_arguments_default_and_no_default') == ['*varargs', 'other', 'value=False']
+    all_args = ['mandatory', 'positional=1', '*varargs', 'other', 'value=False', '**kwargs']
+    assert args('keyword_all_args') == all_args
 
 def test_get_keyword_documentation():
     doc = DynamicLibrary().get_keyword_documentation

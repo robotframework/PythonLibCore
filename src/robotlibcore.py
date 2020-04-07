@@ -32,6 +32,7 @@ from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
+RF31 = robot_version < '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -101,43 +102,8 @@ class DynamicCore(HybridCore):
         kw_method = self.__get_keyword(name)
         if kw_method is None:
             return None
-        args, defaults, varargs, kwargs, kwonlydefaults = self.__get_arg_spec(kw_method)
-        if self.__rf_31:
-            args += self.__old_default_spec(defaults)
-        else:
-            args += self.__new_default_spec(defaults)
-        if varargs:
-            args.append('*%s' % varargs)
-        if kwargs:
-            args.append('**%s' % kwargs)
-        if kwonlydefaults:
-            args += self.__kwonlydefaults_spec(kwonlydefaults)
-        return args
-
-    @property
-    def __rf_31(self):
-        return robot_version < '3.2'
-
-    def __new_default_spec(self, defaults):
-        return [(name, value) for name, value in defaults]
-
-    def __old_default_spec(self, defaults):
-        return ['{}={}'.format(name, value) for name, value in defaults]
-
-    def __kwonlydefaults_spec(self, kwonlydefaults):
-        args = []
-        for argument, default_value in kwonlydefaults.items():
-            if self.__rf_31:
-                args.append(self.__old_kwonlydefaults_spec(argument, default_value))
-            else:
-                args.append(self.__new_kwonlydefaults_spec(argument, default_value))
-        return args
-
-    def __new_kwonlydefaults_spec(self, argument, default_value):
-        return (argument, default_value)
-
-    def __old_kwonlydefaults_spec(self, argument, default_value):
-        return '%s=%s' % (argument, default_value)
+        spec = ArgumentSpec.from_function(kw_method)
+        return spec.get_arguments()
 
     def __get_arg_spec(self, kw):
         if PY2:
@@ -259,6 +225,22 @@ class ArgumentSpec(object):
         self.kwonlyargs = kwonlyargs or []
         self.kwonlydefaults = kwonlydefaults or {}
         self.kwargs = kwargs
+
+    def get_arguments(self):
+        args = self.positional
+        for arg, default in self.defaults.items():
+            default_arg = '%s=%s' % (arg, default)if RF31 else (arg, default)
+            args.append(default_arg)
+        if self.varargs:
+            args.append('*%s' % self.varargs)
+        if self.kwonlyargs:
+            args += self.kwonlyargs
+        for kw_arg, kw_default in self.kwonlydefaults.items():
+            kw_arg_default = '%s=%s' %(kw_arg, kw_default) if RF31 else (kw_arg, kw_default)
+            args.append(kw_arg_default)
+        if self.kwargs:
+            args.append('**%s' % self.kwargs)
+        return args
 
     @classmethod
     def from_function(cls, function):
