@@ -251,23 +251,30 @@ class StaticCore(HybridCore):
 
 class ArgumentSpec(object):
 
-    def __init__(self, positional=None,  varargs=None, kwonlyargs=None, kwargs=None, defaults=None):
+    def __init__(self, positional=None,  varargs=None, kwonlyargs=None, kwonlydefaults=None, kwargs=None, defaults=None):
             self.positional = positional or []
+            self.defaults = defaults or {}
             self.varargs = varargs
             self.kwonlyargs = kwonlyargs or []
+            self.kwonlydefaults = kwonlydefaults or {}
             self.kwargs = kwargs
-            self.defaults = defaults or {}
 
     @classmethod
     def from_function(cls, function):
-        spec = inspect.getfullargspec(function)
+        if PY2:
+            spec = inspect.getargspec(function)
+        else:
+            spec = inspect.getfullargspec(function)
         args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
         defaults = cls._get_defaults(spec)
         positional = cls._remove_defaults_from_positional(args, defaults)
+        kwonlyargs, kwonlydefaults, kwargs = cls._get_kw_args(spec)
         return cls(positional=positional,
                    defaults=defaults,
                    varargs=spec.varargs,
-                   kwargs=spec.varkw)
+                   kwonlyargs=kwonlyargs,
+                   kwonlydefaults=kwonlydefaults,
+                   kwargs=kwargs)
 
     @classmethod
     def _get_defaults(cls, spec):
@@ -283,3 +290,10 @@ class ArgumentSpec(object):
             if argument not in defaults:
                 positional.append(argument)
         return positional
+
+    @classmethod
+    def _get_kw_args(cls, spec):
+        if PY2:
+            return None, None, spec.keywords
+        kwonlyargs = cls._remove_defaults_from_positional(spec.kwonlyargs, spec.kwonlydefaults or [])
+        return kwonlyargs, spec.kwonlydefaults, spec.varkw
