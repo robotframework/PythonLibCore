@@ -37,7 +37,6 @@ def test_keyword_names():
 def test_dir():
     expected = ['Custom name',
                 'Embedded arguments "${here}"',
-                '_DynamicCore__get_arg_spec',
                 '_DynamicCore__get_keyword',
                 '_DynamicCore__get_keyword_line',
                 '_DynamicCore__get_keyword_path',
@@ -75,7 +74,6 @@ def test_dir():
                 'varargs_and_kwargs']
     assert [a for a in dir(DynamicLibrary()) if a[:2] != '__'] == expected
     expected = [e for e in expected if e not in ('_DynamicCore__get_typing_hints',
-                                                 '_DynamicCore__get_arg_spec',
                                                  '_DynamicCore__get_keyword',
                                                  '_DynamicCore__get_keyword_line',
                                                  '_DynamicCore__get_keyword_path',

@@ -105,22 +105,6 @@ class DynamicCore(HybridCore):
         spec = ArgumentSpec.from_function(kw_method)
         return spec.get_arguments()
 
-    def __get_arg_spec(self, kw):
-        if PY2:
-            spec = inspect.getargspec(kw)
-            keywords = spec.keywords
-            kwonlydefaults = {}
-        else:
-            spec = inspect.getfullargspec(kw)
-            keywords = spec.varkw
-            kwonlydefaults = spec.kwonlydefaults
-        args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
-        defaults = spec.defaults or ()
-        nargs = len(args) - len(defaults)
-        mandatory = args[:nargs]
-        defaults = zip(args[nargs:], defaults)
-        return mandatory, defaults, spec.varargs, keywords, kwonlydefaults
-
     def get_keyword_tags(self, name):
         self.__get_keyword_tags_supported = True
         return self.keywords[name].robot_tags
@@ -170,14 +154,13 @@ class DynamicCore(HybridCore):
         return hints
 
     def __join_defaults_with_types(self, method, types):
-        _, defaults, _, _, kwonlydefaults = self.__get_arg_spec(method)
-        for name, value in defaults:
+        spec = ArgumentSpec.from_function(method)
+        for name, value in spec.defaults.items():
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
-        if kwonlydefaults:
-            for name, value in kwonlydefaults.items():
-                if name not in types and isinstance(value, (bool, type(None))):
-                    types[name] = type(value)
+        for name, value in spec.kwonlydefaults.items():
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
         return types
 
     def get_keyword_source(self, keyword_name):
