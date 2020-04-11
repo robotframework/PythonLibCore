@@ -236,7 +236,7 @@ class ArgumentSpec(object):
         if self.kwonlyargs:
             args += self.kwonlyargs
         for kw_arg, kw_default in self.kwonlydefaults.items():
-            kw_arg_default = '%s=%s' %(kw_arg, kw_default) if RF31 else (kw_arg, kw_default)
+            kw_arg_default = '%s=%s' % (kw_arg, kw_default) if RF31 else (kw_arg, kw_default)
             args.append(kw_arg_default)
         if self.kwargs:
             args.append('**%s' % self.kwargs)
