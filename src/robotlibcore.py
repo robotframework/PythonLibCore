@@ -155,10 +155,10 @@ class DynamicCore(HybridCore):
 
     def __join_defaults_with_types(self, method, types):
         spec = ArgumentSpec.from_function(method)
-        for name, value in spec.defaults.items():
+        for name, value in spec.defaults:
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
-        for name, value in spec.kwonlydefaults.items():
+        for name, value in spec.kwonlydefaults:
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
         return types
@@ -203,26 +203,36 @@ class ArgumentSpec(object):
     def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
                  kwonlydefaults=None, kwargs=None):
         self.positional = positional or []
-        self.defaults = defaults or {}
+        self.defaults = defaults or []
         self.varargs = varargs
         self.kwonlyargs = kwonlyargs or []
-        self.kwonlydefaults = kwonlydefaults or {}
+        self.kwonlydefaults = kwonlydefaults or []
         self.kwargs = kwargs
 
     def get_arguments(self):
-        args = self.positional
-        for arg, default in self.defaults.items():
-            default_arg = '%s=%s' % (arg, default)if RF31 else (arg, default)
-            args.append(default_arg)
+        args = self._get_positional(self.positional, self.defaults)
+        for default in self.defaults:
+            if RF31:
+                args.append('%s=%s' % (default[0], default[1]))
+            else:
+                args.append(default)
         if self.varargs:
             args.append('*%s' % self.varargs)
-        if self.kwonlyargs:
-            args += self.kwonlyargs
-        for kw_arg, kw_default in self.kwonlydefaults.items():
-            kw_arg_default = '%s=%s' % (kw_arg, kw_default) if RF31 else (kw_arg, kw_default)
-            args.append(kw_arg_default)
+        kwonlyargs = self._get_positional(self.kwonlyargs, self.kwonlydefaults)
+        args += kwonlyargs
+        for kw_default in self.kwonlydefaults:
+            if RF31:
+                args.append('%s=%s' % (kw_default[0], kw_default[1]))
+            else:
+                args.append(kw_default)
         if self.kwargs:
             args.append('**%s' % self.kwargs)
+        return args
+
+    def _get_positional(self, positional, defaults):
+        args = positional
+        for default in defaults:
+            args.remove(default[0])
         return args
 
     @classmethod
@@ -233,9 +243,8 @@ class ArgumentSpec(object):
             spec = inspect.getfullargspec(function)
         args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
         defaults = cls._get_defaults(spec)
-        positional = cls._remove_defaults_from_positional(args, defaults)
         kwonlyargs, kwonlydefaults, kwargs = cls._get_kw_args(spec)
-        return cls(positional=positional,
+        return cls(positional=args,
                    defaults=defaults,
                    varargs=spec.varargs,
                    kwonlyargs=kwonlyargs,
@@ -245,22 +254,15 @@ class ArgumentSpec(object):
     @classmethod
     def _get_defaults(cls, spec):
         if not spec.defaults:
-            return {}
+            return []
         names = spec.args[-len(spec.defaults):]
-        return dict(zip(names, spec.defaults))
-
-    @classmethod
-    def _remove_defaults_from_positional(cls, args, defaults):
-        positional = []
-        for argument in args:
-            if argument not in defaults:
-                positional.append(argument)
-        return positional
+        return list(zip(names, spec.defaults))
 
     @classmethod
     def _get_kw_args(cls, spec):
         if PY2:
-            return None, None, spec.keywords
-        kwonlydefaults = spec.kwonlydefaults or []
-        kwonlyargs = cls._remove_defaults_from_positional(spec.kwonlyargs, kwonlydefaults)
-        return kwonlyargs, spec.kwonlydefaults, spec.varkw
+            return [], [], spec.keywords
+        kwonlyargs = spec.kwonlyargs or []
+        kwonlydefaults = spec.kwonlydefaults or {}
+        kwonlydefaults = [(arg, name) for arg, name in kwonlydefaults.items()]
+        return kwonlyargs, kwonlydefaults, spec.varkw
