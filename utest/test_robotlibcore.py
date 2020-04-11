@@ -223,6 +223,18 @@ def test_argument_spec_keyword_only_arguments_no_default():
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
+def test_argument_spec_keyword_only_arguments_no_default():
+    lib = DynamicTypesAnnotationsLibrary(1)
+    spec = ArgumentSpec.from_function(lib.keyword_only_arguments_no_vararg)
+    assert spec.positional == []
+    assert spec.defaults == {}
+    assert spec.varargs is None
+    assert spec.kwonlyargs == ['other']
+    assert spec.kwonlydefaults == {}
+    assert spec.kwargs is None
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
 def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
