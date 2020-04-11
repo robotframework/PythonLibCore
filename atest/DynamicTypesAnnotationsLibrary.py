@@ -87,6 +87,10 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{other}'
 
     @keyword
+    def keyword_only_arguments_many_positional_and_default(self, *varargs, one, two, three, four=True, five=None, six=False):
+        return f'{varargs}, {one}, {two}, {three}, {four}, {five}, {six}'
+
+    @keyword
     def keyword_only_arguments_default_and_no_default(self, *varargs, other, value=False):
         return f'{varargs}, {other}, {value}'
 

@@ -235,6 +235,18 @@ def test_argument_spec_keyword_only_arguments_no_default():
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
+def test_argument_spec_keyword_only_arguments_many_args():
+    lib = DynamicTypesAnnotationsLibrary(1)
+    spec = ArgumentSpec.from_function(lib.keyword_only_arguments_many_positional_and_default)
+    assert spec.positional == []
+    assert spec.defaults == {}
+    assert spec.varargs == 'varargs'
+    assert spec.kwonlyargs == ['one', 'two', 'three']
+    assert spec.kwonlydefaults == {'four': True, 'five': None, 'six': False}
+    assert spec.kwargs is None
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
 def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
@@ -256,6 +268,7 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
     assert args('keyword_only_arguments_default_and_no_default') == ['*varargs', 'other', 'value=False']
     all_args = ['mandatory', 'positional=1', '*varargs', 'other', 'value=False', '**kwargs']
     assert args('keyword_all_args') == all_args
+
 
 def test_get_keyword_documentation():
     doc = DynamicLibrary().get_keyword_documentation
