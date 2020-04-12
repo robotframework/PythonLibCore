@@ -230,7 +230,6 @@ class ArgumentSpec(object):
             return [default for default in defaults]
         return ['%s=%s' % (arg, default) for arg, default in defaults]
 
-
     @classmethod
     def from_function(cls, function):
         if PY2:
