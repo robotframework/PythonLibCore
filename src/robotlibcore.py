@@ -93,7 +93,6 @@ class HybridCore(object):
 
 
 class DynamicCore(HybridCore):
-    __get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
 
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
@@ -106,7 +105,6 @@ class DynamicCore(HybridCore):
         return spec.get_arguments()
 
     def get_keyword_tags(self, name):
-        self.__get_keyword_tags_supported = True
         return self.keywords[name].robot_tags
 
     def get_keyword_documentation(self, name):
@@ -116,7 +114,7 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self.__init__) or ''
         kw = self.keywords[name]
         doc = inspect.getdoc(kw) or ''
-        if kw.robot_tags and not self.__get_keyword_tags_supported:
+        if kw.robot_tags:
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc

@@ -40,7 +40,6 @@ def test_dir():
                 '_DynamicCore__get_keyword',
                 '_DynamicCore__get_keyword_line',
                 '_DynamicCore__get_keyword_path',
-                '_DynamicCore__get_keyword_tags_supported',
                 '_DynamicCore__get_typing_hints',
                 '_DynamicCore__join_defaults_with_types',
                 '_HybridCore__get_members',
@@ -77,7 +76,6 @@ def test_dir():
                                                  '_DynamicCore__get_keyword',
                                                  '_DynamicCore__get_keyword_line',
                                                  '_DynamicCore__get_keyword_path',
-                                                 '_DynamicCore__get_keyword_tags_supported',
                                                  '_DynamicCore__join_defaults_with_types',
                                                  'get_keyword_arguments',
                                                  'get_keyword_documentation',
@@ -290,8 +288,8 @@ def test_get_keyword_tags():
     doc = lib.get_keyword_documentation
     assert tags('tags') == ['tag', 'another tag']
     assert tags('doc_and_tags') == ['tag']
-    assert doc('tags') == ''
-    assert doc('doc_and_tags') == 'I got doc!'
+    assert doc('tags') == 'Tags: tag, another tag'
+    assert doc('doc_and_tags').splitlines() == ['I got doc!', '', 'Tags: tag']
 
 
 def test_library_cannot_be_class():
