@@ -57,6 +57,11 @@ Keyword Annonations And Keyword Only Arguments
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments    1    ${1}    some=222
     Should Match Regexp    ${return}    \\('1', 1\\): <class 'tuple'>, 222: <class '(int|str)'>
 
+Keyword Only Arguments Without VarArg
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments No Vararg    other=tidii
+    Should Match    ${return}    tidii: <class 'str'>
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3
