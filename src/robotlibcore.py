@@ -32,7 +32,7 @@ from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
-RF31 = robot_version < '3.2'
+RF32 = robot_version > '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -210,30 +210,26 @@ class ArgumentSpec(object):
         self.kwargs = kwargs
 
     def get_arguments(self):
-        args = self._get_positional(self.positional, self.defaults)
-        for default in self.defaults:
-            if RF31:
-                args.append('%s=%s' % (default[0], default[1]))
-            else:
-                args.append(default)
+        args = self._format_positional(self.positional, self.defaults)
+        args += self._format_default(self.defaults)
         if self.varargs:
             args.append('*%s' % self.varargs)
-        kwonlyargs = self._get_positional(self.kwonlyargs, self.kwonlydefaults)
-        args += kwonlyargs
-        for kw_default in self.kwonlydefaults:
-            if RF31:
-                args.append('%s=%s' % (kw_default[0], kw_default[1]))
-            else:
-                args.append(kw_default)
+        args += self._format_positional(self.kwonlyargs, self.kwonlydefaults)
+        args += self._format_default(self.kwonlydefaults)
         if self.kwargs:
             args.append('**%s' % self.kwargs)
         return args
 
-    def _get_positional(self, positional, defaults):
-        args = positional
+    def _format_positional(self, positional, defaults):
         for default in defaults:
-            args.remove(default[0])
-        return args
+            positional.remove(default[0])
+        return positional
+
+    def _format_default(self, defaults):
+        if RF32:
+            return [default for default in defaults]
+        return ['%s=%s' % (arg, default) for arg, default in defaults]
+
 
     @classmethod
     def from_function(cls, function):
