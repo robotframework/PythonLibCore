@@ -221,14 +221,14 @@ class ArgumentSpec(object):
         return args
 
     def _format_positional(self, positional, defaults):
-        for default in defaults:
-            positional.remove(default[0])
+        for argument, _ in defaults:
+            positional.remove(argument)
         return positional
 
     def _format_default(self, defaults):
         if RF32:
             return [default for default in defaults]
-        return ['%s=%s' % (arg, default) for arg, default in defaults]
+        return ['%s=%s' % (argument, default) for argument, default in defaults]
 
     @classmethod
     def from_function(cls, function):
@@ -258,6 +258,6 @@ class ArgumentSpec(object):
         if PY2:
             return [], [], spec.keywords
         kwonlyargs = spec.kwonlyargs or []
-        kwonlydefaults = spec.kwonlydefaults or {}
-        kwonlydefaults = [(arg, name) for arg, name in kwonlydefaults.items()]
+        defaults = spec.kwonlydefaults or {}
+        kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
         return kwonlyargs, kwonlydefaults, spec.varkw
