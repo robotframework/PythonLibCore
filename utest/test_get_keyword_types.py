@@ -154,6 +154,11 @@ def test_dummy_magic_method(lib):
     assert types is None
 
 
+def test_varargs(lib):
+    types = lib.get_keyword_types('varargs_and_kwargs')
+    assert types == {}
+
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_init_args_with_annotation(lib_types):
     types = lib_types.get_keyword_types('__init__')
@@ -164,3 +169,27 @@ def test_init_args_with_annotation(lib_types):
 def test_exception_in_annotations(lib_types):
     types = lib_types.get_keyword_types('keyword_exception_annotations')
     assert types == {'arg': 'NotHere'}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments(lib_types):
+    types = lib_types.get_keyword_types('keyword_only_arguments')
+    assert types == {}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments_many(lib_types):
+    types = lib_types.get_keyword_types('keyword_only_arguments_many')
+    assert types == {'other': type(None)}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments_many(lib_types):
+    types = lib_types.get_keyword_types('keyword_mandatory_and_keyword_only_arguments')
+    assert types == {'arg': int, 'some': bool}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments_many(lib_types):
+    types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
+    assert types == {'four': bool, 'five': type(None), 'six': bool}

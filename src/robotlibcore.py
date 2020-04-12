@@ -22,16 +22,17 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 import sys
+
 try:
     import typing
 except ImportError:
     typing = None
 
-
 from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
+RF32 = robot_version > '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -101,36 +102,8 @@ class DynamicCore(HybridCore):
         kw_method = self.__get_keyword(name)
         if kw_method is None:
             return None
-        args, defaults, varargs, kwargs = self.__get_arg_spec(kw_method)
-        if robot_version >= '3.2':
-            args += self.__new_default_spec(defaults)
-        else:
-            args += self.__old_default_spec(defaults)
-        if varargs:
-            args.append('*%s' % varargs)
-        if kwargs:
-            args.append('**%s' % kwargs)
-        return args
-
-    def __new_default_spec(self, defaults):
-        return [(name, value) for name, value in defaults]
-
-    def __old_default_spec(self, defaults):
-        return ['{}={}'.format(name, value) for name, value in defaults]
-
-    def __get_arg_spec(self, kw):
-        if PY2:
-            spec = inspect.getargspec(kw)
-            keywords = spec.keywords
-        else:
-            spec = inspect.getfullargspec(kw)
-            keywords = spec.varkw
-        args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
-        defaults = spec.defaults or ()
-        nargs = len(args) - len(defaults)
-        mandatory = args[:nargs]
-        defaults = zip(args[nargs:], defaults)
-        return mandatory, defaults, spec.varargs, keywords
+        spec = ArgumentSpec.from_function(kw_method)
+        return spec.get_arguments()
 
     def get_keyword_tags(self, name):
         self.__get_keyword_tags_supported = True
@@ -181,8 +154,11 @@ class DynamicCore(HybridCore):
         return hints
 
     def __join_defaults_with_types(self, method, types):
-        _, defaults, _, _ = self.__get_arg_spec(method)
-        for name, value in defaults:
+        spec = ArgumentSpec.from_function(method)
+        for name, value in spec.defaults:
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
+        for name, value in spec.kwonlydefaults:
             if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
         return types
@@ -220,3 +196,68 @@ class StaticCore(HybridCore):
 
     def __init__(self):
         HybridCore.__init__(self, [])
+
+
+class ArgumentSpec(object):
+
+    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
+                 kwonlydefaults=None, kwargs=None):
+        self.positional = positional or []
+        self.defaults = defaults or []
+        self.varargs = varargs
+        self.kwonlyargs = kwonlyargs or []
+        self.kwonlydefaults = kwonlydefaults or []
+        self.kwargs = kwargs
+
+    def get_arguments(self):
+        args = self._format_positional(self.positional, self.defaults)
+        args += self._format_default(self.defaults)
+        if self.varargs:
+            args.append('*%s' % self.varargs)
+        args += self._format_positional(self.kwonlyargs, self.kwonlydefaults)
+        args += self._format_default(self.kwonlydefaults)
+        if self.kwargs:
+            args.append('**%s' % self.kwargs)
+        return args
+
+    def _format_positional(self, positional, defaults):
+        for argument, _ in defaults:
+            positional.remove(argument)
+        return positional
+
+    def _format_default(self, defaults):
+        if RF32:
+            return [default for default in defaults]
+        return ['%s=%s' % (argument, default) for argument, default in defaults]
+
+    @classmethod
+    def from_function(cls, function):
+        if PY2:
+            spec = inspect.getargspec(function)
+        else:
+            spec = inspect.getfullargspec(function)
+        args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
+        defaults = cls._get_defaults(spec)
+        kwonlyargs, kwonlydefaults, kwargs = cls._get_kw_args(spec)
+        return cls(positional=args,
+                   defaults=defaults,
+                   varargs=spec.varargs,
+                   kwonlyargs=kwonlyargs,
+                   kwonlydefaults=kwonlydefaults,
+                   kwargs=kwargs)
+
+    @classmethod
+    def _get_defaults(cls, spec):
+        if not spec.defaults:
+            return []
+        names = spec.args[-len(spec.defaults):]
+        return list(zip(names, spec.defaults))
+
+    @classmethod
+    def _get_kw_args(cls, spec):
+        if PY2:
+            return [], [], spec.keywords
+        kwonlyargs = spec.kwonlyargs or []
+        defaults = spec.kwonlydefaults or {}
+        kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
+        return kwonlyargs, kwonlydefaults, spec.varkw

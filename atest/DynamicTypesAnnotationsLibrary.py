@@ -73,3 +73,35 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     def keyword_exception_annotations(self, arg: 'NotHere'):
         return arg
+
+    @keyword
+    def keyword_only_arguments(self, *varargs, some=111):
+        return f'{varargs}: {type(varargs)}, {some}: {type(some)}'
+
+    @keyword
+    def keyword_only_arguments_no_default(self, *varargs, other):
+        return f'{varargs}, {other}'
+
+    @keyword
+    def keyword_only_arguments_no_vararg(self, *, other):
+        return f'{other}: {type(other)}'
+
+    @keyword
+    def keyword_only_arguments_many_positional_and_default(self, *varargs, one, two, three, four=True, five=None, six=False):
+        return f'{varargs}, {one}, {two}, {three}, {four}, {five}, {six}'
+
+    @keyword
+    def keyword_only_arguments_default_and_no_default(self, *varargs, other, value=False):
+        return f'{varargs}, {other}, {value}'
+
+    @keyword
+    def keyword_only_arguments_many(self, *varargs, some='value', other=None):
+        return f'{some}: {type(some)}, {other}: {type(other)}, {varargs}: {type(varargs)}'
+
+    @keyword
+    def keyword_mandatory_and_keyword_only_arguments(self, arg: int, *vararg, some=True):
+        return f'{arg}, {vararg}, {some}'
+
+    @keyword
+    def keyword_all_args(self, mandatory, positional=1, *varargs, other, value=False, **kwargs):
+        return True
