@@ -114,9 +114,6 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self.__init__) or ''
         kw = self.keywords[name]
         doc = inspect.getdoc(kw) or ''
-        if kw.robot_tags:
-            tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
-            doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
 
     def get_keyword_types(self, keyword_name):
