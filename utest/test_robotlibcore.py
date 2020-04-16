@@ -276,20 +276,14 @@ def test_get_keyword_documentation():
     assert doc('__init__') == 'Library init doc.'
 
 
-def test_embed_tags_to_doc_when_get_keyword_tags_is_not_called():
-    doc = DynamicLibrary().get_keyword_documentation
-    assert doc('tags') == 'Tags: tag, another tag'
-    assert doc('doc_and_tags') == 'I got doc!\n\nTags: tag'
-
-
 def test_get_keyword_tags():
     lib = DynamicLibrary()
     tags = lib.get_keyword_tags
     doc = lib.get_keyword_documentation
     assert tags('tags') == ['tag', 'another tag']
     assert tags('doc_and_tags') == ['tag']
-    assert doc('tags') == 'Tags: tag, another tag'
-    assert doc('doc_and_tags').splitlines() == ['I got doc!', '', 'Tags: tag']
+    assert doc('tags') == ''
+    assert doc('doc_and_tags') == 'I got doc!'
 
 
 def test_library_cannot_be_class():
