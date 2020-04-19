@@ -43,11 +43,11 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return None
 
     @keyword
-    def keyword_forward_references(self, arg: 'CustomObject'):
+    def keyword_forward_references(self: 'DynamicTypesAnnotationsLibrary', arg: 'CustomObject'):
         return arg
 
     @keyword
-    def keyword_with_annotations_and_default(self, arg: str = 'Foobar'):
+    def keyword_with_annotations_and_default(self: 'DynamicTypesAnnotationsLibrary', arg: str = 'Foobar'):
         return arg
 
     @keyword
@@ -55,11 +55,11 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return arg
 
     @keyword
-    def keyword_default_and_annotation(self, arg1: int, arg2=False) -> str:
+    def keyword_default_and_annotation(self: 'DynamicTypesAnnotationsLibrary', arg1: int, arg2=False) -> str:
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
 
     @keyword(types={'arg': str})
-    def keyword_robot_types_and_annotations(self, arg: int):
+    def keyword_robot_types_and_annotations(self: 'DynamicTypesAnnotationsLibrary', arg: int):
         return '%s: %s' % (arg, type(arg))
 
     @keyword(types=None)
@@ -71,7 +71,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
 
     @keyword
-    def keyword_exception_annotations(self, arg: 'NotHere'):
+    def keyword_exception_annotations(self: 'DynamicTypesAnnotationsLibrary', arg: 'NotHere'):
         return arg
 
     @keyword
@@ -87,7 +87,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{other}: {type(other)}'
 
     @keyword
-    def keyword_only_arguments_many_positional_and_default(self, *varargs, one, two, three, four=True, five=None, six=False):
+    def keyword_only_arguments_many_positional_and_default(self: 'DynamicTypesAnnotationsLibrary', *varargs, one, two, three, four=True, five=None, six=False):
         return f'{varargs}, {one}, {two}, {three}, {four}, {five}, {six}'
 
     @keyword
@@ -103,5 +103,13 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{arg}, {vararg}, {some}'
 
     @keyword
-    def keyword_all_args(self, mandatory, positional=1, *varargs, other, value=False, **kwargs):
+    def keyword_all_args(self: 'DynamicTypesAnnotationsLibrary', mandatory, positional=1, *varargs, other, value=False, **kwargs):
+        return True
+
+    @keyword
+    def keyword_self_and_types(self: 'DynamicTypesAnnotationsLibrary', mandatory: str, *varargs, other: bool, **kwargs):
+        return True
+
+    @keyword
+    def keyword_self_and_keyword_only_types(self: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs, other: bool, **kwargs):
         return True
