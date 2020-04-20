@@ -250,7 +250,7 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     assert args('keyword_only_arguments_many') == ['*varargs', ('some', 'value'), ('other', None)]
     assert args('keyword_only_arguments_no_default') == ['*varargs', 'other']
     assert args('keyword_only_arguments_default_and_no_default') == ['*varargs', 'other', ('value', False)]
-    all_args = [ 'mandatory', ('positional', 1), '*varargs', 'other', ('value', False), '**kwargs']
+    all_args = ['mandatory', ('positional', 1), '*varargs', 'other', ('value', False), '**kwargs']
     assert args('keyword_all_args') == all_args
 
 

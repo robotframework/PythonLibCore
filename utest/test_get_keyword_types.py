@@ -4,7 +4,7 @@ import pytest
 from robotlibcore import PY2
 
 if not PY2:
-    from typing import List, Union
+    from typing import List, Union, Dict
     from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
     from DynamicTypesAnnotationsLibrary import CustomObject
 
@@ -206,7 +206,8 @@ def test_keyword_self_and_types(lib_types):
     types = lib_types.get_keyword_types('keyword_self_and_types')
     assert types == {'mandatory': str, 'other': bool}
 
+
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_self_and_keyword_only_types(lib_types):
     types = lib_types.get_keyword_types('keyword_self_and_keyword_only_types')
-    assert types == {'other': bool}
+    assert types == {'*varargs': int, 'other': bool, '**kwargs': Dict[str, int]}

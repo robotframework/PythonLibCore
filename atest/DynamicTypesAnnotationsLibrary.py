@@ -1,4 +1,4 @@
-from typing import List, Union, NewType
+from typing import List, Union, NewType, Dict
 
 from robot.api import logger
 
@@ -111,5 +111,5 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return True
 
     @keyword
-    def keyword_self_and_keyword_only_types(self: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs, other: bool, **kwargs):
+    def keyword_self_and_keyword_only_types(x: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs: int, other: bool, **kwargs: Dict[str, int]):
         return True
