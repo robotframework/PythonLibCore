@@ -32,7 +32,7 @@ from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
-RF32 = robot_version > '3.2'
+RF31 = robot_version < '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -246,7 +246,7 @@ class ArgumentSpec(object):
         return positional
 
     def _format_default(self, defaults):
-        if RF32:
+        if not RF31:
             return [default for default in defaults]
         return ['%s=%s' % (argument, default) for argument, default in defaults]
 
