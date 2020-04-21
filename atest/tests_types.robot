@@ -62,6 +62,16 @@ Keyword Only Arguments Without VarArg
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments No Vararg    other=tidii
     Should Match    ${return}    tidii: <class 'str'>
 
+Varargs and KeywordArgs With Typing Hints
+    [Tags]    py3
+    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Self And Keyword Only Types
+    ...    this_is_mandatory    # mandatory argument
+    ...    1    2    3     4    # varargs
+    ...    other=True                 # other argument
+    ...    key1=1    key2=2     # kwargs
+    Should Match     ${return}
+    ...    this_is_mandatory: <class 'str'>, (1, 2, 3, 4): <class 'tuple'>, True: <class 'bool'>, {'key1': 1, 'key2': 2}: <class 'dict'>
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3
