@@ -111,5 +111,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return True
 
     @keyword
-    def keyword_self_and_keyword_only_types(x: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs: int, other: bool, **kwargs: Dict[str, int]):
-        return True
+    def keyword_self_and_keyword_only_types(x: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs: int, other: bool,
+                                            **kwargs: int):
+        return (f'{mandatory}: {type(mandatory)}, {varargs}: {type(varargs)}, '
+                f'{other}: {type(other)}, {kwargs}: {type(kwargs)}')

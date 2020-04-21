@@ -210,4 +210,4 @@ def test_keyword_self_and_types(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_self_and_keyword_only_types(lib_types):
     types = lib_types.get_keyword_types('keyword_self_and_keyword_only_types')
-    assert types == {'*varargs': int, 'other': bool, '**kwargs': Dict[str, int]}
+    assert types == {'varargs': int, 'other': bool, 'kwargs': int}
