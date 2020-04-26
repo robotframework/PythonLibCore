@@ -1,5 +1,5 @@
 =========================
-Python Library Core 2.0.0
+Python Library Core 2.0.1
 =========================
 
 
@@ -7,11 +7,11 @@ Python Library Core 2.0.0
 
 
 `PythonLibraryCore`_ is a generic component making it easier to create
-bigger `Robot Framework`_ test libraries. Python Library Core 2.0.0 is
+bigger `Robot Framework`_ test libraries. Python Library Core 2.0.1 is
 a new release with support of Robot Framework 3.2 dynamic library API
 changes.
 
-All issues targeted for Python Library Core v2.0.0 can be found
+All issues targeted for Python Library Core v2.0.1 can be found
 from the `issue tracker`_.
 
 If you have pip_ installed, just run
@@ -24,12 +24,12 @@ to install the latest available release or use
 
 ::
 
-   pip install robotframework-robotlibcore==2.0.0
+   pip install robotframework-robotlibcore==2.0.1
 
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-PythonLibCore 2.0.0 was released on Sunday April 26, 2020. PythonLibCore
+PythonLibCore 2.0.1was released on Sunday April 26, 2020. PythonLibCore
 supports Python 2.7 and 3.6+ and Robot Framework 3.1.2+. This is last release
 which contains new development for Python 2.7 and users should migrate to Python 3.
 
@@ -37,7 +37,7 @@ which contains new development for Python 2.7 and users should migrate to Python
 .. _Robot Framework: http://robotframework.org
 .. _pip: http://pip-installer.org
 .. _PyPI: https://pypi.python.org/pypi/robotframework-pythontlibcore
-.. _issue tracker: https://github.com/robotframework/PythonLibCore/issues?q=milestone%3Av2.0.0
+.. _issue tracker: https://github.com/robotframework/PythonLibCore/issues?q=milestone%3Av2.0.1
 
 
 .. contents::
@@ -126,7 +126,7 @@ Full list of fixes and enhancements
       - ---
       - Packaging
 
-Altogether 10 issues. View on the `issue tracker <https://github.com/robotframework/PythonLibCore/issues?q=milestone%3Av2.0.0>`__.
+Altogether 10 issues. View on the `issue tracker <https://github.com/robotframework/PythonLibCore/issues?q=milestone%3Av2.0.1>`__.
 
 .. _#10: https://github.com/robotframework/PythonLibCore/issues/10
 .. _#26: https://github.com/robotframework/PythonLibCore/issues/26
