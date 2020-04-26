@@ -34,7 +34,7 @@ from robot import __version__ as robot_version
 PY2 = sys.version_info < (3,)
 RF31 = robot_version < '3.2'
 
-__version__ = '2.0.1'
+__version__ = '2.0.2.dev1'
 
 
 class HybridCore(object):
