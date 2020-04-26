@@ -1,5 +1,5 @@
-PythonLibraryCore
-=================
+Python Library Core
+===================
 
 Tools to ease creating larger test libraries for `Robot Framework`_ using
 Python. The Robot Framework `hybrid`_ and `dynamic library API`_ gives more
