@@ -188,7 +188,7 @@ Creating distributions
       twine upload dist/*
 
 5. Verify that project the page at `PyPI
-   <https://pypi.org/project/robotframework-pythontlibcore/>`_
+   <https://pypi.org/project/robotframework-pythonlibcore/>`_
    looks good.
 
 6. Test installation (add ``--pre`` with pre-releases)::

@@ -30,12 +30,14 @@ to install the latest available release or use
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-SeleniumLibrary 2.0.2 was released on Sunday April 26, 2020.
+PythonLibCore 2.0.2 was released on Sunday April 26, 2020. PythonLibCore
+supports Python 2.7 and 3.6+ and Robot Framework 3.1.2+. This is last release
+which contains new development for Python 2.7 and users should migrate to Python 3.
 
 .. _PythonLibCore: https://github.com/robotframework/PythonLibCore
 .. _Robot Framework: http://robotframework.org
 .. _pip: http://pip-installer.org
-.. _PyPI: https://pypi.python.org/pypi/robotframework-robotlibcore
+.. _PyPI: https://pypi.org/project/robotframework-pythonlibcore/
 .. _issue tracker: https://github.com/robotframework/PythonLibCore/issues?q=milestone%3Av2.0.2
 
 
