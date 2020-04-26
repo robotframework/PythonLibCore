@@ -129,8 +129,8 @@ Release notes
 
 4. Add, commit and push::
 
-      git add doc/PythonLibCore-$VERSION.rst
-      git commit -m "Release notes for $VERSION" doc/PythonLibCore-$VERSION.rst
+      git add docs/PythonLibCore-$VERSION.rst
+      git commit -m "Release notes for $VERSION" docs/PythonLibCore-$VERSION.rst
       git push
 
 5. Update later if necessary. Writing release notes is typically the biggest
@@ -188,7 +188,7 @@ Creating distributions
       twine upload dist/*
 
 5. Verify that project the page at `PyPI
-   <https://pypi.python.org/pypi/robotframework-pythonlibcore>`_
+   <https://pypi.org/project/robotframework-pythontlibcore/>`_
    looks good.
 
 6. Test installation (add ``--pre`` with pre-releases)::
