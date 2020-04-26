@@ -30,7 +30,7 @@ with open(join(CURDIR, 'README.rst')) as f:
 DESCRIPTION = ('Tools to ease creating larger test libraries for '
                'Robot Framework using Python.')
 setup(
-    name             = 'robotframework-pythontlibcore',
+    name             = 'robotframework-pythonlibcore',
     version          = VERSION,
     author           = 'Tatu Aalto',
     author_email     = 'aalto.tatu@gmail.com',
