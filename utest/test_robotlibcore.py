@@ -255,7 +255,7 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
-@pytest.mark.skipif(robot__version > '3.2', reason='For RF 3.1')
+@pytest.mark.skipif(robot__version >= '3.2', reason='For RF 3.1')
 def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
     assert args('keyword_only_arguments') == ['*varargs', 'some=111']
