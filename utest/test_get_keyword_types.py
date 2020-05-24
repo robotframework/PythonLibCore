@@ -184,13 +184,13 @@ def test_keyword_only_arguments_many(lib_types):
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_only_arguments_many(lib_types):
+def test_keyword_mandatory_and_keyword_only_arguments(lib_types):
     types = lib_types.get_keyword_types('keyword_mandatory_and_keyword_only_arguments')
     assert types == {'arg': int, 'some': bool}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_only_arguments_many(lib_types):
+def test_keyword_only_arguments_many_positional_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
     assert types == {'four': bool, 'five': type(None), 'six': bool}
 
