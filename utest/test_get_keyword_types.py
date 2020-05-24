@@ -33,7 +33,7 @@ def test_types_disabled(lib):
 
 def test_keyword_types_and_bool_default(lib):
     types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
-    assert types == {'arg1': str, 'arg2': bool}
+    assert types == {'arg1': str}
 
 
 def test_one_keyword_type_defined(lib):
@@ -51,14 +51,9 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
-def test_keyword_booleans(lib):
-    types = lib.get_keyword_types('keyword_booleans')
-    assert types == {'arg1': bool, 'arg2': bool}
-
-
 def test_keyword_none(lib):
     types = lib.get_keyword_types('keyword_none')
-    assert types == {'arg': type(None)}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -77,11 +72,6 @@ def test_multiple_annotations(lib_types):
 def test_multiple_types(lib_types):
     types = lib_types.get_keyword_types('keyword_multiple_types')
     assert types == {'arg': Union[List, None]}
-
-
-def test_keyword_with_default_type(lib):
-    types = lib.get_keyword_types('keyword_default_types')
-    assert types == {'arg': type(None)}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -123,7 +113,7 @@ def test_keyword_with_annotation_external_class(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_with_annotation_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_default_and_annotation')
-    assert types == {'arg1': int, 'arg2': bool}
+    assert types == {'arg1': int, 'arg2': Union[bool, str]}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -140,13 +130,13 @@ def test_keyword_with_robot_types_disbaled_and_annotations(lib_types):
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_with_robot_types_and_bool_annotations(lib_types):
-    types = lib_types.get_keyword_types('keyword_robot_types_and_bool_defaults')
-    assert types == {'arg1': str, 'arg2': bool}
+    types = lib_types.get_keyword_types('keyword_robot_types_and_bool_hint')
+    assert types == {'arg1': str}
 
-
-def test_init_args(lib):
-    types = lib.get_keyword_types('__init__')
-    assert types == {'arg': bool}
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_init_args(lib_types):
+    types = lib_types.get_keyword_types('__init__')
+    assert types == {'arg': str}
 
 
 def test_dummy_magic_method(lib):
@@ -180,7 +170,7 @@ def test_keyword_only_arguments(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_only_arguments_many(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many')
-    assert types == {'other': type(None)}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -192,13 +182,13 @@ def test_keyword_mandatory_and_keyword_only_arguments(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_only_arguments_many_positional_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
-    assert types == {'four': bool, 'five': type(None), 'six': bool}
+    assert types == {'four': Union[int, str], 'six': Union[bool, str]}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_all_args(lib_types):
     types = lib_types.get_keyword_types('keyword_all_args')
-    assert types == {'value': bool}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')

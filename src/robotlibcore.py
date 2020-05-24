@@ -124,7 +124,7 @@ class DynamicCore(HybridCore):
             return types
         if not types:
             types = self.__get_typing_hints(method)
-        types = self.__join_defaults_with_types(method, types)
+        types.pop('return', None)
         return types
 
     def __get_keyword(self, keyword_name):
@@ -142,16 +142,6 @@ class DynamicCore(HybridCore):
             return {}
         spec = ArgumentSpec.from_function(method)
         return spec.get_typing_hints()
-
-    def __join_defaults_with_types(self, method, types):
-        spec = ArgumentSpec.from_function(method)
-        for name, value in spec.defaults:
-            if name not in types and isinstance(value, (bool, type(None))):
-                types[name] = type(value)
-        for name, value in spec.kwonlydefaults:
-            if name not in types and isinstance(value, (bool, type(None))):
-                types[name] = type(value)
-        return types
 
     def get_keyword_source(self, keyword_name):
         method = self.__get_keyword(keyword_name)
