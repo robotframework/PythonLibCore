@@ -31,7 +31,7 @@ jobs:
     - name: Run unit tests
       run: |
         python utest/run.py
-    - name: Run acceptance  tests
+    - name: Run acceptance tests
       run: |
         python atest/run.py
     - uses: actions/upload-artifact@v1
