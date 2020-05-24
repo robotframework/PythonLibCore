@@ -33,7 +33,7 @@ def test_types_disabled(lib):
 
 def test_keyword_types_and_bool_default(lib):
     types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
-    assert types == {'arg1': str}
+    assert types == {'arg1': str, 'arg2': bool}
 
 
 def test_one_keyword_type_defined(lib):
@@ -188,7 +188,7 @@ def test_keyword_only_arguments_many_positional_and_default(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_all_args(lib_types):
     types = lib_types.get_keyword_types('keyword_all_args')
-    assert types == {}
+    assert types == {'value': bool}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
