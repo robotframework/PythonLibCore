@@ -51,6 +51,11 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
+def test_keyword_booleans(lib):
+    types = lib.get_keyword_types('keyword_booleans')
+    assert types == {'arg1': bool, 'arg2': bool}
+
+
 def test_keyword_none(lib):
     types = lib.get_keyword_types('keyword_none')
     assert types == {}
