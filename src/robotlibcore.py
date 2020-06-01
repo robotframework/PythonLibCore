@@ -124,7 +124,10 @@ class DynamicCore(HybridCore):
             return types
         if not types:
             types = self.__get_typing_hints(method)
-        types = self.__join_defaults_with_types(method, types)
+        if RF31:
+            types = self.__join_defaults_with_types(method, types)
+        else:
+            types.pop('return', None)
         return types
 
     def __get_keyword(self, keyword_name):
@@ -146,10 +149,10 @@ class DynamicCore(HybridCore):
     def __join_defaults_with_types(self, method, types):
         spec = ArgumentSpec.from_function(method)
         for name, value in spec.defaults:
-            if name not in types and isinstance(value, bool):
+            if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
         for name, value in spec.kwonlydefaults:
-            if name not in types and isinstance(value, bool):
+            if name not in types and isinstance(value, (bool, type(None))):
                 types[name] = type(value)
         return types
 

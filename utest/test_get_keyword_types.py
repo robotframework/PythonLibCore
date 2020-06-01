@@ -1,7 +1,7 @@
 import pytest
 
 
-from robotlibcore import PY2
+from robotlibcore import PY2, RF31
 
 if not PY2:
     from typing import List, Union, Dict
@@ -31,9 +31,16 @@ def test_types_disabled(lib):
     assert types is None
 
 
-def test_keyword_types_and_bool_default(lib):
+@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
+def test_keyword_types_and_bool_default_rf31(lib):
     types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
     assert types == {'arg1': str, 'arg2': bool}
+
+
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
+def test_keyword_types_and_bool_default_rf32(lib):
+    types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
+    assert types == {'arg1': str}
 
 
 def test_one_keyword_type_defined(lib):
@@ -51,14 +58,28 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
-def test_keyword_booleans(lib):
+@pytest.mark.skipif(not RF31, reason='Only for RF3.2+')
+def test_keyword_booleans_rf31(lib):
     types = lib.get_keyword_types('keyword_booleans')
     assert types == {'arg1': bool, 'arg2': bool}
 
 
-def test_keyword_none(lib):
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
+def test_keyword_booleans_rf32(lib):
+    types = lib.get_keyword_types('keyword_booleans')
+    assert types == {}
+
+
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
+def test_keyword_none_rf32(lib):
     types = lib.get_keyword_types('keyword_none')
     assert types == {}
+
+
+@pytest.mark.skipif(not RF31, reason='Only for RF3.2+')
+def test_keyword_none_rf31(lib):
+    types = lib.get_keyword_types('keyword_none')
+    assert types == {'arg': type(None)}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -190,8 +211,16 @@ def test_keyword_only_arguments_many_positional_and_default(lib_types):
     assert types == {'four': Union[int, str], 'six': Union[bool, str]}
 
 
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_all_args(lib_types):
+def test_keyword_all_args_rf32(lib_types):
+    types = lib_types.get_keyword_types('keyword_all_args')
+    assert types == {}
+
+
+@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_all_args_rf31(lib_types):
     types = lib_types.get_keyword_types('keyword_all_args')
     assert types == {'value': bool}
 
