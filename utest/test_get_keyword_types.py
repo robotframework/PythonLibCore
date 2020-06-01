@@ -193,10 +193,18 @@ def test_keyword_only_arguments(lib_types):
     assert types == {}
 
 
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_only_arguments_many(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many')
     assert types == {}
+
+
+@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments_many(lib_types):
+    types = lib_types.get_keyword_types('keyword_only_arguments_many')
+    assert types == {'other': type(None)}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -205,10 +213,18 @@ def test_keyword_mandatory_and_keyword_only_arguments(lib_types):
     assert types == {'arg': int, 'some': bool}
 
 
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
-def test_keyword_only_arguments_many_positional_and_default(lib_types):
+def test_keyword_only_arguments_many_positional_and_default_rf32(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
     assert types == {'four': Union[int, str], 'six': Union[bool, str]}
+
+
+@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_only_arguments_many_positional_and_default_rf31(lib_types):
+    types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
+    assert types == {'four': Union[int, str], 'five': type(None), 'six': Union[bool, str]}
 
 
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
