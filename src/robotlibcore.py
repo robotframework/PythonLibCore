@@ -124,7 +124,10 @@ class DynamicCore(HybridCore):
             return types
         if not types:
             types = self.__get_typing_hints(method)
-        types = self.__join_defaults_with_types(method, types)
+        if RF31:
+            types = self.__join_defaults_with_types(method, types)
+        else:
+            types.pop('return', None)
         return types
 
     def __get_keyword(self, keyword_name):

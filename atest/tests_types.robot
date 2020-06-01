@@ -13,7 +13,7 @@ Keyword Default Argument As Abject None Default Value
 
 Keyword Default Argument As String None
     ${return} =    DynamicTypesLibrary.Keyword None    None
-    Should Match Regexp    ${return}    None: <(class|type) 'NoneType'>
+    Should Match Regexp    ${return}    None: <(class|type) '(unicode|str|NoneType)'>
 
 Keyword Default As Booleans With Defaults
     ${return}    DynamicTypesLibrary.Keyword Booleans
@@ -35,22 +35,17 @@ Keyword Annonations And Bool Defaults Using Default
 Keyword Annonations And Bool Defaults Defining All Arguments
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    1    true
-    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+    Should Match Regexp    ${return}    1: <(class|type) 'int'>, true: <(class|type) 'str'>
 
 Keyword Annonations And Bool Defaults Defining All Arguments And With Number
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Default And Annotation    ${1}    true
-    Should Match Regexp    ${return}    1: <(class|type) 'int'>, True: <(class|type) 'bool'>
+    Should Match Regexp    ${return}    1: <(class|type) 'int'>, true: <(class|type) 'str'>
 
 Keyword Annonations And Robot Types Disbales Argument Conversion
     [Tags]    py3
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types Disabled And Annotations    111
     Should Match Regexp    ${return}    111: <(class|type) 'str'>
-
-Keyword Annonations And Robot Types Defined
-    [Tags]    py3
-    ${return} =    DynamicTypesAnnotationsLibrary.Keyword Robot Types And Bool Defaults    tidii    111
-    Should Match Regexp    ${return}    tidii: <(class|type) 'str'>, 111: <(class|type) 'str'>
 
 Keyword Annonations And Keyword Only Arguments
     [Tags]    py3

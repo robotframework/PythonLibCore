@@ -55,7 +55,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return arg
 
     @keyword
-    def keyword_default_and_annotation(self: 'DynamicTypesAnnotationsLibrary', arg1: int, arg2=False) -> str:
+    def keyword_default_and_annotation(self: 'DynamicTypesAnnotationsLibrary', arg1: int, arg2: Union[bool, str] = False) -> str:
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
 
     @keyword(types={'arg': str})
@@ -67,7 +67,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return '%s: %s' % (arg, type(arg))
 
     @keyword(types={'arg1': str})
-    def keyword_robot_types_and_bool_defaults(self, arg1, arg2=False):
+    def keyword_robot_types_and_bool_hint(self, arg1, arg2: bool):
         return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
 
     @keyword
@@ -87,7 +87,9 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{other}: {type(other)}'
 
     @keyword
-    def keyword_only_arguments_many_positional_and_default(self: 'DynamicTypesAnnotationsLibrary', *varargs, one, two, three, four=True, five=None, six=False):
+    def keyword_only_arguments_many_positional_and_default(self: 'DynamicTypesAnnotationsLibrary', *varargs, one, two,
+                                                           three, four: Union[int, str] = 1, five=None,
+                                                           six: Union[bool, str] = False):
         return f'{varargs}, {one}, {two}, {three}, {four}, {five}, {six}'
 
     @keyword
@@ -99,7 +101,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{some}: {type(some)}, {other}: {type(other)}, {varargs}: {type(varargs)}'
 
     @keyword
-    def keyword_mandatory_and_keyword_only_arguments(self, arg: int, *vararg, some=True):
+    def keyword_mandatory_and_keyword_only_arguments(self, arg: int, *vararg, some: bool):
         return f'{arg}, {vararg}, {some}'
 
     @keyword
