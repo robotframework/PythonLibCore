@@ -11,7 +11,7 @@ from robot.version import VERSION as rf_version
 from robotstatuschecker import process_output
 
 
-library_variants = ['Hybrid', 'Dynamic', 'Static', 'ExtendExisting']
+library_variants = ['Hybrid', 'Dynamic', 'ExtendExisting']
 curdir = dirname(abspath(__file__))
 outdir = join(curdir, 'results')
 tests = join(curdir, 'tests.robot')
