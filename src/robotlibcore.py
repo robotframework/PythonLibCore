@@ -185,12 +185,6 @@ class DynamicCore(HybridCore):
             return None
 
 
-class StaticCore(HybridCore):
-
-    def __init__(self):
-        HybridCore.__init__(self, [])
-
-
 class ArgumentSpec(object):
 
     _function = None
