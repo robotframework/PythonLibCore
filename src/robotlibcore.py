@@ -273,3 +273,21 @@ class ArgumentSpec(object):
         defaults = spec.kwonlydefaults or {}
         kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
         return kwonlyargs, kwonlydefaults, spec.varkw
+
+
+class ArgumentSpecification(object):
+    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None, kwargs=None):
+        self.positional = positional or []
+        self.defaults = defaults or []
+        self.varargs = varargs
+        self.kwonlyargs = kwonlyargs or []
+        self.kwargs = kwargs
+
+    def get_arguments(self):
+        arguments = [*self.positional, *self.defaults]
+        if self.varargs:
+            arguments.append(self.varargs)
+        arguments.extend(self.kwonlyargs)
+        if self.kwargs:
+            arguments.append(self.kwargs)
+        return tuple(arguments)
