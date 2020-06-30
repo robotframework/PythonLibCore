@@ -4,7 +4,7 @@ import pytest
 from robotlibcore import PY2, RF31
 
 if not PY2:
-    from typing import List, Union, Dict
+    from typing import List, Union
     from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
     from DynamicTypesAnnotationsLibrary import CustomObject
 
