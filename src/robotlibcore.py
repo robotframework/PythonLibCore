@@ -284,7 +284,9 @@ class ArgumentSpecification(object):
         self.kwargs = kwargs
 
     def get_arguments(self):
-        arguments = [*self.positional, *self.defaults]
+        arguments = []
+        arguments.extend(self.positional)
+        arguments.extend(self.defaults)
         if self.varargs:
             arguments.append(self.varargs)
         arguments.extend(self.kwonlyargs)
