@@ -17,7 +17,7 @@ WhiteLibrary_. The version 2.0 support changes in the Robot Framework
 
 Usage
 -----
-There are two ways to use PythonLinCore, either by `HybridCore` or by using `DynamicCore`.
+There are two ways to use PythonLibCore, either by `HybridCore` or by using `DynamicCore`.
 `HybridCore` provides support for the hybrid library API and `DynamicCore` provides support
 for dynamic library API. Consult the Robot Framework `User Guide`_, for choosing the
 correct API for library.
