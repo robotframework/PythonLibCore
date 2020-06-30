@@ -286,10 +286,15 @@ class ArgumentSpecification(object):
     def get_arguments(self):
         arguments = []
         arguments.extend(self.positional)
-        arguments.extend(self.defaults)
+        arguments.extend(self._format_default_args(self.defaults))
         if self.varargs:
             arguments.append(self.varargs)
         arguments.extend(self.kwonlyargs)
         if self.kwargs:
             arguments.append(self.kwargs)
         return tuple(arguments)
+
+    def _format_default_args(self, defaults):
+        if RF31:
+            return ['%s=%s' % (argument, default) for argument, default in defaults]
+        return defaults
