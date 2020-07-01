@@ -277,12 +277,14 @@ class ArgumentSpec(object):
 
 class ArgumentSpecification(object):
 
-    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None, kwargs=None):
+    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None, kwargs=None,
+                 typing_hints=None):
         self._positional = positional or []
         self._defaults = defaults or []
         self._varargs = varargs
         self._kwonlyargs = kwonlyargs or []
         self._kwargs = kwargs
+        self.typing_hints = typing_hints
 
     def get_arguments(self):
         arguments = []
