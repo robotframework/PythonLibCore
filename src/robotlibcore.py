@@ -276,22 +276,23 @@ class ArgumentSpec(object):
 
 
 class ArgumentSpecification(object):
+
     def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None, kwargs=None):
-        self.positional = positional or []
-        self.defaults = defaults or []
-        self.varargs = varargs
-        self.kwonlyargs = kwonlyargs or []
-        self.kwargs = kwargs
+        self._positional = positional or []
+        self._defaults = defaults or []
+        self._varargs = varargs
+        self._kwonlyargs = kwonlyargs or []
+        self._kwargs = kwargs
 
     def get_arguments(self):
         arguments = []
-        arguments.extend(self.positional)
-        arguments.extend(self._format_default_args(self.defaults))
-        if self.varargs:
-            arguments.append(self.varargs)
-        arguments.extend(self.kwonlyargs)
-        if self.kwargs:
-            arguments.append(self.kwargs)
+        arguments.extend(self._positional)
+        arguments.extend(self._format_default_args(self._defaults))
+        if self._varargs:
+            arguments.append(self._varargs)
+        arguments.extend(self._kwonlyargs)
+        if self._kwargs:
+            arguments.append(self._kwargs)
         return tuple(arguments)
 
     def _format_default_args(self, defaults):
