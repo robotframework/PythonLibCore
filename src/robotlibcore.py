@@ -275,6 +275,14 @@ class ArgumentSpec(object):
         return kwonlyargs, kwonlydefaults, spec.varkw
 
 
+class ArgumentBuilder(object):
+
+    @classmethod
+    def build(cls, function):
+        doc = inspect.getdoc(function) or ''
+        return ArgumentSpecification(documentation=doc)
+
+
 class ArgumentSpecification(object):
 
     def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None, kwargs=None,
