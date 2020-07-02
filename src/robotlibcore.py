@@ -282,8 +282,7 @@ class ArgumentBuilder(object):
         doc = inspect.getdoc(function) or ''
         arg_spec = cls._get_arg_spec(function)
         positional = arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args  # drop self
-        varargs = '*%s' % arg_spec.varargs if arg_spec.varargs else None
-        kwargs = '**%s' % arg_spec.varkw if arg_spec.varkw else None
+        varargs, kwargs = cls._get_var_and_kw_args(arg_spec)
         return ArgumentSpecification(
             positional=positional,
             varargs=varargs,
@@ -296,6 +295,15 @@ class ArgumentBuilder(object):
         if PY2:
             return inspect.getargspec(function)
         return inspect.getfullargspec(function)
+
+    @classmethod
+    def _get_var_and_kw_args(cls, arg_spec):
+        varargs = '*%s' % arg_spec.varargs if arg_spec.varargs else None
+        if PY2:
+            kwargs = '**%s' % arg_spec.keywords if arg_spec.keywords else None
+        else:
+            kwargs = '**%s' % arg_spec.varkw if arg_spec.varkw else None
+        return varargs, kwargs
 
 
 class ArgumentSpecification(object):

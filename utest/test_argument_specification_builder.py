@@ -1,9 +1,7 @@
 from robotlibcore import ArgumentBuilder, PY2
 
 from DynamicLibrary import DynamicLibrary
-
-if not PY2:
-    from DynamicTypesLibrary import DynamicTypesLibrary
+from DynamicTypesLibrary import DynamicTypesLibrary
 
 
 def test_documentation():
