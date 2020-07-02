@@ -280,7 +280,22 @@ class ArgumentBuilder(object):
     @classmethod
     def build(cls, function):
         doc = inspect.getdoc(function) or ''
-        return ArgumentSpecification(documentation=doc)
+        arg_spec = cls._get_arg_spec(function)
+        positional = arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args  # drop self
+        varargs = '*%s' % arg_spec.varargs if arg_spec.varargs else None
+        kwargs = '**%s' % arg_spec.varkw if arg_spec.varkw else None
+        return ArgumentSpecification(
+            positional=positional,
+            varargs=varargs,
+            kwargs=kwargs,
+            documentation=doc
+        )
+
+    @classmethod
+    def _get_arg_spec(cls, function):
+        if PY2:
+            return inspect.getargspec(function)
+        return inspect.getfullargspec(function)
 
 
 class ArgumentSpecification(object):
