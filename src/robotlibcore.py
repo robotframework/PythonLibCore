@@ -273,3 +273,65 @@ class ArgumentSpec(object):
         defaults = spec.kwonlydefaults or {}
         kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
         return kwonlyargs, kwonlydefaults, spec.varkw
+
+
+class KeywordBuilder(object):
+
+    @classmethod
+    def build(cls, function):
+        arg_spec = cls._get_arg_spec(function)
+        argument_specification = cls._get_positional(arg_spec, function)
+        argument_specification.extend(cls._get_defaults(arg_spec))
+        varargs, kwargs = cls._get_var_and_kw_args(arg_spec)
+        argument_specification.extend(varargs)
+        argument_specification.extend(kwargs)
+        return KeywordSpecification(
+            argument_specification=tuple(argument_specification),
+            documentation=inspect.getdoc(function) or ''
+        )
+
+    @classmethod
+    def _get_arg_spec(cls, function):
+        if PY2:
+            return inspect.getargspec(function)
+        return inspect.getfullargspec(function)
+
+    @classmethod
+    def _get_positional(cls, arg_spec, function):
+        args = arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args  # drop self
+        defaults_len = len(arg_spec.defaults) if arg_spec.defaults else 0
+        if defaults_len == len(args):
+            return []
+        if defaults_len == 0:
+            return args
+        return args[:defaults_len]
+
+    @classmethod
+    def _get_defaults(cls, arg_spec):
+        if not arg_spec.defaults:
+            return []
+        names = arg_spec.args[-len(arg_spec.defaults):]
+        defaults = list(zip(names, arg_spec.defaults))
+        if RF31:
+            return [ '%s=%s' % (arg, value) for arg, value in defaults]
+        return defaults
+
+    @classmethod
+    def _get_var_and_kw_args(cls, arg_spec):
+        if arg_spec.varargs:
+            varargs = ['*%s' % arg_spec.varargs]
+        else:
+            varargs = []
+        if PY2:
+            kwargs = ['**%s' % arg_spec.keywords] if arg_spec.keywords else []
+        else:
+            kwargs = ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
+        return varargs, kwargs
+
+
+class KeywordSpecification(object):
+
+    def __init__(self, argument_specification=None, documentation=None):
+        self.argument_specification = argument_specification
+        self.documentation = documentation
+
