@@ -313,7 +313,7 @@ class KeywordBuilder(object):
         names = arg_spec.args[-len(arg_spec.defaults):]
         defaults = list(zip(names, arg_spec.defaults))
         if RF31:
-            return [ '%s=%s' % (arg, value) for arg, value in defaults]
+            return ['%s=%s' % (arg, value) for arg, value in defaults]
         return defaults
 
     @classmethod
@@ -334,4 +334,3 @@ class KeywordSpecification(object):
     def __init__(self, argument_specification=None, documentation=None):
         self.argument_specification = argument_specification
         self.documentation = documentation
-
