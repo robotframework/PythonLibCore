@@ -62,6 +62,21 @@ def test_varargs_and_kwargs(lib):
     assert spec.argument_specification == ('*vargs', '**kwargs')
 
 
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_named_only(lib_py3):
     spec = KeywordBuilder.build(lib_py3.named_only)
     assert spec.argument_specification == ('*varargs', 'key1', 'key2')
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
+def test_named_only_rf32(lib_py3):
+    spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
+    assert spec.argument_specification == ('*varargs', 'key1', 'key2', ('key3', 'default1'), ('key4', True))
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
+def test_named_only_rf31(lib_py3):
+    spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
+    assert spec.argument_specification == ('*varargs', 'key1', 'key2', 'key3=default1', 'key4=True')

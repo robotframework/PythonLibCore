@@ -284,6 +284,9 @@ class KeywordBuilder(object):
         argument_specification.extend(cls._get_defaults(arg_spec))
         varargs, kwargs = cls._get_var_and_kw_args(arg_spec)
         argument_specification.extend(varargs)
+        kw_only_args = cls._get_kw_only(arg_spec)
+        if kw_only_args:
+            argument_specification.extend(kw_only_args)
         argument_specification.extend(kwargs)
         return KeywordSpecification(
             argument_specification=tuple(argument_specification),
@@ -327,6 +330,27 @@ class KeywordBuilder(object):
         else:
             kwargs = ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
         return varargs, kwargs
+
+    @classmethod
+    def _get_kw_only(cls, arg_spec):
+        if PY2:
+            return None
+        kw_only_args = []
+        if not arg_spec.kwonlyargs:
+            return kw_only_args
+        for arg in arg_spec.kwonlyargs:
+            if not arg_spec.kwonlydefaults:
+                kw_only_args.append(arg)
+            elif arg not in arg_spec.kwonlydefaults:
+                kw_only_args.append(arg)
+            else:
+                value = arg_spec.kwonlydefaults.get(arg, '')
+                if RF31:
+                    arg_syntax = '%s=%s' % (arg, value)
+                else:
+                    arg_syntax = (arg, value)
+                kw_only_args.append(arg_syntax)
+        return kw_only_args
 
 
 class KeywordSpecification(object):
