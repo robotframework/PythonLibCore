@@ -280,8 +280,9 @@ class KeywordBuilder(object):
     @classmethod
     def build(cls, function):
         arg_spec = cls._get_arg_spec(function)
-        argument_specification = cls._get_positional(arg_spec, function)
-        argument_specification.extend(cls._get_defaults(arg_spec))
+        argument_specification = cls._get_default_and_named_args(
+            arg_spec, function
+        )
         argument_specification.extend(cls._get_var_args(arg_spec))
         kw_only_args = cls._get_kw_only(arg_spec)
         if kw_only_args:
@@ -299,24 +300,20 @@ class KeywordBuilder(object):
         return inspect.getfullargspec(function)
 
     @classmethod
-    def _get_positional(cls, arg_spec, function):
+    def _get_default_and_named_args(cls, arg_spec, function):
         args = arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args  # drop self
-        defaults_len = len(arg_spec.defaults) if arg_spec.defaults else 0
-        if defaults_len == len(args):
-            return []
-        if defaults_len == 0:
-            return args
-        return args[:defaults_len]
-
-    @classmethod
-    def _get_defaults(cls, arg_spec):
-        if not arg_spec.defaults:
-            return []
-        names = arg_spec.args[-len(arg_spec.defaults):]
-        defaults = list(zip(names, arg_spec.defaults))
-        if RF31:
-            return ['%s=%s' % (arg, value) for arg, value in defaults]
-        return defaults
+        args.reverse()
+        defaults = list(arg_spec.defaults) if arg_spec.defaults else []
+        formated_args = []
+        for arg in args:
+            if defaults:
+                formated_args.append(
+                    cls._format_defaults(arg, defaults.pop())
+                )
+            else:
+                formated_args.append(arg)
+        formated_args.reverse()
+        return formated_args
 
     @classmethod
     def _get_var_args(cls, arg_spec):
