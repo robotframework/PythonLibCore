@@ -332,24 +332,22 @@ class KeywordBuilder(object):
 
     @classmethod
     def _get_kw_only(cls, arg_spec):
-        if PY2:
-            return None
         kw_only_args = []
-        if not arg_spec.kwonlyargs:
+        if PY2:
             return kw_only_args
         for arg in arg_spec.kwonlyargs:
-            if not arg_spec.kwonlydefaults:
-                kw_only_args.append(arg)
-            elif arg not in arg_spec.kwonlydefaults:
+            if not arg_spec.kwonlydefaults or arg not in arg_spec.kwonlydefaults:
                 kw_only_args.append(arg)
             else:
                 value = arg_spec.kwonlydefaults.get(arg, '')
-                if RF31:
-                    arg_syntax = '%s=%s' % (arg, value)
-                else:
-                    arg_syntax = (arg, value)
-                kw_only_args.append(arg_syntax)
+                kw_only_args.append(cls._format_defaults(arg, value))
         return kw_only_args
+
+    @classmethod
+    def _format_defaults(cls, arg, value):
+        if RF31:
+            return '%s=%s' % (arg, value)
+        return arg, value
 
 
 class KeywordSpecification(object):
