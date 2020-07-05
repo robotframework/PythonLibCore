@@ -282,12 +282,11 @@ class KeywordBuilder(object):
         arg_spec = cls._get_arg_spec(function)
         argument_specification = cls._get_positional(arg_spec, function)
         argument_specification.extend(cls._get_defaults(arg_spec))
-        varargs, kwargs = cls._get_var_and_kw_args(arg_spec)
-        argument_specification.extend(varargs)
+        argument_specification.extend(cls._get_var_args(arg_spec))
         kw_only_args = cls._get_kw_only(arg_spec)
         if kw_only_args:
             argument_specification.extend(kw_only_args)
-        argument_specification.extend(kwargs)
+        argument_specification.extend(cls._get_kwargs(arg_spec))
         return KeywordSpecification(
             argument_specification=tuple(argument_specification),
             documentation=inspect.getdoc(function) or ''
@@ -320,16 +319,16 @@ class KeywordBuilder(object):
         return defaults
 
     @classmethod
-    def _get_var_and_kw_args(cls, arg_spec):
+    def _get_var_args(cls, arg_spec):
         if arg_spec.varargs:
-            varargs = ['*%s' % arg_spec.varargs]
-        else:
-            varargs = []
+            return ['*%s' % arg_spec.varargs]
+        return []
+
+    @classmethod
+    def _get_kwargs(cls, arg_spec):
         if PY2:
-            kwargs = ['**%s' % arg_spec.keywords] if arg_spec.keywords else []
-        else:
-            kwargs = ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
-        return varargs, kwargs
+            return ['**%s' % arg_spec.keywords] if arg_spec.keywords else []
+        return ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
 
     @classmethod
     def _get_kw_only(cls, arg_spec):
