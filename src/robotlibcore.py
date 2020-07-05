@@ -279,6 +279,14 @@ class KeywordBuilder(object):
 
     @classmethod
     def build(cls, function):
+
+        return KeywordSpecification(
+            argument_specification=cls._get_arguments(function),
+            documentation=inspect.getdoc(function) or ''
+        )
+
+    @classmethod
+    def _get_arguments(cls, function):
         arg_spec = cls._get_arg_spec(function)
         argument_specification = cls._get_default_and_named_args(
             arg_spec, function
@@ -288,10 +296,7 @@ class KeywordBuilder(object):
         if kw_only_args:
             argument_specification.extend(kw_only_args)
         argument_specification.extend(cls._get_kwargs(arg_spec))
-        return KeywordSpecification(
-            argument_specification=tuple(argument_specification),
-            documentation=inspect.getdoc(function) or ''
-        )
+        return tuple(argument_specification)
 
     @classmethod
     def _get_arg_spec(cls, function):
