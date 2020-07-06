@@ -279,10 +279,10 @@ class KeywordBuilder(object):
 
     @classmethod
     def build(cls, function):
-
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
-            documentation=inspect.getdoc(function) or ''
+            documentation=inspect.getdoc(function) or '',
+            argument_types=cls._get_types(function)
         )
 
     @classmethod
@@ -351,9 +351,38 @@ class KeywordBuilder(object):
             return '%s=%s' % (arg, value)
         return arg, value
 
+    @classmethod
+    def _get_types(cls, function):
+        if function is None:
+            return function
+        types = getattr(function, 'robot_types', ())
+        if types is None or types:
+            return types
+        if not types:
+            types = cls._get_typing_hints(function)
+        return types
+
+    @classmethod
+    def _get_typing_hints(cls, function):
+        if PY2:
+            return {}
+        try:
+            hints = typing.get_type_hints(function)
+        except Exception:
+            hints = function.__annotations__
+        arg_spec = cls._get_arg_spec(function)
+        function_args = []
+        function_args.extend(arg_spec.args or [])
+        for arg in list(hints):
+            # remove return and self statements
+            if arg not in function_args:
+                hints.pop(arg)
+        return hints
+
 
 class KeywordSpecification(object):
 
-    def __init__(self, argument_specification=None, documentation=None):
+    def __init__(self, argument_specification=None, documentation=None, argument_types=None):
         self.argument_specification = argument_specification
         self.documentation = documentation
+        self.argument_types = argument_types

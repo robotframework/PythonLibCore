@@ -80,3 +80,19 @@ def test_named_only_rf32(lib_py3):
 def test_named_only_rf31(lib_py3):
     spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
     assert spec.argument_specification == ('*varargs', 'key1', 'key2', 'key3=default1', 'key4=True')
+
+
+def test_types_in_keyword_deco(lib):
+    spec = KeywordBuilder.build(lib.positional_args)
+    assert spec.argument_types == {'arg1': str, 'arg2': int}
+
+
+def test_types_disabled_in_keyword_deco(lib):
+    spec = KeywordBuilder.build(lib.types_disabled)
+    assert spec.argument_types is None
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+def test_types_(lib_py3):
+    spec = KeywordBuilder.build(lib_py3.args_with_type_hints)
+    assert spec.argument_types == {'arg3': str, 'arg4': type(None)}
