@@ -238,7 +238,7 @@ def test_keyword_all_args_rf32(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_all_args_rf31(lib_types):
     types = lib_types.get_keyword_types('keyword_all_args')
-    assert types == {'value': bool}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')

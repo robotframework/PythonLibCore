@@ -47,6 +47,7 @@ class HybridCore(object):
         self.add_library_components([self])
 
     def add_library_components(self, library_components):
+        self.keywords_spec['__init__'] = KeywordBuilder.build(self.__init__)
         for component in library_components:
             for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, 'robot_name'):
@@ -100,11 +101,8 @@ class DynamicCore(HybridCore):
         return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
-        kw_method = self.__get_keyword(name)
-        if kw_method is None:
-            return None
-        spec = ArgumentSpec.from_function(kw_method)
-        return spec.get_arguments()
+        spec = self.keywords_spec.get(name)
+        return spec.argument_specification
 
     def get_keyword_tags(self, name):
         return self.keywords[name].robot_tags
@@ -112,15 +110,10 @@ class DynamicCore(HybridCore):
     def get_keyword_documentation(self, name):
         if name == '__intro__':
             return inspect.getdoc(self) or ''
-        if name == '__init__':
-            return inspect.getdoc(self.__init__) or ''
         spec = self.keywords_spec.get(name)
         return spec.documentation
 
     def get_keyword_types(self, name):
-        if name == '__init__':
-            spec = KeywordBuilder.build_init(self.__init__)
-            return spec.argument_types
         spec = self.keywords_spec.get(name)
         if spec is None:
             raise ValueError('Keyword "%s" not found.' % name)
@@ -165,96 +158,6 @@ class DynamicCore(HybridCore):
             return None
 
 
-class ArgumentSpec(object):
-
-    _function = None
-
-    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
-                 kwonlydefaults=None, kwargs=None):
-        self.positional = positional or []
-        self.defaults = defaults or []
-        self.varargs = varargs
-        self.kwonlyargs = kwonlyargs or []
-        self.kwonlydefaults = kwonlydefaults or []
-        self.kwargs = kwargs
-
-    def __contains__(self, item):
-        if item in self.positional:
-            return True
-        if self.varargs and item in self.varargs:
-            return True
-        if item in self.kwonlyargs:
-            return True
-        if self.kwargs and item in self.kwargs:
-            return True
-        return False
-
-    def get_arguments(self):
-        args = self._format_positional(self.positional, self.defaults)
-        args += self._format_default(self.defaults)
-        if self.varargs:
-            args.append('*%s' % self.varargs)
-        args += self._format_positional(self.kwonlyargs, self.kwonlydefaults)
-        args += self._format_default(self.kwonlydefaults)
-        if self.kwargs:
-            args.append('**%s' % self.kwargs)
-        return args
-
-    def get_typing_hints(self):
-        try:
-            hints = typing.get_type_hints(self._function)
-        except Exception:
-            hints = self._function.__annotations__
-        for arg in list(hints):
-            # remove return and self statements
-            if arg not in self:
-                hints.pop(arg)
-        return hints
-
-    def _format_positional(self, positional, defaults):
-        for argument, _ in defaults:
-            positional.remove(argument)
-        return positional
-
-    def _format_default(self, defaults):
-        if not RF31:
-            return [default for default in defaults]
-        return ['%s=%s' % (argument, default) for argument, default in defaults]
-
-    @classmethod
-    def from_function(cls, function):
-        cls._function = function
-        if PY2:
-            spec = inspect.getargspec(function)
-        else:
-            spec = inspect.getfullargspec(function)
-        args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
-        defaults = cls._get_defaults(spec)
-        kwonlyargs, kwonlydefaults, kwargs = cls._get_kw_args(spec)
-        return cls(positional=args,
-                   defaults=defaults,
-                   varargs=spec.varargs,
-                   kwonlyargs=kwonlyargs,
-                   kwonlydefaults=kwonlydefaults,
-                   kwargs=kwargs)
-
-    @classmethod
-    def _get_defaults(cls, spec):
-        if not spec.defaults:
-            return []
-        names = spec.args[-len(spec.defaults):]
-        return list(zip(names, spec.defaults))
-
-    @classmethod
-    def _get_kw_args(cls, spec):
-        if PY2:
-            return [], [], spec.keywords
-        kwonlyargs = spec.kwonlyargs or []
-        defaults = spec.kwonlydefaults or {}
-        kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
-        return kwonlyargs, kwonlydefaults, spec.varkw
-
-
 class KeywordBuilder(object):
 
     @classmethod
@@ -263,12 +166,6 @@ class KeywordBuilder(object):
             argument_specification=cls._get_arguments(function),
             documentation=inspect.getdoc(function) or '',
             argument_types=cls._get_types(function)
-        )
-
-    @classmethod
-    def build_init(cls, init):
-        return KeywordSpecification(
-            argument_types=cls._get_types(init)
         )
 
     @classmethod
@@ -282,7 +179,7 @@ class KeywordBuilder(object):
         if kw_only_args:
             argument_specification.extend(kw_only_args)
         argument_specification.extend(cls._get_kwargs(arg_spec))
-        return tuple(argument_specification)
+        return argument_specification
 
     @classmethod
     def _get_arg_spec(cls, function):

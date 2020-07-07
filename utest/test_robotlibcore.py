@@ -108,7 +108,8 @@ def test_get_keyword_arguments_rf31():
     assert args('kwargs_only') == ['**kws']
     assert args('all_arguments') == ['mandatory', 'default=value', '*varargs', '**kwargs']
     assert args('__init__') == ['arg=None']
-    assert args('__foobar__') is None
+    with pytest.raises(AttributeError):
+        args('__foobar__')
 
 
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
@@ -120,7 +121,8 @@ def test_get_keyword_arguments_rf32():
     assert args('kwargs_only') == ['**kws']
     assert args('all_arguments') == ['mandatory', ('default', 'value'), '*varargs', '**kwargs']
     assert args('__init__') == [('arg', None)]
-    assert args('__foobar__') is None
+    with pytest.raises(AttributeError):
+        args('__foobar__')
 
 
 def test_argument_spec_no_args(dyn_lib):
