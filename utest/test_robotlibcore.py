@@ -3,7 +3,7 @@ import sys
 import pytest
 from robot import __version__ as robot__version
 
-from robotlibcore import HybridCore, PY2, ArgumentSpec
+from robotlibcore import HybridCore, PY2
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
 if not PY2:
@@ -40,8 +40,6 @@ def test_dir():
                 '_DynamicCore__get_keyword',
                 '_DynamicCore__get_keyword_line',
                 '_DynamicCore__get_keyword_path',
-                '_DynamicCore__get_typing_hints',
-                '_DynamicCore__join_defaults_with_types',
                 '_HybridCore__get_members',
                 '_HybridCore__get_members_from_instance',
                 '_custom_name',
@@ -62,6 +60,7 @@ def test_dir():
                 'instance_attribute',
                 'keyword_in_main',
                 'keywords',
+                'keywords_spec',
                 'kwargs_only',
                 'mandatory',
                 'method',
@@ -109,7 +108,8 @@ def test_get_keyword_arguments_rf31():
     assert args('kwargs_only') == ['**kws']
     assert args('all_arguments') == ['mandatory', 'default=value', '*varargs', '**kwargs']
     assert args('__init__') == ['arg=None']
-    assert args('__foobar__') is None
+    with pytest.raises(AttributeError):
+        args('__foobar__')
 
 
 @pytest.mark.skipif(robot__version < '3.2', reason='For RF 3.2 or greater')
@@ -121,125 +121,8 @@ def test_get_keyword_arguments_rf32():
     assert args('kwargs_only') == ['**kws']
     assert args('all_arguments') == ['mandatory', ('default', 'value'), '*varargs', '**kwargs']
     assert args('__init__') == [('arg', None)]
-    assert args('__foobar__') is None
-
-
-def test_argument_spec_no_args(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.keyword_in_main)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs is None
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-def test_argument_spec_mandatory(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.mandatory)
-    assert spec.positional == ['arg1', 'arg2']
-    assert spec.defaults == []
-    assert spec.varargs is None
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-def test_argument_spec_defaults(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.defaults)
-    assert spec.positional == ['arg1', 'arg2', 'arg3']
-    assert spec.defaults == [('arg2', 'default'), ('arg3', 3)]
-    assert spec.varargs is None
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-def test_argument_spec_varargs_and_kwargs(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.varargs_and_kwargs)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs == 'args'
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs == 'kws'
-
-
-def test_argument_spec_kwargs_only(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.kwargs_only)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs is None
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs == 'kws'
-
-
-def test_argument_spec_all_arguments(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.all_arguments)
-    assert spec.positional == ['mandatory', 'default']
-    assert spec.defaults == [('default', 'value')]
-    assert spec.varargs == 'varargs'
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs == 'kwargs'
-
-
-def test_argument_spec_init(dyn_lib):
-    spec = ArgumentSpec.from_function(dyn_lib.__init__)
-    assert spec.positional == ['arg']
-    assert spec.defaults == [('arg', None)]
-    assert spec.varargs is None
-    assert spec.kwonlyargs == []
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
-def test_argument_spec_keyword_only_arguments():
-    lib = DynamicTypesAnnotationsLibrary(1)
-    spec = ArgumentSpec.from_function(lib.keyword_only_arguments)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs == 'varargs'
-    assert spec.kwonlyargs == ['some']
-    assert spec.kwonlydefaults == [('some', 111)]
-    assert spec.kwargs is None
-
-
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
-def test_argument_spec_keyword_only_arguments_no_default():
-    lib = DynamicTypesAnnotationsLibrary(1)
-    spec = ArgumentSpec.from_function(lib.keyword_only_arguments_no_default)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs == 'varargs'
-    assert spec.kwonlyargs == ['other']
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
-def test_argument_spec_keyword_only_arguments_no_vararg():
-    lib = DynamicTypesAnnotationsLibrary(1)
-    spec = ArgumentSpec.from_function(lib.keyword_only_arguments_no_vararg)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs is None
-    assert spec.kwonlyargs == ['other']
-    assert spec.kwonlydefaults == []
-    assert spec.kwargs is None
-
-
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
-def test_argument_spec_keyword_only_arguments_many_args():
-    lib = DynamicTypesAnnotationsLibrary(1)
-    spec = ArgumentSpec.from_function(lib.keyword_only_arguments_many_positional_and_default)
-    assert spec.positional == []
-    assert spec.defaults == []
-    assert spec.varargs == 'varargs'
-    assert spec.kwonlyargs == ['one', 'two', 'three', 'four', 'five', 'six']
-    assert spec.kwonlydefaults == [('four', True), ('five', None), ('six', False)]
-    assert spec.kwargs is None
+    with pytest.raises(AttributeError):
+        args('__foobar__')
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
