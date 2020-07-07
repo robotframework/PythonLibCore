@@ -166,8 +166,8 @@ def test_init_args(lib_types):
 
 
 def test_dummy_magic_method(lib):
-    types = lib.get_keyword_types('__foobar__')
-    assert types is None
+    with pytest.raises(ValueError):
+        lib.get_keyword_types('__foobar__')
 
 
 def test_varargs(lib):

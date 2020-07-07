@@ -41,6 +41,7 @@ class HybridCore(object):
 
     def __init__(self, library_components):
         self.keywords = {}
+        self.keywords_spec = {}
         self.attributes = {}
         self.add_library_components(library_components)
         self.add_library_components([self])
@@ -52,6 +53,7 @@ class HybridCore(object):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
                     self.keywords[kw_name] = kw
+                    self.keywords_spec[kw_name] = KeywordBuilder.build(kw)
                     # Expose keywords as attributes both using original
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
@@ -112,23 +114,17 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self) or ''
         if name == '__init__':
             return inspect.getdoc(self.__init__) or ''
-        kw = self.keywords[name]
-        return inspect.getdoc(kw) or ''
+        spec = self.keywords_spec.get(name)
+        return spec.documentation
 
-    def get_keyword_types(self, keyword_name):
-        method = self.__get_keyword(keyword_name)
-        if method is None:
-            return method
-        types = getattr(method, 'robot_types', ())
-        if types is None:
-            return types
-        if not types:
-            types = self.__get_typing_hints(method)
-        if RF31:
-            types = self.__join_defaults_with_types(method, types)
-        else:
-            types.pop('return', None)
-        return types
+    def get_keyword_types(self, name):
+        if name == '__init__':
+            spec = KeywordBuilder.build_init(self.__init__)
+            return spec.argument_types
+        spec = self.keywords_spec.get(name)
+        if spec is None:
+            raise ValueError('Keyword "%s" not found.' % name)
+        return spec.argument_types
 
     def __get_keyword(self, keyword_name):
         if keyword_name == '__init__':
@@ -139,22 +135,6 @@ class DynamicCore(HybridCore):
         if not method:
             raise ValueError('Keyword "%s" not found.' % keyword_name)
         return method
-
-    def __get_typing_hints(self, method):
-        if PY2:
-            return {}
-        spec = ArgumentSpec.from_function(method)
-        return spec.get_typing_hints()
-
-    def __join_defaults_with_types(self, method, types):
-        spec = ArgumentSpec.from_function(method)
-        for name, value in spec.defaults:
-            if name not in types and isinstance(value, (bool, type(None))):
-                types[name] = type(value)
-        for name, value in spec.kwonlydefaults:
-            if name not in types and isinstance(value, (bool, type(None))):
-                types[name] = type(value)
-        return types
 
     def get_keyword_source(self, keyword_name):
         method = self.__get_keyword(keyword_name)
@@ -283,6 +263,12 @@ class KeywordBuilder(object):
             argument_specification=cls._get_arguments(function),
             documentation=inspect.getdoc(function) or '',
             argument_types=cls._get_types(function)
+        )
+
+    @classmethod
+    def build_init(cls, init):
+        return KeywordSpecification(
+            argument_types=cls._get_types(init)
         )
 
     @classmethod
