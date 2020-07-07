@@ -306,7 +306,7 @@ class KeywordBuilder(object):
 
     @classmethod
     def _get_default_and_named_args(cls, arg_spec, function):
-        args = arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args  # drop self
+        args = cls._drop_self_from_args(function, arg_spec)
         args.reverse()
         defaults = list(arg_spec.defaults) if arg_spec.defaults else []
         formated_args = []
@@ -319,6 +319,10 @@ class KeywordBuilder(object):
                 formated_args.append(arg)
         formated_args.reverse()
         return formated_args
+
+    @classmethod
+    def _drop_self_from_args(cls, function, arg_spec):
+        return arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args
 
     @classmethod
     def _get_var_args(cls, arg_spec):
@@ -370,14 +374,22 @@ class KeywordBuilder(object):
             hints = typing.get_type_hints(function)
         except Exception:
             hints = function.__annotations__
+        all_args = cls._args_as_list(function)
+        for arg_with_hint in list(hints):
+            # remove return and self statements
+            if arg_with_hint not in all_args:
+                hints.pop(arg_with_hint)
+        return hints
+
+    @classmethod
+    def _args_as_list(cls, function):
         arg_spec = cls._get_arg_spec(function)
         function_args = []
-        function_args.extend(arg_spec.args or [])
-        for arg in list(hints):
-            # remove return and self statements
-            if arg not in function_args:
-                hints.pop(arg)
-        return hints
+        function_args.extend(cls._drop_self_from_args(function, arg_spec))
+        function_args.extend(arg_spec.varargs or [])
+        function_args.extend(arg_spec.kwonlyargs or [])
+        function_args.extend(arg_spec.varkw or [])
+        return function_args
 
 
 class KeywordSpecification(object):
