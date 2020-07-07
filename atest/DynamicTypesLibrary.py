@@ -54,10 +54,6 @@ class DynamicTypesLibrary(DynamicCore):
         return arg1, arg2
 
     @keyword
-    def keyword_booleans(self, arg1=True, arg2=False):
-        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
-
-    @keyword
     def keyword_none(self, arg=None):
         return '%s: %s' % (arg, type(arg))
 

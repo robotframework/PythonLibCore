@@ -34,7 +34,7 @@ def test_types_disabled(lib):
 @pytest.mark.skipif(not RF31, reason='Only for RF3.1')
 def test_keyword_types_and_bool_default_rf31(lib):
     types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
-    assert types == {'arg1': str, 'arg2': bool}
+    assert types == {'arg1': str}
 
 
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
@@ -58,18 +58,6 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
-@pytest.mark.skipif(not RF31, reason='Only for RF3.2+')
-def test_keyword_booleans_rf31(lib):
-    types = lib.get_keyword_types('keyword_booleans')
-    assert types == {'arg1': bool, 'arg2': bool}
-
-
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_booleans_rf32(lib):
-    types = lib.get_keyword_types('keyword_booleans')
-    assert types == {}
-
-
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
 def test_keyword_none_rf32(lib):
     types = lib.get_keyword_types('keyword_none')
@@ -79,7 +67,7 @@ def test_keyword_none_rf32(lib):
 @pytest.mark.skipif(not RF31, reason='Only for RF3.2+')
 def test_keyword_none_rf31(lib):
     types = lib.get_keyword_types('keyword_none')
-    assert types == {'arg': type(None)}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -204,7 +192,7 @@ def test_keyword_only_arguments_many(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_only_arguments_many(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many')
-    assert types == {'other': type(None)}
+    assert types == {}
 
 
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
@@ -224,7 +212,7 @@ def test_keyword_only_arguments_many_positional_and_default_rf32(lib_types):
 @pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_keyword_only_arguments_many_positional_and_default_rf31(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
-    assert types == {'four': Union[int, str], 'five': type(None), 'six': Union[bool, str]}
+    assert types == {'four': Union[int, str], 'six': Union[bool, str]}
 
 
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
