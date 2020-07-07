@@ -3,6 +3,7 @@ import pytest
 from robotlibcore import PY2, RF31, KeywordBuilder
 from moc_library import MockLibrary
 if not PY2:
+    from typing import Union
     from moc_library_py3 import MockLibraryPy3
 
 
@@ -99,6 +100,12 @@ def test_types_(lib_py3):
 
 
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
-def test_types_(lib_py3):
+def test_types(lib_py3):
     spec = KeywordBuilder.build(lib_py3.self_and_keyword_only_types)
     assert spec.argument_types == {'varargs': int, 'other': bool, 'kwargs': int}
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+def test_optional_none(lib_py3):
+    spec = KeywordBuilder.build(lib_py3.optional_none)
+    assert spec.argument_types == {'arg': Union[str, None]}
