@@ -386,9 +386,11 @@ class KeywordBuilder(object):
         arg_spec = cls._get_arg_spec(function)
         function_args = []
         function_args.extend(cls._drop_self_from_args(function, arg_spec))
-        function_args.extend(arg_spec.varargs or [])
+        if arg_spec.varargs:
+            function_args.append(arg_spec.varargs)
         function_args.extend(arg_spec.kwonlyargs or [])
-        function_args.extend(arg_spec.varkw or [])
+        if arg_spec.varkw:
+            function_args.append(arg_spec.varkw)
         return function_args
 
 

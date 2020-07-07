@@ -8,3 +8,6 @@ class MockLibraryPy3:
 
     def args_with_type_hints(self, arg1, arg2, arg3: str, arg4: None) -> bool:
         pass
+
+    def self_and_keyword_only_types(x: 'MockLibraryPy3', mandatory, *varargs: int, other: bool, **kwargs: int):
+        pass

@@ -96,3 +96,9 @@ def test_types_disabled_in_keyword_deco(lib):
 def test_types_(lib_py3):
     spec = KeywordBuilder.build(lib_py3.args_with_type_hints)
     assert spec.argument_types == {'arg3': str, 'arg4': type(None)}
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+def test_types_(lib_py3):
+    spec = KeywordBuilder.build(lib_py3.self_and_keyword_only_types)
+    assert spec.argument_types == {'varargs': int, 'other': bool, 'kwargs': int}
