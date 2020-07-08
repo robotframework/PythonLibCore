@@ -287,7 +287,7 @@ class KeywordBuilder(object):
                 type_ = type_hints[arg]
                 if cls._is_union(type_):
                     types = type_.__args__
-                    if len(types) == 2 and types[1] is type(None):
+                    if len(types) == 2 and types[1] is type(None): # noqa
                         type_hints[arg] = types[0]
         return type_hints
 
