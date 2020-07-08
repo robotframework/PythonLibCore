@@ -108,4 +108,4 @@ def test_types(lib_py3):
 @pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_optional_none(lib_py3):
     spec = KeywordBuilder.build(lib_py3.optional_none)
-    assert spec.argument_types == {'arg': Union[str, None]}
+    assert spec.argument_types == {'arg1': str, 'arg2': str}

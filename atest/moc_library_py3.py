@@ -15,5 +15,5 @@ class MockLibraryPy3:
     def self_and_keyword_only_types(x: 'MockLibraryPy3', mandatory, *varargs: int, other: bool, **kwargs: int):
         pass
 
-    def optional_none(self, arg: Optional[str] = None):
+    def optional_none(self, xxx, arg1: Optional[str] = None, arg2: Optional[str] = None, arg3=False):
         pass
