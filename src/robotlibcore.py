@@ -245,9 +245,7 @@ class KeywordBuilder(object):
         types = getattr(function, 'robot_types', ())
         if types is None or types:
             return types
-        if not types:
-            types = cls._get_typing_hints(function)
-        return types
+        return cls._get_typing_hints(function)
 
     @classmethod
     def _get_typing_hints(cls, function):
