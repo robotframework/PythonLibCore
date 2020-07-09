@@ -63,6 +63,17 @@ Varargs and KeywordArgs With Typing Hints
     Should Match     ${return}
     ...    this_is_mandatory: <class 'str'>, (1, 2, 3, 4): <class 'tuple'>, True: <class 'bool'>, {'key1': 1, 'key2': 2}: <class 'dict'>
 
+Enum Conversion Should Work
+    [Tags]    py3
+    ${value} =    Enum Conversion    ok
+    Should Match    OK penum.ok    ${value}
+
+Enum Conversion To Invalid Value Should Fail
+    [Tags]    py3
+    Run Keyword And Expect Error    ValueError: Argument 'param' got value 'not ok' that*
+    ...    Enum Conversion    not ok
+
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3

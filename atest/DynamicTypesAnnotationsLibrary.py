@@ -1,10 +1,13 @@
-from typing import List, Union, NewType, Dict
+from enum import Enum
+from typing import List, Union, NewType, Optional
 
 from robot.api import logger
 
 from robotlibcore import DynamicCore, keyword
 
 UserId = NewType('UserId', int)
+
+penum = Enum("penum", "ok")
 
 
 class CustomObject(object):
@@ -117,3 +120,9 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
                                             **kwargs: int):
         return (f'{mandatory}: {type(mandatory)}, {varargs}: {type(varargs)}, '
                 f'{other}: {type(other)}, {kwargs}: {type(kwargs)}')
+
+    @keyword
+    def enum_conversion(self, param: Optional[penum] = None):
+        logger.info(f'OK {param}')
+        logger.info(param.ok)
+        return f'OK {param}'
