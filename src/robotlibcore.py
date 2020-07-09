@@ -23,6 +23,8 @@ import inspect
 import os
 import sys
 
+from robot.utils import PY_VERSION
+
 try:
     import typing
 except ImportError:
@@ -245,9 +247,7 @@ class KeywordBuilder(object):
         types = getattr(function, 'robot_types', ())
         if types is None or types:
             return types
-        if not types:
-            types = cls._get_typing_hints(function)
-        return types
+        return cls._get_typing_hints(function)
 
     @classmethod
     def _get_typing_hints(cls, function):
@@ -257,16 +257,17 @@ class KeywordBuilder(object):
             hints = typing.get_type_hints(function)
         except Exception:
             hints = function.__annotations__
-        all_args = cls._args_as_list(function)
+        arg_spec = cls._get_arg_spec(function)
+        all_args = cls._args_as_list(function, arg_spec)
         for arg_with_hint in list(hints):
             # remove return and self statements
             if arg_with_hint not in all_args:
                 hints.pop(arg_with_hint)
-        return hints
+        default = cls._get_defaults(arg_spec)
+        return cls._remove_optional_none_type_hints(hints, default)
 
     @classmethod
-    def _args_as_list(cls, function):
-        arg_spec = cls._get_arg_spec(function)
+    def _args_as_list(cls, function, arg_spec):
         function_args = []
         function_args.extend(cls._drop_self_from_args(function, arg_spec))
         if arg_spec.varargs:
@@ -275,6 +276,34 @@ class KeywordBuilder(object):
         if arg_spec.varkw:
             function_args.append(arg_spec.varkw)
         return function_args
+
+    # Copied from: robot.running.arguments.argumentparser
+    @classmethod
+    def _remove_optional_none_type_hints(cls, type_hints, defaults):
+        # If argument has None as a default, typing.get_type_hints adds
+        # optional None to the information it returns. We don't want that.
+        for arg, default in defaults:
+            if default is None and arg in type_hints:
+                type_ = type_hints[arg]
+                if cls._is_union(type_):
+                    types = type_.__args__
+                    if len(types) == 2 and types[1] is type(None): # noqa
+                        type_hints[arg] = types[0]
+        return type_hints
+
+    # Copied from: robot.running.arguments.argumentparser
+    @classmethod
+    def _is_union(cls, typing_type):
+        if PY_VERSION >= (3, 7) and hasattr(typing_type, '__origin__'):
+            typing_type = typing_type.__origin__
+        return isinstance(typing_type, type(typing.Union))
+
+    @classmethod
+    def _get_defaults(cls, arg_spec):
+        if not arg_spec.defaults:
+            return {}
+        names = arg_spec.args[-len(arg_spec.defaults):]
+        return zip(names, arg_spec.defaults)
 
 
 class KeywordSpecification(object):
