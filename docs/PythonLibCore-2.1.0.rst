@@ -6,9 +6,7 @@ Python Library Core 2.1.0
 .. default-role:: code
 
 
-RELEASE NOTES TEMPLATE TODO
-
-`Python Library Core`_ is a generic component making it easier to create
+The `Python Library Core`_ is a generic component making it easier to create
 bigger `Robot Framework`_ test libraries. Python Library Core 2.1.0 is
 a new release with with Enum conversion and not providing type hints
 for bool and None default values.
