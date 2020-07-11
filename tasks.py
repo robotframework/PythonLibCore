@@ -14,8 +14,6 @@ VERSION_PATH = Path('src/robotlibcore.py')
 RELEASE_NOTES_PATH = Path('docs/PythonLibCore-{version}.rst')
 RELEASE_NOTES_TITLE = 'Python Library Core {version}'
 RELEASE_NOTES_INTRO = '''
-RELEASE NOTES TEMPLATE TODO
-
 `Python Library Core`_ is a generic component making it easier to create
 bigger `Robot Framework`_ test libraries. Python Library Core {version} is
 a new release with **UPDATE** enhancements and bug fixes. **MORE intro stuff**
