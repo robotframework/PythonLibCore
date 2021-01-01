@@ -25,6 +25,7 @@ pytest_args = [
     '-p', 'no:cacheprovider',
     '--junitxml=%s' % xunit_report,
     '-o', 'junit_family=xunit2',
+    '--showlocals',
     curdir
 ]
 if args.cov:

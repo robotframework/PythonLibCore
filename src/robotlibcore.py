@@ -164,8 +164,6 @@ class KeywordBuilder(object):
 
     @classmethod
     def build(cls, function):
-        if not PY2:
-            function = inspect.unwrap(function)
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
             documentation=inspect.getdoc(function) or '',
@@ -173,8 +171,15 @@ class KeywordBuilder(object):
         )
 
     @classmethod
+    def unwrap(cls, function):
+        if PY2:
+            return function
+        return inspect.unwrap(function)
+
+    @classmethod
     def _get_arguments(cls, function):
-        arg_spec = cls._get_arg_spec(function)
+        unwrap_function = cls.unwrap(function)
+        arg_spec = cls._get_arg_spec(unwrap_function)
         argument_specification = cls._get_default_and_named_args(
             arg_spec, function
         )
@@ -255,6 +260,7 @@ class KeywordBuilder(object):
     def _get_typing_hints(cls, function):
         if PY2:
             return {}
+        function = cls.unwrap(function)
         try:
             hints = typing.get_type_hints(function)
         except Exception:

@@ -3,8 +3,8 @@ import pytest
 from robotlibcore import PY2, RF31, KeywordBuilder
 from moc_library import MockLibrary
 if not PY2:
-    from typing import Union
     from moc_library_py3 import MockLibraryPy3
+    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 @pytest.fixture
@@ -15,6 +15,11 @@ def lib():
 @pytest.fixture
 def lib_py3():
     return MockLibraryPy3()
+
+
+@pytest.fixture
+def dyn_types():
+    return DynamicTypesAnnotationsLibrary(1)
 
 
 def test_documentation(lib):
@@ -109,3 +114,21 @@ def test_types(lib_py3):
 def test_optional_none(lib_py3):
     spec = KeywordBuilder.build(lib_py3.optional_none)
     assert spec.argument_types == {'arg1': str, 'arg2': str}
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(RF31, reason='For RF 3.2')
+def test_complex_deco_rf32(dyn_types):
+    spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)
+    assert spec.argument_types == {'arg1': bool, 'arg2': bool}
+    assert spec.argument_specification == [('arg1', False), ('arg2', False)]
+    assert spec.documentation == "Test me doc here"
+
+
+@pytest.mark.skipif(PY2, reason='Only for Python 3')
+@pytest.mark.skipif(not RF31, reason='For RF 3.2')
+def test_complex_deco_rf31(dyn_types):
+    spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)
+    assert spec.argument_types == {'arg1': bool, 'arg2': bool}
+    assert spec.argument_specification == ['arg1=False', 'arg2=False']
+    assert spec.documentation == "Test me doc here"
