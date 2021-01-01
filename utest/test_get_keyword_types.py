@@ -239,3 +239,9 @@ def test_keyword_self_and_types(lib_types):
 def test_keyword_self_and_keyword_only_types(lib_types):
     types = lib_types.get_keyword_types('keyword_self_and_keyword_only_types')
     assert types == {'varargs': int, 'other': bool, 'kwargs': int}
+
+
+@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
+def test_keyword_with_decorator_arguments(lib_types):
+    types = lib_types.get_keyword_types('keyword_with_deco_and_signature')
+    assert types == {'arg1': bool, 'arg2': bool}

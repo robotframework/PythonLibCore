@@ -164,6 +164,8 @@ class KeywordBuilder(object):
 
     @classmethod
     def build(cls, function):
+        if not PY2:
+            function = inspect.unwrap(function)
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
             documentation=inspect.getdoc(function) or '',

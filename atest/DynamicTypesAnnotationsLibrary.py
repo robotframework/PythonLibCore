@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import List, Union, NewType, Optional
+from functools import wraps
+from typing import List, Union, NewType, Optional, Tuple
 
 from robot.api import logger
 
@@ -8,6 +9,21 @@ from robotlibcore import DynamicCore, keyword
 UserId = NewType('UserId', int)
 
 penum = Enum("penum", "ok")
+
+
+def _my_deco(old_args: Tuple[str, str], new_args: Tuple[str, str]):
+    def actual_decorator(method):
+        @wraps(method)
+        def wrapper(*args, **kwargs):
+            for index, old_arg in enumerate(old_args):
+                logger.warn(
+                    f"{old_arg} has deprecated, use {new_args[index]}",
+                )
+            return method(*args, **kwargs)
+
+        return wrapper
+
+    return actual_decorator
 
 
 class CustomObject(object):
@@ -126,3 +142,8 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         logger.info(f'OK {param}')
         logger.info(param.ok)
         return f'OK {param}'
+
+    @keyword
+    @_my_deco(old_args=("arg1", ), new_args=("arg2", ))
+    def keyword_with_deco_and_signature(self, arg1: bool = False, arg2: bool = False):
+        return f"{arg1}: {type(arg1)}, {arg2}: {type(arg2)}"
