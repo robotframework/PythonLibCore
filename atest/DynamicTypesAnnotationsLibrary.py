@@ -146,4 +146,5 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     @_my_deco(old_args=("arg1", ), new_args=("arg2", ))
     def keyword_with_deco_and_signature(self, arg1: bool = False, arg2: bool = False):
+        """Test me doc here"""
         return f"{arg1}: {type(arg1)}, {arg2}: {type(arg2)}"
