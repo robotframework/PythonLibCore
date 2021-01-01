@@ -28,7 +28,7 @@ to install the latest available release or use
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-SeleniumLibrary 2.2.0 was released on Friday January 1, 2021.
+Python Library Core 2.2.0 was released on Friday January 1, 2021.
 
 .. _PythonLibCore: https://github.com/robotframework/PythonLibCore
 .. _Robot Framework: http://robotframework.org

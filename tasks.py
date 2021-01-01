@@ -39,7 +39,7 @@ to install the latest available release or use
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-SeleniumLibrary {version} was released on {date}.
+Python Library Core {version} was released on {date}.
 
 .. _PythonLibCore: https://github.com/robotframework/PythonLibCore
 .. _Robot Framework: http://robotframework.org
