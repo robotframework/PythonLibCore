@@ -8,10 +8,8 @@ Python Library Core 2.2.0
 
 `Python Library Core`_ is a generic component making it easier to create
 bigger `Robot Framework`_ test libraries. Python Library Core 2.2.0 is
-a new release with **UPDATE** enhancements and bug fixes. **MORE intro stuff**
+a new release with fixes when using complex decorators in keywords.
 
-**REMOVE this section with final releases or otherwise if release notes contain
-all issues.**
 All issues targeted for Python Library Core v2.2.0 can be found
 from the `issue tracker`_.
 
@@ -19,7 +17,7 @@ If you have pip_ installed, just run
 
 ::
 
-   pip install --pre --upgrade pip install robotframework-pythonlibcore
+   pip install --upgrade pip install robotframework-pythonlibcore
 
 to install the latest available release or use
 
