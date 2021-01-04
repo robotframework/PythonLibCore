@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.6, 3.9, pypy3]
+        python-version: [3.6, 3.9, pypy3]
         rf-version: [3.1.2, 3.2.2]
 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }} with Robot Framework ${{ matrix.rf-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -27,7 +27,6 @@ jobs:
     - name: Run flake8
       run: |
         flake8 --max-line-length=110 src/
-      if: matrix.python-version != '2.7'
     - name: Run unit tests
       run: |
         python utest/run.py
