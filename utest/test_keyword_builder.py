@@ -2,18 +2,12 @@ import pytest
 
 from robotlibcore import RF31, KeywordBuilder
 from moc_library import MockLibrary
-from moc_library_py3 import MockLibraryPy3
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 @pytest.fixture
 def lib():
     return MockLibrary()
-
-
-@pytest.fixture
-def lib_py3():
-    return MockLibraryPy3()
 
 
 @pytest.fixture
@@ -67,20 +61,20 @@ def test_varargs_and_kwargs(lib):
     assert spec.argument_specification == ['*vargs', '**kwargs']
 
 
-def test_named_only(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.named_only)
+def test_named_only(lib):
+    spec = KeywordBuilder.build(lib.named_only)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2']
 
 
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_named_only_rf32(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
+def test_named_only_rf32(lib):
+    spec = KeywordBuilder.build(lib.named_only_with_defaults)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2', ('key3', 'default1'), ('key4', True)]
 
 
 @pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_named_only_rf31(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
+def test_named_only_rf31(lib):
+    spec = KeywordBuilder.build(lib.named_only_with_defaults)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2', 'key3=default1', 'key4=True']
 
 
@@ -94,18 +88,18 @@ def test_types_disabled_in_keyword_deco(lib):
     assert spec.argument_types is None
 
 
-def test_types_(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.args_with_type_hints)
+def test_types_(lib):
+    spec = KeywordBuilder.build(lib.args_with_type_hints)
     assert spec.argument_types == {'arg3': str, 'arg4': type(None)}
 
 
-def test_types(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.self_and_keyword_only_types)
+def test_types(lib):
+    spec = KeywordBuilder.build(lib.self_and_keyword_only_types)
     assert spec.argument_types == {'varargs': int, 'other': bool, 'kwargs': int}
 
 
-def test_optional_none(lib_py3):
-    spec = KeywordBuilder.build(lib_py3.optional_none)
+def test_optional_none(lib):
+    spec = KeywordBuilder.build(lib.optional_none)
     assert spec.argument_types == {'arg1': str, 'arg2': str}
 
 
