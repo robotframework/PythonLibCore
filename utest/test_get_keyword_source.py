@@ -45,7 +45,7 @@ def test_location_in_main(lib, lib_path):
 
 def test_location_in_class(lib, lib_path_components):
     source = lib.get_keyword_source('method')
-    assert source == '%s:15' % lib_path_components
+    assert source == '%s:13' % lib_path_components
 
 
 def test_decorator_wrapper(lib_types, lib_path_types):
@@ -55,7 +55,7 @@ def test_decorator_wrapper(lib_types, lib_path_types):
 
 def test_location_in_class_custom_keyword_name(lib, lib_path_components):
     source = lib.get_keyword_source('Custom name')
-    assert source == '%s:19' % lib_path_components
+    assert source == '%s:17' % lib_path_components
 
 
 def test_no_line_number(lib, lib_path, when):
