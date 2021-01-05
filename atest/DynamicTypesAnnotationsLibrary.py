@@ -26,7 +26,7 @@ def _my_deco(old_args: Tuple[str, str], new_args: Tuple[str, str]):
     return actual_decorator
 
 
-class CustomObject(object):
+class CustomObject:
 
     def __init__(self, x, y):
         self.x = x
@@ -75,19 +75,19 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
 
     @keyword
     def keyword_default_and_annotation(self: 'DynamicTypesAnnotationsLibrary', arg1: int, arg2: Union[bool, str] = False) -> str:
-        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
+        return '{}: {}, {}: {}'.format(arg1, type(arg1), arg2, type(arg2))
 
     @keyword(types={'arg': str})
     def keyword_robot_types_and_annotations(self: 'DynamicTypesAnnotationsLibrary', arg: int):
-        return '%s: %s' % (arg, type(arg))
+        return '{}: {}'.format(arg, type(arg))
 
     @keyword(types=None)
     def keyword_robot_types_disabled_and_annotations(self, arg: int):
-        return '%s: %s' % (arg, type(arg))
+        return '{}: {}'.format(arg, type(arg))
 
     @keyword(types={'arg1': str})
     def keyword_robot_types_and_bool_hint(self, arg1, arg2: bool):
-        return '%s: %s, %s: %s' % (arg1, type(arg1), arg2, type(arg2))
+        return '{}: {}, {}: {}'.format(arg1, type(arg1), arg2, type(arg2))
 
     @keyword
     def keyword_exception_annotations(self: 'DynamicTypesAnnotationsLibrary', arg: 'NotHere'):

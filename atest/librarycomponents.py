@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from robotlibcore import keyword
 
 
@@ -8,7 +6,7 @@ def function():
     return 1
 
 
-class Names(object):
+class Names:
     attribute = 'not keyword'
 
     @keyword
@@ -31,7 +29,7 @@ class Names(object):
         raise RuntimeError('Should not touch property!!')
 
 
-class Arguments(object):
+class Arguments:
 
     @keyword
     def mandatory(self, arg1, arg2):
@@ -61,11 +59,11 @@ class Arguments(object):
         def ru(item):
             return repr(item).lstrip('u')
         args = [ru(a) for a in args]
-        kwargs = ['%s=%s' % (k, ru(kwargs[k])) for k in sorted(kwargs)]
+        kwargs = ['{}={}'.format(k, ru(kwargs[k])) for k in sorted(kwargs)]
         return ', '.join(args + kwargs)
 
 
-class DocsAndTags(object):
+class DocsAndTags:
 
     @keyword
     def one_line_doc(self):
