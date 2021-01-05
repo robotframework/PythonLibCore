@@ -21,7 +21,6 @@ https://github.com/robotframework/PythonLibCore
 
 import inspect
 import os
-import sys
 
 from robot.utils import PY_VERSION
 
@@ -33,7 +32,6 @@ except ImportError:
 from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
-PY2 = sys.version_info < (3,)
 RF31 = robot_version < '3.2'
 
 __version__ = '2.2.2.dev1'
@@ -87,10 +85,7 @@ class HybridCore(object):
                              .format(type(self).__name__, name))
 
     def __dir__(self):
-        if PY2:
-            my_attrs = dir(type(self)) + list(self.__dict__)
-        else:
-            my_attrs = super().__dir__()
+        my_attrs = super().__dir__()
         return sorted(set(my_attrs) | set(self.attributes))
 
     def get_keyword_names(self):
@@ -172,8 +167,6 @@ class KeywordBuilder(object):
 
     @classmethod
     def unwrap(cls, function):
-        if PY2:
-            return function
         return inspect.unwrap(function)
 
     @classmethod
@@ -192,8 +185,6 @@ class KeywordBuilder(object):
 
     @classmethod
     def _get_arg_spec(cls, function):
-        if PY2:
-            return inspect.getargspec(function)
         return inspect.getfullargspec(function)
 
     @classmethod
@@ -224,15 +215,11 @@ class KeywordBuilder(object):
 
     @classmethod
     def _get_kwargs(cls, arg_spec):
-        if PY2:
-            return ['**%s' % arg_spec.keywords] if arg_spec.keywords else []
         return ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
 
     @classmethod
     def _get_kw_only(cls, arg_spec):
         kw_only_args = []
-        if PY2:
-            return kw_only_args
         for arg in arg_spec.kwonlyargs:
             if not arg_spec.kwonlydefaults or arg not in arg_spec.kwonlydefaults:
                 kw_only_args.append(arg)
@@ -258,8 +245,6 @@ class KeywordBuilder(object):
 
     @classmethod
     def _get_typing_hints(cls, function):
-        if PY2:
-            return {}
         function = cls.unwrap(function)
         try:
             hints = typing.get_type_hints(function)

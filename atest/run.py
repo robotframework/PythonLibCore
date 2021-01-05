@@ -26,8 +26,7 @@ for variant in library_variants:
         sys.exit(rc)
     process_output(output, verbose=False)
 output = join(outdir, 'lib-DynamicTypesLibrary-python-%s-robot-%s.xml' % (python_version, rf_version))
-exclude = 'py3' if sys.version_info < (3,) else ''
-rc = run(tests_types, name='Types', output=output, report=None, log=None, loglevel='debug', exclude=exclude)
+rc = run(tests_types, name='Types', output=output, report=None, log=None, loglevel='debug')
 if rc > 250:
     sys.exit(rc)
 process_output(output, verbose=False)
