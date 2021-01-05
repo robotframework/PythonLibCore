@@ -1,10 +1,9 @@
 import pytest
 
-from robotlibcore import PY2, RF31, KeywordBuilder
+from robotlibcore import RF31, KeywordBuilder
 from moc_library import MockLibrary
-if not PY2:
-    from moc_library_py3 import MockLibraryPy3
-    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
+from moc_library_py3 import MockLibraryPy3
+from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 @pytest.fixture
@@ -68,20 +67,17 @@ def test_varargs_and_kwargs(lib):
     assert spec.argument_specification == ['*vargs', '**kwargs']
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_named_only(lib_py3):
     spec = KeywordBuilder.build(lib_py3.named_only)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2']
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(RF31, reason='Only for RF3.2+')
 def test_named_only_rf32(lib_py3):
     spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2', ('key3', 'default1'), ('key4', True)]
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(not RF31, reason='Only for RF3.1')
 def test_named_only_rf31(lib_py3):
     spec = KeywordBuilder.build(lib_py3.named_only_with_defaults)
@@ -98,25 +94,21 @@ def test_types_disabled_in_keyword_deco(lib):
     assert spec.argument_types is None
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_types_(lib_py3):
     spec = KeywordBuilder.build(lib_py3.args_with_type_hints)
     assert spec.argument_types == {'arg3': str, 'arg4': type(None)}
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_types(lib_py3):
     spec = KeywordBuilder.build(lib_py3.self_and_keyword_only_types)
     assert spec.argument_types == {'varargs': int, 'other': bool, 'kwargs': int}
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 def test_optional_none(lib_py3):
     spec = KeywordBuilder.build(lib_py3.optional_none)
     assert spec.argument_types == {'arg1': str, 'arg2': str}
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(RF31, reason='For RF 3.2')
 def test_complex_deco_rf32(dyn_types):
     spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)
@@ -125,7 +117,6 @@ def test_complex_deco_rf32(dyn_types):
     assert spec.documentation == "Test me doc here"
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(not RF31, reason='For RF 3.2')
 def test_complex_deco_rf31(dyn_types):
     spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)

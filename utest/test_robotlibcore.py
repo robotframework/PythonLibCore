@@ -1,13 +1,10 @@
-import sys
-
 import pytest
 from robot import __version__ as robot_version
 
-from robotlibcore import HybridCore, PY2
+from robotlibcore import HybridCore
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
-if not PY2:
-    from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
+from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
 
 @pytest.fixture(scope='module')
@@ -125,7 +122,6 @@ def test_get_keyword_arguments_rf32():
         args('__foobar__')
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(robot_version < '3.2', reason='For RF 3.2 or greater')
 def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
@@ -138,7 +134,6 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     assert args('keyword_with_deco_and_signature') == [('arg1', False), ('arg2', False)]
 
 
-@pytest.mark.skipif(PY2, reason='Only for Python 3')
 @pytest.mark.skipif(robot_version >= '3.2', reason='For RF 3.1')
 def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
@@ -176,13 +171,3 @@ def test_library_cannot_be_class():
         HybridCore([HybridLibrary])
     assert str(exc_info.value) == \
         "Libraries must be modules or instances, got class 'HybridLibrary' instead."
-
-
-@pytest.mark.skipif(sys.version_info[0] > 2, reason='Only applicable on Py 2')
-def test_library_cannot_be_old_style_class_instance():
-    class OldStyle:
-        pass
-    with pytest.raises(TypeError) as exc_info:
-        HybridCore([OldStyle()])
-    assert str(exc_info.value) == \
-           "Libraries must be modules or new-style class instances, got old-style class 'OldStyle' instead."

@@ -6,7 +6,6 @@ from mockito.matchers import Any
 
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
-from robotlibcore import PY2
 
 
 @pytest.fixture(scope='module')
@@ -49,7 +48,6 @@ def test_location_in_class(lib, lib_path_components):
     assert source == '%s:15' % lib_path_components
 
 
-@pytest.mark.skipif(PY2, reason='Only applicable on Python 3')
 def test_decorator_wrapper(lib_types, lib_path_types):
     source = lib_types.get_keyword_source('keyword_wrapped')
     assert source == '%s:72' % lib_path_types
