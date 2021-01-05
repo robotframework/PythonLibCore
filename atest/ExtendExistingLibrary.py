@@ -8,7 +8,7 @@ class ExtendExistingLibrary(HybridLibrary):
         self.add_library_components([ExtendingComponent()])
 
 
-class ExtendingComponent(object):
+class ExtendingComponent:
 
     @keyword
     def keyword_in_extending_library(self):

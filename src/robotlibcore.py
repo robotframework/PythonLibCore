@@ -37,7 +37,7 @@ RF31 = robot_version < '3.2'
 __version__ = '2.2.2.dev1'
 
 
-class HybridCore(object):
+class HybridCore:
 
     def __init__(self, library_components):
         self.keywords = {}
@@ -131,7 +131,7 @@ class DynamicCore(HybridCore):
         path = self.__get_keyword_path(method)
         line_number = self.__get_keyword_line(method)
         if path and line_number:
-            return '%s:%s' % (path, line_number)
+            return '{}:{}'.format(path, line_number)
         if path:
             return path
         if line_number:
@@ -141,7 +141,7 @@ class DynamicCore(HybridCore):
     def __get_keyword_line(self, method):
         try:
             lines, line_number = inspect.getsourcelines(method)
-        except (OSError, IOError, TypeError):
+        except (OSError, TypeError):
             return None
         for increment, line in enumerate(lines):
             if line.strip().startswith('def '):
@@ -155,7 +155,7 @@ class DynamicCore(HybridCore):
             return None
 
 
-class KeywordBuilder(object):
+class KeywordBuilder:
 
     @classmethod
     def build(cls, function):
@@ -231,7 +231,7 @@ class KeywordBuilder(object):
     @classmethod
     def _format_defaults(cls, arg, value):
         if RF31:
-            return '%s=%s' % (arg, value)
+            return '{}={}'.format(arg, value)
         return arg, value
 
     @classmethod
@@ -299,7 +299,7 @@ class KeywordBuilder(object):
         return zip(names, arg_spec.defaults)
 
 
-class KeywordSpecification(object):
+class KeywordSpecification:
 
     def __init__(self, argument_specification=None, documentation=None, argument_types=None):
         self.argument_specification = argument_specification

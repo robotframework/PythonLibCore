@@ -1,7 +1,7 @@
 from robot.api.deco import keyword
 
 
-class MockLibrary(object):
+class MockLibrary:
 
     def no_args(self):
         pass
