@@ -95,3 +95,8 @@ ENV/
 
 # PyCharm project settings
 .idea
+
+# Robot Ouput files
+log.html
+output.xml
+report.html
