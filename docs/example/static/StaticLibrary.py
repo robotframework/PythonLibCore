@@ -5,8 +5,8 @@ from robot.api import logger
 
 
 class StaticLibrary:
-    def __init__(self):
-        self.separator = ";"
+    def __init__(self, separator: str = ";"):
+        self.separator = separator
 
     def join_strings(self, *strings: str) -> str:
         """Joins args strings."""
