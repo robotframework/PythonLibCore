@@ -27,7 +27,7 @@ class StaticLibrary:
         logger.info("Waiting done")
         return f"{arg1} and {arg2}"
 
-    def join_string_with_separator(self, *strings, separator: Optional[str] =None):
+    def join_string_with_separator(self, *strings, separator: Optional[str] = None):
         """Joins strings with separator"""
         return f"{separator if separator else self.separator}".join(strings)
 

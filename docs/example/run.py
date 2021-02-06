@@ -11,8 +11,4 @@ elif args.type == "hybrid":
     folder = f"02-{args.type}"
 else:
     raise ValueError("Invalid value for library type.")
-run_cli([
-    "--pythonpath",
-    folder,
-    folder
-])
+run_cli(["--loglevel", "trace", "--pythonpath", folder, folder])
