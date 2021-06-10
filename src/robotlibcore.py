@@ -18,19 +18,17 @@ Main usage is easing creating larger test libraries. For more information and
 examples see the project pages at
 https://github.com/robotframework/PythonLibCore
 """
-
 import inspect
 import os
+import typing
 
+from robot import version as robot_version
 from robot.utils import PY_VERSION
 
-try:
-    import typing
-except ImportError:
-    typing = None
 
 from robot.api.deco import keyword  # noqa F401
 
+RF32 = robot_version < '4.'
 
 __version__ = '2.2.2.dev1'
 
@@ -51,6 +49,8 @@ class HybridCore:
                 if callable(func) and hasattr(func, 'robot_name'):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
+                    if kw_name == "keyword_optional_with_none":
+                        print(kw_name)
                     self.keywords[kw_name] = kw
                     self.keywords_spec[kw_name] = KeywordBuilder.build(kw)
                     # Expose keywords as attributes both using original
@@ -246,8 +246,10 @@ class KeywordBuilder:
             # remove return and self statements
             if arg_with_hint not in all_args:
                 hints.pop(arg_with_hint)
-        default = cls._get_defaults(arg_spec)
-        return cls._remove_optional_none_type_hints(hints, default)
+        if RF32:
+            default = cls._get_defaults(arg_spec)
+            return cls._remove_optional_none_type_hints(hints, default)
+        return hints
 
     @classmethod
     def _args_as_list(cls, function, arg_spec):
