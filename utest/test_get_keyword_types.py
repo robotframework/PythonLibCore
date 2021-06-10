@@ -187,13 +187,11 @@ def test_keyword_with_decorator_arguments(lib_types):
 
 @pytest.mark.skipif(RF32, reason='Only for RF4+')
 def test_keyword_optional_with_none_rf4(lib_types):
-    lib = DynamicTypesAnnotationsLibrary("111")
-    types = lib.get_keyword_types('keyword_optional_with_none')
+    types = lib_types.get_keyword_types('keyword_optional_with_none')
     assert types == {'arg': typing.Union[str, type(None)]}
 
 
 @pytest.mark.skipif(not RF32, reason='Only for RF3.2+')
 def test_keyword_optional_with_none_rf32(lib_types):
-    lib = DynamicTypesAnnotationsLibrary("111")
-    types = lib.get_keyword_types('keyword_optional_with_none')
+    types = lib_types.get_keyword_types('keyword_optional_with_none')
     assert types == {'arg': str}
