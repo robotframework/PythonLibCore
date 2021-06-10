@@ -30,9 +30,7 @@ except ImportError:
     typing = None
 
 from robot.api.deco import keyword  # noqa F401
-from robot import __version__ as robot_version
 
-RF31 = robot_version < '3.2'
 
 __version__ = '2.2.2.dev1'
 
@@ -195,9 +193,7 @@ class KeywordBuilder:
         formated_args = []
         for arg in args:
             if defaults:
-                formated_args.append(
-                    cls._format_defaults(arg, defaults.pop())
-                )
+                formated_args.append((arg, defaults.pop()))
             else:
                 formated_args.append(arg)
         formated_args.reverse()
@@ -225,14 +221,8 @@ class KeywordBuilder:
                 kw_only_args.append(arg)
             else:
                 value = arg_spec.kwonlydefaults.get(arg, '')
-                kw_only_args.append(cls._format_defaults(arg, value))
+                kw_only_args.append((arg, value))
         return kw_only_args
-
-    @classmethod
-    def _format_defaults(cls, arg, value):
-        if RF31:
-            return '{}={}'.format(arg, value)
-        return arg, value
 
     @classmethod
     def _get_types(cls, function):

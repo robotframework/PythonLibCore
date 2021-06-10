@@ -1,5 +1,4 @@
 import pytest
-from robot import __version__ as robot_version
 
 from robotlibcore import HybridCore
 from HybridLibrary import HybridLibrary
@@ -96,21 +95,7 @@ def test_getattr():
             "'%s' object has no attribute 'non_existing'" % type(lib).__name__
 
 
-@pytest.mark.skipif(robot_version >= '3.2', reason='For RF 3.1')
-def test_get_keyword_arguments_rf31():
-    args = DynamicLibrary().get_keyword_arguments
-    assert args('mandatory') == ['arg1', 'arg2']
-    assert args('defaults') == ['arg1', 'arg2=default', 'arg3=3']
-    assert args('varargs_and_kwargs') == ['*args', '**kws']
-    assert args('kwargs_only') == ['**kws']
-    assert args('all_arguments') == ['mandatory', 'default=value', '*varargs', '**kwargs']
-    assert args('__init__') == ['arg=None']
-    with pytest.raises(AttributeError):
-        args('__foobar__')
-
-
-@pytest.mark.skipif(robot_version < '3.2', reason='For RF 3.2 or greater')
-def test_get_keyword_arguments_rf32():
+def test_get_keyword_arguments():
     args = DynamicLibrary().get_keyword_arguments
     assert args('mandatory') == ['arg1', 'arg2']
     assert args('defaults') == ['arg1', ('arg2', 'default'), ('arg3', 3)]
@@ -122,8 +107,7 @@ def test_get_keyword_arguments_rf32():
         args('__foobar__')
 
 
-@pytest.mark.skipif(robot_version < '3.2', reason='For RF 3.2 or greater')
-def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
+def test_keyword_only_arguments_for_get_keyword_arguments():
     args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
     assert args('keyword_only_arguments') == ['*varargs', ('some', 111)]
     assert args('keyword_only_arguments_many') == ['*varargs', ('some', 'value'), ('other', None)]
@@ -132,18 +116,6 @@ def test_keyword_only_arguments_for_get_keyword_arguments_rf32():
     all_args = ['mandatory', ('positional', 1), '*varargs', 'other', ('value', False), '**kwargs']
     assert args('keyword_all_args') == all_args
     assert args('keyword_with_deco_and_signature') == [('arg1', False), ('arg2', False)]
-
-
-@pytest.mark.skipif(robot_version >= '3.2', reason='For RF 3.1')
-def test_keyword_only_arguments_for_get_keyword_arguments_rf31():
-    args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
-    assert args('keyword_only_arguments') == ['*varargs', 'some=111']
-    assert args('keyword_only_arguments_many') == ['*varargs', 'some=value', 'other=None']
-    assert args('keyword_only_arguments_no_default') == ['*varargs', 'other']
-    assert args('keyword_only_arguments_default_and_no_default') == ['*varargs', 'other', 'value=False']
-    all_args = ['mandatory', 'positional=1', '*varargs', 'other', 'value=False', '**kwargs']
-    assert args('keyword_all_args') == all_args
-    assert args('keyword_with_deco_and_signature') == ['arg1=False', 'arg2=False']
 
 
 def test_get_keyword_documentation():
