@@ -22,7 +22,7 @@ import inspect
 import os
 import typing
 
-from robot import version as robot_version
+from robot import __version__ as robot_version
 from robot.utils import PY_VERSION
 
 
@@ -262,6 +262,7 @@ class KeywordBuilder:
             function_args.append(arg_spec.varkw)
         return function_args
 
+    # TODO: Remove when support RF 3.2 is dropped
     # Copied from: robot.running.arguments.argumentparser
     @classmethod
     def _remove_optional_none_type_hints(cls, type_hints, defaults):
@@ -276,6 +277,7 @@ class KeywordBuilder:
                         type_hints[arg] = types[0]
         return type_hints
 
+    # TODO: Remove when support RF 3.2 is dropped
     # Copied from: robot.running.arguments.argumentparser
     @classmethod
     def _is_union(cls, typing_type):

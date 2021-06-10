@@ -1,6 +1,7 @@
 import pytest
+import typing
 
-from robotlibcore import KeywordBuilder
+from robotlibcore import KeywordBuilder, RF32
 from moc_library import MockLibrary
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
@@ -77,9 +78,16 @@ def test_types(lib):
     assert spec.argument_types == {'varargs': int, 'other': bool, 'kwargs': int}
 
 
-def test_optional_none(lib):
+@pytest.mark.skipif(not RF32, reason='Only for RF3.2+')
+def test_optional_none_rf32(lib):
     spec = KeywordBuilder.build(lib.optional_none)
     assert spec.argument_types == {'arg1': str, 'arg2': str}
+
+
+@pytest.mark.skipif(RF32, reason='Only for RF4')
+def test_optional_none_rf4(lib):
+    spec = KeywordBuilder.build(lib.optional_none)
+    assert spec.argument_types == {'arg1': typing.Union[str, None], 'arg2': typing.Union[str, None]}
 
 
 def test_complex_deco(dyn_types):
