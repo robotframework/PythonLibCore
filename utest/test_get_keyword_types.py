@@ -1,9 +1,7 @@
+from typing import List, Union
+
 import pytest
 
-
-from robotlibcore import RF31
-
-from typing import List, Union
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 from DynamicTypesAnnotationsLibrary import CustomObject
 from DynamicTypesLibrary import DynamicTypesLibrary
@@ -29,14 +27,7 @@ def test_types_disabled(lib):
     assert types is None
 
 
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_keyword_types_and_bool_default_rf31(lib):
-    types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
-    assert types == {'arg1': str}
-
-
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_types_and_bool_default_rf32(lib):
+def test_keyword_types_and_bool_default(lib):
     types = lib.get_keyword_types('keyword_robot_types_and_bool_default')
     assert types == {'arg1': str}
 
@@ -56,14 +47,7 @@ def test_not_keyword(lib):
         lib.get_keyword_types('not_keyword')
 
 
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_none_rf32(lib):
-    types = lib.get_keyword_types('keyword_none')
-    assert types == {}
-
-
-@pytest.mark.skipif(not RF31, reason='Only for RF3.2+')
-def test_keyword_none_rf31(lib):
+def test_keyword_none(lib):
     types = lib.get_keyword_types('keyword_none')
     assert types == {}
 
@@ -114,7 +98,7 @@ def test_keyword_with_annotation_external_class(lib_types):
     assert types == {'arg': CustomObject}
 
 
-def test_keyword_with_annotation_and_default(lib_types):
+def test_keyword_with_annotation_and_default_part2(lib_types):
     types = lib_types.get_keyword_types('keyword_default_and_annotation')
     assert types == {'arg1': int, 'arg2': Union[bool, str]}
 
@@ -163,13 +147,6 @@ def test_keyword_only_arguments(lib_types):
     assert types == {}
 
 
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_only_arguments_many(lib_types):
-    types = lib_types.get_keyword_types('keyword_only_arguments_many')
-    assert types == {}
-
-
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
 def test_keyword_only_arguments_many(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many')
     assert types == {}
@@ -180,26 +157,12 @@ def test_keyword_mandatory_and_keyword_only_arguments(lib_types):
     assert types == {'arg': int, 'some': bool}
 
 
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_only_arguments_many_positional_and_default_rf32(lib_types):
+def test_keyword_only_arguments_many_positional_and_default(lib_types):
     types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
     assert types == {'four': Union[int, str], 'six': Union[bool, str]}
 
 
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_keyword_only_arguments_many_positional_and_default_rf31(lib_types):
-    types = lib_types.get_keyword_types('keyword_only_arguments_many_positional_and_default')
-    assert types == {'four': Union[int, str], 'six': Union[bool, str]}
-
-
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_keyword_all_args_rf32(lib_types):
-    types = lib_types.get_keyword_types('keyword_all_args')
-    assert types == {}
-
-
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_keyword_all_args_rf31(lib_types):
+def test_keyword_all_args(lib_types):
     types = lib_types.get_keyword_types('keyword_all_args')
     assert types == {}
 

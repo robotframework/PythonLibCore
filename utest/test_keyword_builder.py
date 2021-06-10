@@ -1,6 +1,6 @@
 import pytest
 
-from robotlibcore import RF31, KeywordBuilder
+from robotlibcore import KeywordBuilder
 from moc_library import MockLibrary
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 
@@ -32,28 +32,14 @@ def test_positional_args(lib):
     assert spec.argument_specification == ['arg1', 'arg2']
 
 
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_positional_and_named_rf32(lib):
+def test_positional_and_named(lib):
     spec = KeywordBuilder.build(lib.positional_and_default)
     assert spec.argument_specification == ['arg1', 'arg2', ('named1', 'string1'), ('named2', 123)]
 
 
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_positional_and_named_rf31(lib):
-    spec = KeywordBuilder.build(lib.positional_and_default)
-    assert spec.argument_specification == ['arg1', 'arg2', 'named1=string1', 'named2=123']
-
-
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_named_only_rf32(lib):
+def test_named_only(lib):
     spec = KeywordBuilder.build(lib.default_only)
     assert spec.argument_specification == [('named1', 'string1'), ('named2', 123)]
-
-
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_named_only_rf31(lib):
-    spec = KeywordBuilder.build(lib.default_only)
-    assert spec.argument_specification == ['named1=string1', 'named2=123']
 
 
 def test_varargs_and_kwargs(lib):
@@ -61,21 +47,14 @@ def test_varargs_and_kwargs(lib):
     assert spec.argument_specification == ['*vargs', '**kwargs']
 
 
-def test_named_only(lib):
+def test_named_only_part2(lib):
     spec = KeywordBuilder.build(lib.named_only)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2']
 
 
-@pytest.mark.skipif(RF31, reason='Only for RF3.2+')
-def test_named_only_rf32(lib):
+def test_named_only(lib):
     spec = KeywordBuilder.build(lib.named_only_with_defaults)
     assert spec.argument_specification == ['*varargs', 'key1', 'key2', ('key3', 'default1'), ('key4', True)]
-
-
-@pytest.mark.skipif(not RF31, reason='Only for RF3.1')
-def test_named_only_rf31(lib):
-    spec = KeywordBuilder.build(lib.named_only_with_defaults)
-    assert spec.argument_specification == ['*varargs', 'key1', 'key2', 'key3=default1', 'key4=True']
 
 
 def test_types_in_keyword_deco(lib):
@@ -103,17 +82,8 @@ def test_optional_none(lib):
     assert spec.argument_types == {'arg1': str, 'arg2': str}
 
 
-@pytest.mark.skipif(RF31, reason='For RF 3.2')
-def test_complex_deco_rf32(dyn_types):
+def test_complex_deco(dyn_types):
     spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)
     assert spec.argument_types == {'arg1': bool, 'arg2': bool}
     assert spec.argument_specification == [('arg1', False), ('arg2', False)]
-    assert spec.documentation == "Test me doc here"
-
-
-@pytest.mark.skipif(not RF31, reason='For RF 3.2')
-def test_complex_deco_rf31(dyn_types):
-    spec = KeywordBuilder.build(dyn_types.keyword_with_deco_and_signature)
-    assert spec.argument_types == {'arg1': bool, 'arg2': bool}
-    assert spec.argument_specification == ['arg1=False', 'arg2=False']
     assert spec.documentation == "Test me doc here"
