@@ -30,7 +30,7 @@ from robot.api.deco import keyword  # noqa F401
 
 RF32 = robot_version < '4.'
 
-__version__ = '2.2.2.dev1'
+__version__ = '3.0.0'
 
 
 class HybridCore:
