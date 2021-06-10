@@ -49,8 +49,6 @@ class HybridCore:
                 if callable(func) and hasattr(func, 'robot_name'):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
-                    if kw_name == "keyword_optional_with_none":
-                        print(kw_name)
                     self.keywords[kw_name] = kw
                     self.keywords_spec[kw_name] = KeywordBuilder.build(kw)
                     # Expose keywords as attributes both using original
