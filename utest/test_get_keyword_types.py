@@ -180,3 +180,8 @@ def test_keyword_self_and_keyword_only_types(lib_types):
 def test_keyword_with_decorator_arguments(lib_types):
     types = lib_types.get_keyword_types('keyword_with_deco_and_signature')
     assert types == {'arg1': bool, 'arg2': bool}
+
+
+def test_keyword_optional_with_none_1(lib_types):
+    types = lib_types.get_keyword_types('keyword_optional_with_none')
+    assert types == {'arg': Union[str, type(None)]}

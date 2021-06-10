@@ -1,5 +1,6 @@
 *** Settings ***
 Library        DynamicTypesLibrary.py
+Library        DynamicTypesAnnotationsLibrary.py    xxx
 Suite Setup    Import DynamicTypesAnnotationsLibrary In Python 3 Only
 
 *** Test Cases ***
@@ -73,6 +74,16 @@ Enum Conversion To Invalid Value Should Fail
     Run Keyword And Expect Error    ValueError: Argument 'param' got value 'not ok' that*
     ...    Enum Conversion    not ok
 
+Type Conversion With Optional And None
+    ${types} =    Keyword Optional With None
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'NoneType'>
+    ${types} =    Keyword Optional With None    None
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'str'>
+    ${types} =    Keyword Optional With None    ${None}
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'NoneType'>
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3 Only
