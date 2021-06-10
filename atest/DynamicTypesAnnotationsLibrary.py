@@ -148,3 +148,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     def keyword_with_deco_and_signature(self, arg1: bool = False, arg2: bool = False):
         """Test me doc here"""
         return f"{arg1}: {type(arg1)}, {arg2}: {type(arg2)}"
+
+    @keyword
+    def keyword_optional_with_none(self, arg: Optional[str] = None):
+        return f"arg: {arg}, type: {type(arg)}"
