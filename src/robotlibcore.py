@@ -22,9 +22,6 @@ import inspect
 import os
 import typing
 
-from robot.utils import PY_VERSION
-
-
 from robot.api.deco import keyword  # noqa F401
 
 __version__ = '3.0.1.dev1'
