@@ -22,13 +22,10 @@ import inspect
 import os
 import typing
 
-from robot import __version__ as robot_version
 from robot.utils import PY_VERSION
 
 
 from robot.api.deco import keyword  # noqa F401
-
-RF32 = robot_version < '4.'
 
 __version__ = '3.0.1.dev1'
 
@@ -244,9 +241,6 @@ class KeywordBuilder:
             # remove return and self statements
             if arg_with_hint not in all_args:
                 hints.pop(arg_with_hint)
-        if RF32:
-            default = cls._get_defaults(arg_spec)
-            return cls._remove_optional_none_type_hints(hints, default)
         return hints
 
     @classmethod
@@ -259,29 +253,6 @@ class KeywordBuilder:
         if arg_spec.varkw:
             function_args.append(arg_spec.varkw)
         return function_args
-
-    # TODO: Remove when support RF 3.2 is dropped
-    # Copied from: robot.running.arguments.argumentparser
-    @classmethod
-    def _remove_optional_none_type_hints(cls, type_hints, defaults):
-        # If argument has None as a default, typing.get_type_hints adds
-        # optional None to the information it returns. We don't want that.
-        for arg, default in defaults:
-            if default is None and arg in type_hints:
-                type_ = type_hints[arg]
-                if cls._is_union(type_):
-                    types = type_.__args__
-                    if len(types) == 2 and types[1] is type(None): # noqa
-                        type_hints[arg] = types[0]
-        return type_hints
-
-    # TODO: Remove when support RF 3.2 is dropped
-    # Copied from: robot.running.arguments.argumentparser
-    @classmethod
-    def _is_union(cls, typing_type):
-        if PY_VERSION >= (3, 7) and hasattr(typing_type, '__origin__'):
-            typing_type = typing_type.__origin__
-        return isinstance(typing_type, type(typing.Union))
 
     @classmethod
     def _get_defaults(cls, arg_spec):
