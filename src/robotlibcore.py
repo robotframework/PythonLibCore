@@ -24,11 +24,10 @@ import typing
 
 from robot.api.deco import keyword  # noqa F401
 
-__version__ = '3.0.1.dev1'
+__version__ = "3.0.1.dev1"
 
 
 class HybridCore:
-
     def __init__(self, library_components):
         self.keywords = {}
         self.keywords_spec = {}
@@ -37,10 +36,10 @@ class HybridCore:
         self.add_library_components([self])
 
     def add_library_components(self, library_components):
-        self.keywords_spec['__init__'] = KeywordBuilder.build(self.__init__)
+        self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)
         for component in library_components:
             for name, func in self.__get_members(component):
-                if callable(func) and hasattr(func, 'robot_name'):
+                if callable(func) and hasattr(func, "robot_name"):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
                     self.keywords[kw_name] = kw
@@ -53,12 +52,14 @@ class HybridCore:
         if inspect.ismodule(component):
             return inspect.getmembers(component)
         if inspect.isclass(component):
-            raise TypeError('Libraries must be modules or instances, got '
-                            'class {!r} instead.'.format(component.__name__))
+            raise TypeError(
+                "Libraries must be modules or instances, got " "class {!r} instead.".format(component.__name__)
+            )
         if type(component) != component.__class__:
-            raise TypeError('Libraries must be modules or new-style class '
-                            'instances, got old-style class {!r} instead.'
-                            .format(component.__class__.__name__))
+            raise TypeError(
+                "Libraries must be modules or new-style class "
+                "instances, got old-style class {!r} instead.".format(component.__class__.__name__)
+            )
         return self.__get_members_from_instance(component)
 
     def __get_members_from_instance(self, instance):
@@ -71,8 +72,7 @@ class HybridCore:
     def __getattr__(self, name):
         if name in self.attributes:
             return self.attributes[name]
-        raise AttributeError('{!r} object has no attribute {!r}'
-                             .format(type(self).__name__, name))
+        raise AttributeError("{!r} object has no attribute {!r}".format(type(self).__name__, name))
 
     def __dir__(self):
         my_attrs = super().__dir__()
@@ -83,7 +83,6 @@ class HybridCore:
 
 
 class DynamicCore(HybridCore):
-
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
 
@@ -95,8 +94,8 @@ class DynamicCore(HybridCore):
         return self.keywords[name].robot_tags
 
     def get_keyword_documentation(self, name):
-        if name == '__intro__':
-            return inspect.getdoc(self) or ''
+        if name == "__intro__":
+            return inspect.getdoc(self) or ""
         spec = self.keywords_spec.get(name)
         return spec.documentation
 
@@ -107,9 +106,9 @@ class DynamicCore(HybridCore):
         return spec.argument_types
 
     def __get_keyword(self, keyword_name):
-        if keyword_name == '__init__':
+        if keyword_name == "__init__":
             return self.__init__
-        if keyword_name.startswith('__') and keyword_name.endswith('__'):
+        if keyword_name.startswith("__") and keyword_name.endswith("__"):
             return None
         method = self.keywords.get(keyword_name)
         if not method:
@@ -121,11 +120,11 @@ class DynamicCore(HybridCore):
         path = self.__get_keyword_path(method)
         line_number = self.__get_keyword_line(method)
         if path and line_number:
-            return '{}:{}'.format(path, line_number)
+            return "{}:{}".format(path, line_number)
         if path:
             return path
         if line_number:
-            return ':%s' % line_number
+            return ":%s" % line_number
         return None
 
     def __get_keyword_line(self, method):
@@ -134,7 +133,7 @@ class DynamicCore(HybridCore):
         except (OSError, TypeError):
             return None
         for increment, line in enumerate(lines):
-            if line.strip().startswith('def '):
+            if line.strip().startswith("def "):
                 return line_number + increment
         return line_number
 
@@ -146,13 +145,12 @@ class DynamicCore(HybridCore):
 
 
 class KeywordBuilder:
-
     @classmethod
     def build(cls, function):
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
-            documentation=inspect.getdoc(function) or '',
-            argument_types=cls._get_types(function)
+            documentation=inspect.getdoc(function) or "",
+            argument_types=cls._get_types(function),
         )
 
     @classmethod
@@ -163,9 +161,7 @@ class KeywordBuilder:
     def _get_arguments(cls, function):
         unwrap_function = cls.unwrap(function)
         arg_spec = cls._get_arg_spec(unwrap_function)
-        argument_specification = cls._get_default_and_named_args(
-            arg_spec, function
-        )
+        argument_specification = cls._get_default_and_named_args(arg_spec, function)
         argument_specification.extend(cls._get_var_args(arg_spec))
         kw_only_args = cls._get_kw_only(arg_spec)
         if kw_only_args:
@@ -198,12 +194,12 @@ class KeywordBuilder:
     @classmethod
     def _get_var_args(cls, arg_spec):
         if arg_spec.varargs:
-            return ['*%s' % arg_spec.varargs]
+            return ["*%s" % arg_spec.varargs]
         return []
 
     @classmethod
     def _get_kwargs(cls, arg_spec):
-        return ['**%s' % arg_spec.varkw] if arg_spec.varkw else []
+        return ["**%s" % arg_spec.varkw] if arg_spec.varkw else []
 
     @classmethod
     def _get_kw_only(cls, arg_spec):
@@ -212,7 +208,7 @@ class KeywordBuilder:
             if not arg_spec.kwonlydefaults or arg not in arg_spec.kwonlydefaults:
                 kw_only_args.append(arg)
             else:
-                value = arg_spec.kwonlydefaults.get(arg, '')
+                value = arg_spec.kwonlydefaults.get(arg, "")
                 kw_only_args.append((arg, value))
         return kw_only_args
 
@@ -220,7 +216,7 @@ class KeywordBuilder:
     def _get_types(cls, function):
         if function is None:
             return function
-        types = getattr(function, 'robot_types', ())
+        types = getattr(function, "robot_types", ())
         if types is None or types:
             return types
         return cls._get_typing_hints(function)
@@ -255,12 +251,11 @@ class KeywordBuilder:
     def _get_defaults(cls, arg_spec):
         if not arg_spec.defaults:
             return {}
-        names = arg_spec.args[-len(arg_spec.defaults):]
+        names = arg_spec.args[-len(arg_spec.defaults) :]
         return zip(names, arg_spec.defaults)
 
 
 class KeywordSpecification:
-
     def __init__(self, argument_specification=None, documentation=None, argument_types=None):
         self.argument_specification = argument_specification
         self.documentation = documentation
