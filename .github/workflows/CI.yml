@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.9, pypy3, 3.10.0-rc.1]
+        python-version: [3.6, 3.9, 3.10.0-rc.1]
         rf-version: [4.0.2, 4.1.1]
 
     steps:
@@ -26,7 +26,10 @@ jobs:
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Run flake8
       run: |
-        flake8 --max-line-length=110 src/
+        flake8 --config .flake8 src/
+    - name: Run balck
+      run: |
+        black --target-version py36 --line-length 120 --check src/
     - name: Run unit tests
       run: |
         python utest/run.py

@@ -118,3 +118,12 @@ def init_labels(ctx, username=None, password=None):
     when labels it uses have changed.
     """
     initialize_labels(REPOSITORY, username, password)
+
+@task
+def lint(ctx):
+    print("Run flake8")
+    ctx.run("flake8 --config .flake8 src/")
+    print("Run black")
+    ctx.run("black --target-version py36 --line-length 120 src/")
+    print("Run isort")
+    ctx.run("isort src/")
