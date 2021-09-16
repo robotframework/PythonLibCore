@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -127,3 +128,16 @@ def lint(ctx):
     ctx.run("black --target-version py36 --line-length 120 src/")
     print("Run isort")
     ctx.run("isort src/")
+    print("Run tidy")
+    in_ci = os.getenv("GITHUB_WORKFLOW")
+    print(f"Lint Robot files {'in ci' if in_ci else ''}")
+    command = [
+        "robotidy",
+        "--lineseparator",
+        "unix",
+        "atest/",
+    ]
+    if in_ci:
+        command.insert(1, "--check")
+        command.insert(1, "--diff")
+    ctx.run(" ".join(command))
