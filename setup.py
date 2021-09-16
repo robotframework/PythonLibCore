@@ -40,7 +40,7 @@ setup(
     keywords         = 'robotframework testing testautomation library development',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    python_requires  = '>=3.6, <4',
+    python_requires  = '>=3.7, <4',
     package_dir      = {'': 'src'},
     packages         = find_packages('src'),
     py_modules       = ['robotlibcore'],
