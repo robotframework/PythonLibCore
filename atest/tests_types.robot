@@ -2,6 +2,9 @@
 Library     DynamicTypesLibrary.py
 Library     DynamicTypesAnnotationsLibrary.py    xxx
 
+*** Variables ***
+${CUSTOM NONE} =    ${None}
+
 *** Test Cases ***
 Keyword Default Argument As Abject None
     ${return} =    DynamicTypesLibrary.Keyword None    ${None}
@@ -74,3 +77,17 @@ Type Conversion With Optional And None
     ${types} =    Keyword Optional With None    ${None}
     Should Contain    ${types}    arg: None,
     Should Contain    ${types}    <class 'NoneType'>
+    ${types} =    Keyword Optional With None    arg=${CUSTOM NONE}
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'NoneType'>
+
+Type Conversion With Union And Multiple Types
+    ${types} =    Keyword Union With None
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'NoneType'>
+    ${types} =    Keyword Union With None    None
+    Should Contain    ${types}    arg: None,
+    Should Contain    ${types}    <class 'str'>
+    ${types} =    Keyword Union With None    {"key": 1}
+    Should Contain    ${types}    arg: {"key": 1},
+    Should Contain    ${types}    <class 'str'>

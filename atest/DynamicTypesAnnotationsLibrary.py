@@ -1,6 +1,6 @@
 from enum import Enum
 from functools import wraps
-from typing import List, Union, NewType, Optional, Tuple
+from typing import List, Union, NewType, Optional, Tuple, Dict
 
 from robot.api import logger
 
@@ -151,4 +151,8 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
 
     @keyword
     def keyword_optional_with_none(self, arg: Optional[str] = None):
+        return f"arg: {arg}, type: {type(arg)}"
+
+    @keyword
+    def keyword_union_with_none(self, arg: Union[None, Dict, str] = None):
         return f"arg: {arg}, type: {type(arg)}"
