@@ -5,3 +5,4 @@ robotstatuschecker
 flake8
 black
 isort
+robotframework-tidy
