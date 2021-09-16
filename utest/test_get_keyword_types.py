@@ -1,8 +1,6 @@
 import pytest
 import typing
 
-from robotlibcore import RF32
-
 from typing import List, Union
 
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
@@ -185,13 +183,6 @@ def test_keyword_with_decorator_arguments(lib_types):
     assert types == {'arg1': bool, 'arg2': bool}
 
 
-@pytest.mark.skipif(RF32, reason='Only for RF4+')
-def test_keyword_optional_with_none_rf4(lib_types):
+def test_keyword_optional_with_none(lib_types):
     types = lib_types.get_keyword_types('keyword_optional_with_none')
     assert types == {'arg': typing.Union[str, type(None)]}
-
-
-@pytest.mark.skipif(not RF32, reason='Only for RF3.2+')
-def test_keyword_optional_with_none_rf32(lib_types):
-    types = lib_types.get_keyword_types('keyword_optional_with_none')
-    assert types == {'arg': str}
