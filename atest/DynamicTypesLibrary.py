@@ -58,8 +58,8 @@ class DynamicTypesLibrary(DynamicCore):
         return '{}: {}'.format(arg, type(arg))
 
     @keyword
-    def is_python_3(self):
-        return sys.version_info >= (3,)
+    def is_python_3_10(self):
+        return sys.version_info >= (3, 10)
 
     @keyword
     @def_deco

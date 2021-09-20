@@ -91,3 +91,17 @@ Type Conversion With Union And Multiple Types
     ${types} =    Keyword Union With None    {"key": 1}
     Should Contain    ${types}    arg: {"key": 1},
     Should Contain    ${types}    <class 'str'>
+
+Python 3.10 New Type Hints
+    [Tags]    py310
+    [Setup]    Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
+    ${types} =    Python310 Style    111
+    Should Be Equal    ${types}    arg: 111, type: <class 'int'>
+    ${types} =    Python310 Style    {"key": 1}
+    Should Be Equal    ${types}    arg: {'key': 1}, type: <class 'dict'>
+
+*** Keywords ***
+Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
+    ${py3} =    DynamicTypesLibrary.Is Python 3 10
+    Run Keyword If     ${py3}
+    ...    Import Library      Python310Library.py
