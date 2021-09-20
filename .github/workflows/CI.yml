@@ -37,6 +37,7 @@ jobs:
       run: |
         python atest/run.py
     - uses: actions/upload-artifact@v1
+      if: ${{ always() }}
       with:
         name: atest_results
         path: atest/results
