@@ -96,6 +96,12 @@ Python 3.10 New Type Hints
     [Tags]    py310
     [Setup]    Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
     ${types} =    Python310 Style    111
+    ${rf401} =    DynamicTypesLibrary.Is Rf 401
+    IF    ${rf401} != ${True}
+        Should Be Equal    ${types}    arg: 111, type: <class 'int'>
+    ELSE
+        Should Be Equal    ${types}    arg: 111, type: <class 'str'>
+    END
     Should Be Equal    ${types}    arg: 111, type: <class 'int'>
     ${types} =    Python310 Style    {"key": 1}
     Should Be Equal    ${types}    arg: {'key': 1}, type: <class 'dict'>
@@ -103,5 +109,6 @@ Python 3.10 New Type Hints
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3 10
-    Run Keyword If     ${py3}
-    ...    Import Library      Python310Library.py
+    IF    ${py3}
+        Import Library    Python310Library.py
+    END
