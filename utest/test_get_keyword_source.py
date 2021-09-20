@@ -50,7 +50,7 @@ def test_location_in_class(lib, lib_path_components):
 
 def test_decorator_wrapper(lib_types, lib_path_types):
     source = lib_types.get_keyword_source('keyword_wrapped')
-    assert source == '%s:72' % lib_path_types
+    assert source == '%s:74' % lib_path_types
 
 
 def test_location_in_class_custom_keyword_name(lib, lib_path_components):
@@ -79,7 +79,7 @@ def test_no_path_and_no_line_number(lib, when):
 
 def test_def_in_decorator(lib_types, lib_path_types):
     source = lib_types.get_keyword_source('keyword_with_def_deco')
-    assert source == '%s:66' % lib_path_types
+    assert source == '%s:68' % lib_path_types
 
 
 def test_error_in_getfile(lib, when):
