@@ -1,6 +1,8 @@
 import functools
 import sys
 
+from robot import version as rf_version
+
 from robotlibcore import DynamicCore, keyword
 
 
@@ -60,6 +62,10 @@ class DynamicTypesLibrary(DynamicCore):
     @keyword
     def is_python_3_10(self):
         return sys.version_info >= (3, 10)
+
+    @keyword
+    def is_rf_401(self):
+        return "4.0." in rf_version.VERSION
 
     @keyword
     @def_deco
