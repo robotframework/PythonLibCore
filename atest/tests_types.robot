@@ -102,9 +102,12 @@ Python 3.10 New Type Hints
     ELSE
         Should Be Equal    ${types}    arg: 111, type: <class 'str'>
     END
-    Should Be Equal    ${types}    arg: 111, type: <class 'int'>
     ${types} =    Python310 Style    {"key": 1}
-    Should Be Equal    ${types}    arg: {'key': 1}, type: <class 'dict'>
+    IF    ${rf401} != ${True}
+        Should Be Equal    ${types}    arg: {'key': 1}, type: <class 'dict'>
+    ELSE
+        Should Be Equal    ${types}    arg: {"key": 1}, type: <class 'str'>
+    END
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
