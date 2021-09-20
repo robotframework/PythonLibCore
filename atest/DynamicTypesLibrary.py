@@ -64,10 +64,6 @@ class DynamicTypesLibrary(DynamicCore):
         return sys.version_info >= (3, 10)
 
     @keyword
-    def is_rf_401(self):
-        return "4.0." in rf_version.VERSION
-
-    @keyword
     @def_deco
     def keyword_with_def_deco(self):
         return 1
@@ -85,3 +81,7 @@ class DynamicTypesLibrary(DynamicCore):
     @keyword
     def keyword_booleans(self, arg1=True, arg2=False):
         return '{}: {}, {}: {}'.format(arg1, type(arg1), arg2, type(arg2))
+
+    @keyword
+    def is_rf_401(self):
+        return "4.0." in rf_version.VERSION
