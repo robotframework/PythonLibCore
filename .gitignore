@@ -7,6 +7,7 @@ atest/results/
 __pycache__/
 *.py[cod]
 *$py.class
+.venv
 
 # C extensions
 *.so
