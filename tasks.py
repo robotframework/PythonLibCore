@@ -122,11 +122,11 @@ def init_labels(ctx, username=None, password=None):
 @task
 def lint(ctx):
     print("Run flake8")
-    ctx.run("flake8 --config .flake8 src/ tasks.py")
+    ctx.run("flake8 --config .flake8 src/ tasks.py utest/run.py atest/run.py")
     print("Run black")
-    ctx.run("black --target-version py36 --line-length 120 src/ tasks.py")
+    ctx.run("black --target-version py36 --line-length 120 src/ tasks.py utest/run.py atest/run.py")
     print("Run isort")
-    ctx.run("isort src/ tasks.py")
+    ctx.run("isort src/ tasks.py utest/run.py atest/run.py")
     print("Run tidy")
     in_ci = os.getenv("GITHUB_WORKFLOW")
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
