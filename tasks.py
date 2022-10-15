@@ -124,7 +124,7 @@ def lint(ctx):
     print("Run flake8")
     ctx.run("flake8 --config .flake8 src/ tasks.py utest/run.py atest/run.py")
     print("Run black")
-    ctx.run("black --target-version py36 --line-length 120 src/ tasks.py utest/run.py atest/run.py")
+    ctx.run("black --target-version py37 --line-length 120 src/ tasks.py utest/run.py atest/run.py")
     print("Run isort")
     ctx.run("isort src/ tasks.py utest/run.py atest/run.py")
     print("Run tidy")
