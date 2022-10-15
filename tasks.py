@@ -3,18 +3,17 @@ import sys
 from pathlib import Path
 
 from invoke import task
-from rellu import initialize_labels, ReleaseNotesGenerator, Version
-from rellu.tasks import clean
-
+from rellu import ReleaseNotesGenerator, Version, initialize_labels
+from rellu.tasks import clean  # noqa
 
 assert Path.cwd() == Path(__file__).parent
 
 
-REPOSITORY = 'robotframework/PythonLibCore'
-VERSION_PATH = Path('src/robotlibcore.py')
-RELEASE_NOTES_PATH = Path('docs/PythonLibCore-{version}.rst')
-RELEASE_NOTES_TITLE = 'Python Library Core {version}'
-RELEASE_NOTES_INTRO = '''
+REPOSITORY = "robotframework/PythonLibCore"
+VERSION_PATH = Path("src/robotlibcore.py")
+RELEASE_NOTES_PATH = Path("docs/PythonLibCore-{version}.rst")
+RELEASE_NOTES_TITLE = "Python Library Core {version}"
+RELEASE_NOTES_INTRO = """
 `Python Library Core`_ is a generic component making it easier to create
 bigger `Robot Framework`_ test libraries. Python Library Core {version} is
 a new release with **UPDATE** enhancements and bug fixes. **MORE intro stuff**
@@ -47,7 +46,7 @@ Python Library Core {version} was released on {date}.
 .. _pip: http://pip-installer.org
 .. _PyPI: https://pypi.python.org/pypi/robotframework-robotlibcore
 .. _issue tracker: https://github.com/robotframework/PythonLibCore/issues?q=milestone%3A{version.milestone}
-'''
+"""
 
 
 @task
@@ -99,8 +98,7 @@ def release_notes(ctx, version=None, username=None, password=None, write=False):
     """
     version = Version(version, VERSION_PATH)
     file = RELEASE_NOTES_PATH if write else sys.stdout
-    generator = ReleaseNotesGenerator(REPOSITORY, RELEASE_NOTES_TITLE,
-                                      RELEASE_NOTES_INTRO)
+    generator = ReleaseNotesGenerator(REPOSITORY, RELEASE_NOTES_TITLE, RELEASE_NOTES_INTRO)
     generator.generate(version, username, password, file)
 
 
@@ -120,14 +118,15 @@ def init_labels(ctx, username=None, password=None):
     """
     initialize_labels(REPOSITORY, username, password)
 
+
 @task
 def lint(ctx):
     print("Run flake8")
-    ctx.run("flake8 --config .flake8 src/")
+    ctx.run("flake8 --config .flake8 src/ tasks.py")
     print("Run black")
-    ctx.run("black --target-version py36 --line-length 120 src/")
+    ctx.run("black --target-version py36 --line-length 120 src/ tasks.py")
     print("Run isort")
-    ctx.run("isort src/")
+    ctx.run("isort src/ tasks.py")
     print("Run tidy")
     in_ci = os.getenv("GITHUB_WORKFLOW")
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
@@ -141,3 +140,18 @@ def lint(ctx):
         command.insert(1, "--check")
         command.insert(1, "--diff")
     ctx.run(" ".join(command))
+
+
+@task
+def atest(ctx):
+    ctx.run("python atest/run.py")
+
+
+@task
+def utest(ctx):
+    ctx.run("python utest/run.py")
+
+
+@task(utest, atest)
+def test(ctx):
+    pass
