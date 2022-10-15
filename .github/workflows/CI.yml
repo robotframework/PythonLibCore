@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.9, 3.10.0-rc.2]
-        rf-version: [4.0.2, 4.1.1]
+        python-version: [3.7, 3.10.7]
+        rf-version: [5.0.1, 4.1.3]
 
     steps:
     - uses: actions/checkout@v2
