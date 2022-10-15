@@ -1,8 +1,10 @@
 *** Settings ***
 Library     ${LIBRARY}.py
 
+
 *** Variables ***
 ${LIBRARY}      DynamicLibrary
+
 
 *** Test Cases ***
 Keyword names
@@ -12,9 +14,7 @@ Keyword names
     Method
     Custom name
     Cust omna me
-    IF    $LIBRARY == "ExtendExistingLibrary"
-        Keyword in extending library
-    END
+    IF    $LIBRARY == "ExtendExistingLibrary"    Keyword in extending library
 
 Method without @keyword are not keyowrds
     [Documentation]    FAIL GLOB:    No keyword with name 'Not keyword' found.*
@@ -44,6 +44,7 @@ Embedded arguments
     [Documentation]    FAIL    Work but this fails
     Embedded arguments "work"
     embeDded ArgumeNtS "Work but this fails"
+
 
 *** Keywords ***
 Return value should be
