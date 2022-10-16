@@ -21,10 +21,21 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 import typing
+from dataclasses import dataclass
 
 from robot.api.deco import keyword  # noqa F401
+from robot.utils import Importer  # noqa F401
+from robot.errors import DataError
 
 __version__ = "3.0.1.dev1"
+
+
+class PythonLibCoreException(Exception):
+    pass
+
+
+class PluginError(PythonLibCoreException):
+    pass
 
 
 class HybridCore:
@@ -82,7 +93,15 @@ class HybridCore:
         return sorted(self.keywords)
 
 
+@dataclass
+class Module:
+    module: str
+    args: list
+    kw_args: dict
+
+
 class DynamicCore(HybridCore):
+
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
 
@@ -104,6 +123,9 @@ class DynamicCore(HybridCore):
         if spec is None:
             raise ValueError('Keyword "%s" not found.' % name)
         return spec.argument_types
+
+    def parse_plugins(self, plugins: str) -> typing.List:
+        pass
 
     def __get_keyword(self, keyword_name):
         if keyword_name == "__init__":
@@ -260,3 +282,44 @@ class KeywordSpecification:
         self.argument_specification = argument_specification
         self.documentation = documentation
         self.argument_types = argument_types
+
+
+class PluginParser:
+
+    def parse_plugins(self, plugins: str) -> typing.List:
+        libraries = []
+        importer = Importer("test library")
+        for parsed_plugin in self._string_to_modules(plugins):
+            plugin = importer.import_class_or_module(parsed_plugin.module)
+            if not inspect.isclass(plugin):
+                message = f"Importing test library: '{parsed_plugin.module}' failed."
+                raise DataError(message)
+            plugin = plugin(self, *parsed_plugin.args, **parsed_plugin.kw_args)
+            if not isinstance(plugin, LibraryComponent):
+                message = (
+                    "Plugin does not inherit SeleniumLibrary.base.LibraryComponent"
+                )
+                raise PluginError(message)
+            self._store_plugin_keywords(plugin)
+            libraries.append(plugin)
+        return libraries
+
+    def _string_to_modules(self, modules):
+        parsed_modules = []
+        if not modules:
+            return parsed_modules
+        for module in modules.split(","):
+            module = module.strip()
+            module_and_args = module.split(";")
+            module_name = module_and_args.pop(0)
+            kw_args = {}
+            args = []
+            for argument in module_and_args:
+                if "=" in argument:
+                    key, value = argument.split("=")
+                    kw_args[key] = value
+                else:
+                    args.append(argument)
+            module = Module(module=module_name, args=args, kw_args=kw_args)
+            parsed_modules.append(module)
+        return parsed_modules
