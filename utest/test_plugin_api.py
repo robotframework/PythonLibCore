@@ -6,7 +6,7 @@ import my_plugin_test
 
 @pytest.fixture(scope="module")
 def plugin_parser() -> PluginParser:
-    return PluginParser(None)
+    return PluginParser()
 
 
 def test_no_plugins_parsing(plugin_parser):

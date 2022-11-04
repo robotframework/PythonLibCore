@@ -124,9 +124,6 @@ class DynamicCore(HybridCore):
             raise ValueError('Keyword "%s" not found.' % name)
         return spec.argument_types
 
-    def parse_plugins(self, plugins: str) -> typing.List:
-        pass
-
     def __get_keyword(self, keyword_name):
         if keyword_name == "__init__":
             return self.__init__
@@ -285,7 +282,7 @@ class KeywordSpecification:
 
 
 class PluginParser:
-    def __init__(self, base_class: typing.Any):
+    def __init__(self, base_class: typing.Optional[typing.Any] = None):
         self._base_class = base_class
 
     def parse_plugins(self, plugins: str) -> typing.List:

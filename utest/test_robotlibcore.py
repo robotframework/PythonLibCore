@@ -66,7 +66,6 @@ def test_dir():
         "multi_line_doc",
         "not_keyword_in_main",
         "one_line_doc",
-        "parse_plugins",
         "run_keyword",
         "tags",
         "varargs_and_kwargs",
