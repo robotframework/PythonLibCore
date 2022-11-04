@@ -24,8 +24,8 @@ import typing
 from dataclasses import dataclass
 
 from robot.api.deco import keyword  # noqa F401
-from robot.utils import Importer  # noqa F401
 from robot.errors import DataError
+from robot.utils import Importer  # noqa F401
 
 __version__ = "3.0.1.dev1"
 
@@ -101,7 +101,6 @@ class Module:
 
 
 class DynamicCore(HybridCore):
-
     def run_keyword(self, name, args, kwargs=None):
         return self.keywords[name](*args, **(kwargs or {}))
 
@@ -295,9 +294,7 @@ class PluginParser:
                 raise DataError(message)
             plugin = plugin(*parsed_plugin.args, **parsed_plugin.kw_args)
             if self._base_class and not isinstance(plugin, self._base_class):
-                message = (
-                    f"Plugin does not inherit {self._base_class}"
-                )
+                message = f"Plugin does not inherit {self._base_class}"
                 raise PluginError(message)
             imported_plugins.append(plugin)
         return imported_plugins
