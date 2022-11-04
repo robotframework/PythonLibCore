@@ -1,6 +1,6 @@
 import pytest
 
-from robotlibcore import Module, PluginParser
+from robotlibcore import Module, PluginParser, PluginError
 import my_plugin_test
 
 
@@ -46,5 +46,13 @@ def test_parse_plugins(plugin_parser):
     assert len(plugins) == 2
     assert isinstance(plugins[0], my_plugin_test.TestClass)
     assert isinstance(plugins[1], my_plugin_test.TestClassWithBase)
-    
 
+
+def test_parse_plugins_with_base():
+    parser = PluginParser(my_plugin_test.LibraryBase)
+    plugins = parser.parse_plugins("my_plugin_test.TestClassWithBase")
+    assert len(plugins) == 1
+    assert isinstance(plugins[0], my_plugin_test.TestClassWithBase)
+    with pytest.raises(PluginError) as excinfo:
+        parser.parse_plugins("my_plugin_test.TestClass")
+    assert "Plugin does not inherit <class 'my_plugin_test.LibraryBase'>" in str(excinfo.value)

@@ -299,7 +299,7 @@ class PluginParser:
             plugin = plugin(*parsed_plugin.args, **parsed_plugin.kw_args)
             if self._base_class and not isinstance(plugin, self._base_class):
                 message = (
-                    "Plugin does not inherit SeleniumLibrary.base.LibraryComponent"
+                    f"Plugin does not inherit {self._base_class}"
                 )
                 raise PluginError(message)
             imported_plugins.append(plugin)
