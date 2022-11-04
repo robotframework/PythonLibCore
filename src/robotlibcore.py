@@ -305,8 +305,8 @@ class PluginParser:
             imported_plugins.append(plugin)
         return imported_plugins
 
-    def get_plugin_keyword(self, plugins: typing.List):
-        pass
+    def get_plugin_keywords(self, plugins: typing.List):
+        return DynamicCore(plugins).get_keyword_names()
 
     def _string_to_modules(self, modules):
         parsed_modules = []

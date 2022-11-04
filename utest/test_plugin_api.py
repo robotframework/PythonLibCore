@@ -56,3 +56,11 @@ def test_parse_plugins_with_base():
     with pytest.raises(PluginError) as excinfo:
         parser.parse_plugins("my_plugin_test.TestClass")
     assert "Plugin does not inherit <class 'my_plugin_test.LibraryBase'>" in str(excinfo.value)
+
+
+def test_plugin_keywords(plugin_parser):
+    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass,my_plugin_test.TestClassWithBase")
+    keywords = plugin_parser.get_plugin_keywords(plugins)
+    assert len(keywords) == 2
+    assert keywords[0] == "another_keyword"
+    assert keywords[1] == "new_keyword"
