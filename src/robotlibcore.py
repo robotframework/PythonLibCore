@@ -285,24 +285,28 @@ class KeywordSpecification:
 
 
 class PluginParser:
+    def __init__(self, base_class: typing.Any):
+        self._base_class = base_class
 
     def parse_plugins(self, plugins: str) -> typing.List:
-        libraries = []
+        imported_plugins = []
         importer = Importer("test library")
         for parsed_plugin in self._string_to_modules(plugins):
             plugin = importer.import_class_or_module(parsed_plugin.module)
             if not inspect.isclass(plugin):
                 message = f"Importing test library: '{parsed_plugin.module}' failed."
                 raise DataError(message)
-            plugin = plugin(self, *parsed_plugin.args, **parsed_plugin.kw_args)
-            if not isinstance(plugin, LibraryComponent):
+            plugin = plugin(*parsed_plugin.args, **parsed_plugin.kw_args)
+            if self._base_class and not isinstance(plugin, self._base_class):
                 message = (
                     "Plugin does not inherit SeleniumLibrary.base.LibraryComponent"
                 )
                 raise PluginError(message)
-            self._store_plugin_keywords(plugin)
-            libraries.append(plugin)
-        return libraries
+            imported_plugins.append(plugin)
+        return imported_plugins
+
+    def get_plugin_keyword(self, plugins: typing.List):
+        pass
 
     def _string_to_modules(self, modules):
         parsed_modules = []

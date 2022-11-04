@@ -2,8 +2,10 @@
 Library     DynamicTypesLibrary.py
 Library     DynamicTypesAnnotationsLibrary.py    xxx
 
+
 *** Variables ***
 ${CUSTOM NONE} =    ${None}
+
 
 *** Test Cases ***
 Keyword Default Argument As Abject None
@@ -56,7 +58,8 @@ Varargs and KeywordArgs With Typing Hints
     ...    1    2    3    4    # varargs
     ...    other=True    # other argument
     ...    key1=1    key2=2    # kwargs
-    Should Match    ${return}
+    Should Match
+    ...    ${return}
     ...    this_is_mandatory: <class 'str'>, (1, 2, 3, 4): <class 'tuple'>, True: <class 'bool'>, {'key1': 1, 'key2': 2}: <class 'dict'>
 
 Enum Conversion Should Work
@@ -109,9 +112,8 @@ Python 3.10 New Type Hints
         Should Be Equal    ${types}    arg: {"key": 1}, type: <class 'str'>
     END
 
+
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3.10 Only
     ${py3} =    DynamicTypesLibrary.Is Python 3 10
-    IF    ${py3}
-        Import Library    Python310Library.py
-    END
+    IF    ${py3}    Import Library    Python310Library.py
