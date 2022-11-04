@@ -1,11 +1,12 @@
 import pytest
 
 from robotlibcore import Module, PluginParser
+import my_plugin_test
 
 
 @pytest.fixture(scope="module")
 def plugin_parser() -> PluginParser:
-    return PluginParser()
+    return PluginParser(None)
 
 
 def test_no_plugins_parsing(plugin_parser):
@@ -35,3 +36,15 @@ def test_plugins_string_to_modules(plugin_parser):
     assert result == [
         Module("PluginWithKwArgs.py", [], {"kw1": "Text1", "kw2": "Text2"}),
     ]
+
+
+def test_parse_plugins(plugin_parser):
+    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass")
+    assert len(plugins) == 1
+    assert isinstance(plugins[0], my_plugin_test.TestClass)
+    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass,my_plugin_test.TestClassWithBase")
+    assert len(plugins) == 2
+    assert isinstance(plugins[0], my_plugin_test.TestClass)
+    assert isinstance(plugins[1], my_plugin_test.TestClassWithBase)
+    
+

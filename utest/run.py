@@ -14,6 +14,8 @@ xunit_report = join(atest_dir, "results", "xunit-python-{}-robot{}.xml".format(p
 src = join(curdir, "..", "src")
 sys.path.insert(0, src)
 sys.path.insert(0, atest_dir)
+helpers = join(curdir, "helpers")
+sys.path.append(helpers)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--no-cov", dest="cov", action="store_false")
@@ -22,6 +24,7 @@ parser.set_defaults(cov=True)
 args = parser.parse_args()
 
 pytest_args = [
+    f"--ignore={helpers}",
     "-p",
     "no:cacheprovider",
     "--junitxml=%s" % xunit_report,
