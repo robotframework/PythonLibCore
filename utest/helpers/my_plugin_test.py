@@ -23,7 +23,7 @@ class LibraryBase:
 class TestClassWithBase(LibraryBase):
 
     @keyword
-    def another_keywor(self) -> int:
+    def another_keyword(self) -> int:
         return 2 * 2
 
     def normal_method(self):
