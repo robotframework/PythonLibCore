@@ -281,8 +281,9 @@ class KeywordSpecification:
 
 
 class PluginParser:
-    def __init__(self, base_class: Optional[Any] = None):
+    def __init__(self, base_class: Optional[Any] = None, python_object: List[Any] = []):
         self._base_class = base_class
+        self._python_object = python_object
 
     def parse_plugins(self, plugins: str) -> List:
         imported_plugins = []
@@ -292,7 +293,8 @@ class PluginParser:
             if not inspect.isclass(plugin):
                 message = f"Importing test library: '{parsed_plugin.module}' failed."
                 raise DataError(message)
-            plugin = plugin(*parsed_plugin.args, **parsed_plugin.kw_args)
+            args = self._python_object + parsed_plugin.args
+            plugin = plugin(*args, **parsed_plugin.kw_args)
             if self._base_class and not isinstance(plugin, self._base_class):
                 message = f"Plugin does not inherit {self._base_class}"
                 raise PluginError(message)

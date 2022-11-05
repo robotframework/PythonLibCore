@@ -13,6 +13,13 @@ Plugins With Base Class
     ${value} =    Base Keyword
     Should Be Equal    ${value}    42
 
+Plugins With Internal Python Objects
+    Import Library    ${CURDIR}/PluginWithPythonObjectsLib.py    plugins=${CURDIR}/MyPluginWithPythonObjects.py;123;98
+    ${value} =    Keyword With Python
+    Should Be Equal    ${value}    123
+    ${value} =    Plugin Keyword With Python
+    Should Be Equal    ${value}    ${238}
+
 Pugins With No Base Class
     Run Keyword And Expect Error
     ...    *PluginError: Plugin does not inherit <class 'PluginWithBaseLib.BaseClass'>
