@@ -64,3 +64,13 @@ def test_plugin_keywords(plugin_parser):
     assert len(keywords) == 2
     assert keywords[0] == "another_keyword"
     assert keywords[1] == "new_keyword"
+
+
+def test_plugin_python_objects():
+    class PythonObject:
+        x = 1
+        y = 2
+    python_object = PythonObject()
+    parser = PluginParser(my_plugin_test.LibraryBase, [python_object])
+    plugins = parser.parse_plugins("my_plugin_test.TestPluginWithPythonArgs;4")
+    assert len(plugins)

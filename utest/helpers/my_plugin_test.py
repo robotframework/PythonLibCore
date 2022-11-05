@@ -28,3 +28,15 @@ class TestClassWithBase(LibraryBase):
 
     def normal_method(self):
         return "xxx"
+
+
+class TestPluginWithPythonArgs(LibraryBase):
+
+    def __init__(self, python_class, rf_arg):
+        self.python_class = python_class
+        self.rf_arg = rf_arg
+        super().__init__()
+
+    @keyword
+    def include_python_object(self):
+        return self.python_class.x + self.python_class.y + int(self.rf_arg)
