@@ -7,9 +7,9 @@ Plugin Test
     Should Be Equal    ${value}    ${2}
 
 Plugins With Base Class
-    Import Library    ${CURDIR}/PluginWithBaseLib.py    plugins=${CURDIR}/MyPluginBase.py
+    Import Library    ${CURDIR}/PluginWithBaseLib.py    plugins=${CURDIR}/MyPluginBase.py;11
     ${value} =    Base Plugin Keyword
-    Should Be Equal    ${value}    40
+    Should Be Equal    ${value}    ${51}
     ${value} =    Base Keyword
     Should Be Equal    ${value}    42
 
