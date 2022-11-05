@@ -20,8 +20,8 @@ https://github.com/robotframework/PythonLibCore
 """
 import inspect
 import os
-import typing
 from dataclasses import dataclass
+from typing import Any, List, Optional, get_type_hints
 
 from robot.api.deco import keyword  # noqa F401
 from robot.errors import DataError
@@ -243,7 +243,7 @@ class KeywordBuilder:
     def _get_typing_hints(cls, function):
         function = cls.unwrap(function)
         try:
-            hints = typing.get_type_hints(function)
+            hints = get_type_hints(function)
         except Exception:
             hints = function.__annotations__
         arg_spec = cls._get_arg_spec(function)
@@ -281,10 +281,10 @@ class KeywordSpecification:
 
 
 class PluginParser:
-    def __init__(self, base_class: typing.Optional[typing.Any] = None):
+    def __init__(self, base_class: Optional[Any] = None):
         self._base_class = base_class
 
-    def parse_plugins(self, plugins: str) -> typing.List:
+    def parse_plugins(self, plugins: str) -> List:
         imported_plugins = []
         importer = Importer("test library")
         for parsed_plugin in self._string_to_modules(plugins):
@@ -299,7 +299,7 @@ class PluginParser:
             imported_plugins.append(plugin)
         return imported_plugins
 
-    def get_plugin_keywords(self, plugins: typing.List):
+    def get_plugin_keywords(self, plugins: List):
         return DynamicCore(plugins).get_keyword_names()
 
     def _string_to_modules(self, modules):
