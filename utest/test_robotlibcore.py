@@ -41,7 +41,7 @@ def test_dir():
         "_DynamicCore__get_keyword_path",
         "_HybridCore__get_members",
         "_HybridCore__get_members_from_instance",
-        "_custom_name",
+        "_other_name_here",
         "add_library_components",
         "all_arguments",
         "attributes",
@@ -99,7 +99,7 @@ def test_getattr():
         assert lib.instance_attribute == "not keyword"
         assert lib.function() == 1
         assert lib.method() == 2
-        assert lib._custom_name() == 3
+        assert lib._other_name_here() == 3
         assert getattr(lib, "Custom name")() == 3
         with pytest.raises(AttributeError) as exc_info:
             lib.non_existing
