@@ -73,4 +73,8 @@ def test_plugin_python_objects():
     python_object = PythonObject()
     parser = PluginParser(my_plugin_test.LibraryBase, [python_object])
     plugins = parser.parse_plugins("my_plugin_test.TestPluginWithPythonArgs;4")
-    assert len(plugins)
+    assert len(plugins) == 1
+    plugin = plugins[0]
+    assert plugin.python_class.x == 1
+    assert plugin.python_class.y == 2
+
