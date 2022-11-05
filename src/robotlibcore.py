@@ -157,7 +157,7 @@ class DynamicCore(HybridCore):
 
     def __get_keyword_path(self, method):
         try:
-            return os.path.normpath(inspect.getfile(method))
+            return os.path.normpath(inspect.getfile(inspect.unwrap(method)))
         except TypeError:
             return None
 

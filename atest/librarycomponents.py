@@ -1,3 +1,4 @@
+from custon_deco import custom_deco
 from robotlibcore import keyword
 
 
@@ -13,8 +14,9 @@ class Names:
     def method(self):
         return 2
 
+    @custom_deco("foo", "bar")
     @keyword('Custom name')
-    def _custom_name(self):
+    def _other_name_here(self):
         return 3
 
     def not_keyword(self):
