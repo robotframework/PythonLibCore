@@ -87,11 +87,7 @@ class HybridCore:
             return component_listeners
 
     def _get_component_listeners(self, library_listeners):
-        return [
-            component
-            for component in library_listeners
-            if hasattr(component, "ROBOT_LISTENER_API_VERSION")
-        ]
+        return [component for component in library_listeners if hasattr(component, "ROBOT_LISTENER_API_VERSION")]
 
     def __get_members(self, component):
         if inspect.ismodule(component):
