@@ -45,6 +45,7 @@ class HybridCore:
         self.attributes = {}
         self.add_library_components(library_components)
         self.add_library_components([self])
+        self._set_library_listeners(library_components)
 
     def add_library_components(self, library_components):
         self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)
@@ -58,6 +59,39 @@ class HybridCore:
                     # Expose keywords as attributes both using original
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
+
+    def _set_library_listeners(self, library_components):
+        listeners = self._get_component_listeners(library_components)
+        listeners = self._insert_manually_registered_listeners(listeners)
+        listeners = self._insert_self_to_listeners(listeners)
+        if listeners:
+            self.ROBOT_LIBRARY_LISTENER = listeners
+
+    def _insert_self_to_listeners(self, component_listeners):
+        if self not in component_listeners:
+            try:
+                getattr(self, "ROBOT_LISTENER_API_VERSION")
+                return [self, *component_listeners]
+            except AttributeError:
+                pass
+        return component_listeners
+
+    def _insert_manually_registered_listeners(self, component_listeners: list) -> list:
+        try:
+            manually_registered_listener = getattr(self, "ROBOT_LIBRARY_LISTENER")
+            try:
+                return [*manually_registered_listener, *component_listeners]
+            except TypeError:
+                return [manually_registered_listener, *component_listeners]
+        except AttributeError:
+            return component_listeners
+
+    def _get_component_listeners(self, library_listeners):
+        return [
+            component
+            for component in library_listeners
+            if hasattr(component, "ROBOT_LISTENER_API_VERSION")
+        ]
 
     def __get_members(self, component):
         if inspect.ismodule(component):
