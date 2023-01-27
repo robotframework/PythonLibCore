@@ -60,14 +60,14 @@ class HybridCore:
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
 
-    def _set_library_listeners(self, library_components):
+    def _set_library_listeners(self, library_components: list):
         listeners = self._get_component_listeners(library_components)
         listeners = self._insert_manually_registered_listeners(listeners)
         listeners = self._insert_self_to_listeners(listeners)
         if listeners:
             self.ROBOT_LIBRARY_LISTENER = listeners
 
-    def _insert_self_to_listeners(self, component_listeners):
+    def _insert_self_to_listeners(self, component_listeners: list) -> list:
         if self not in component_listeners:
             try:
                 getattr(self, "ROBOT_LISTENER_API_VERSION")
@@ -86,7 +86,7 @@ class HybridCore:
         except AttributeError:
             return component_listeners
 
-    def _get_component_listeners(self, library_listeners):
+    def _get_component_listeners(self, library_listeners: list) -> list:
         return [component for component in library_listeners if hasattr(component, "ROBOT_LISTENER_API_VERSION")]
 
     def __get_members(self, component):
