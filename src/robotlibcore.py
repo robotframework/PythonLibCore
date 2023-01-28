@@ -64,7 +64,7 @@ class HybridCore:
         listeners = self.__get_component_listeners([self, *library_components])
         listeners = self.__insert_manually_registered_listeners(listeners)
         if listeners:
-            self.ROBOT_LIBRARY_LISTENER = list(dict.fromkeys(listeners).keys())
+            self.ROBOT_LIBRARY_LISTENER = list(dict.fromkeys(listeners))
 
     def __insert_manually_registered_listeners(self, component_listeners: list) -> list:
         try:
