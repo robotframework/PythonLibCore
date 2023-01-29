@@ -61,17 +61,17 @@ class HybridCore:
                     self.attributes[name] = self.attributes[kw_name] = kw
 
     def __set_library_listeners(self, library_components: list):
-        listeners = self.__get_component_listeners([self, *library_components])
-        listeners = self.__insert_manually_registered_listeners(listeners)
+        listeners = self.__get_manually_registered_listeners()
+        listeners.extend(self.__get_component_listeners([self, *library_components]))
         if listeners:
             self.ROBOT_LIBRARY_LISTENER = list(dict.fromkeys(listeners))
 
-    def __insert_manually_registered_listeners(self, component_listeners: list) -> list:
+    def __get_manually_registered_listeners(self) -> list:
         manually_registered_listener = getattr(self, "ROBOT_LIBRARY_LISTENER", [])
         try:
-            return [*manually_registered_listener, *component_listeners]
+            return [*manually_registered_listener]
         except TypeError:
-            return [manually_registered_listener, *component_listeners]
+            return [manually_registered_listener]
 
     def __get_component_listeners(self, library_listeners: list) -> list:
         return [component for component in library_listeners if hasattr(component, "ROBOT_LISTENER_API_VERSION")]
