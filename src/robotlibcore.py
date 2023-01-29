@@ -67,14 +67,11 @@ class HybridCore:
             self.ROBOT_LIBRARY_LISTENER = list(dict.fromkeys(listeners))
 
     def __insert_manually_registered_listeners(self, component_listeners: list) -> list:
+        manually_registered_listener = getattr(self, "ROBOT_LIBRARY_LISTENER", [])
         try:
-            manually_registered_listener = getattr(self, "ROBOT_LIBRARY_LISTENER")
-            try:
-                return [*manually_registered_listener, *component_listeners]
-            except TypeError:
-                return [manually_registered_listener, *component_listeners]
-        except AttributeError:
-            return component_listeners
+            return [*manually_registered_listener, *component_listeners]
+        except TypeError:
+            return [manually_registered_listener, *component_listeners]
 
     def __get_component_listeners(self, library_listeners: list) -> list:
         return [component for component in library_listeners if hasattr(component, "ROBOT_LISTENER_API_VERSION")]
