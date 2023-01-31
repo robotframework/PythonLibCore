@@ -27,7 +27,7 @@ from robot.api.deco import keyword  # noqa F401
 from robot.errors import DataError
 from robot.utils import Importer  # noqa F401
 
-__version__ = "4.0.1.dev1"
+__version__ = "4.1.0"
 
 
 class PythonLibCoreException(Exception):
