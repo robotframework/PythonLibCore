@@ -94,6 +94,52 @@ Example
             pass
 
 
+Plugin API
+----------
+It is possible to create plugin API to a library by using PythonLibCore. This allows extending library
+with external Python classes. Plugins can be imported during library import time, example by defining argumet
+in library `__init__` which allows defining the plugins. It is possible to define multiple plugins, by seperating
+plugins with with comma. Also it is possible to provide arguments to plugin by seperating arguments with
+semicolon. 
+
+
+.. sourcecode:: python
+
+    from robot.api.deco import keyword  # noqa F401
+
+    from robotlibcore import DynamicCore, PluginParser
+
+    from mystuff import Library1, Library2
+
+
+    class PluginLib(DynamicCore):
+
+        def __init__(self, plugins):
+            plugin_parser = PluginParser()
+            libraries = [Library1(), Library2()]
+            parsed_plugins = plugin_parser.parse_plugins(plugins)
+            libraries.extend(parsed_plugins)
+            DynamicCore.__init__(self, libraries)
+
+
+When plugin class can look like this:
+
+.. sourcecode:: python
+
+    class MyPlugi:
+
+        @keyword
+        def plugin_keyword(self):
+            return 123
+
+Then Library can be imported in Robot Framework side like this:
+
+.. sourcecode:: bash
+
+    Library    ${CURDIR}/PluginLib.py    plugins=${CURDIR}/MyPlugin.py
+
+
+
 .. _Robot Framework: http://robotframework.org
 .. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/
 .. _WhiteLibrary: https://pypi.org/project/robotframework-whitelibrary/
