@@ -2,6 +2,7 @@ from robot.api import logger
 
 from robotlibcore import DynamicCore, keyword
 
+
 class Python310Library(DynamicCore):
 
     def __init__(self):

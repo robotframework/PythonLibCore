@@ -52,7 +52,7 @@ Keyword Only Arguments Without VarArg
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Only Arguments No Vararg    other=tidii
     Should Match    ${return}    tidii: <class 'str'>
 
-Varargs and KeywordArgs With Typing Hints
+Varargs And KeywordArgs With Typing Hints
     ${return} =    DynamicTypesAnnotationsLibrary.Keyword Self And Keyword Only Types
     ...    this_is_mandatory    # mandatory argument
     ...    1    2    3    4    # varargs
@@ -111,6 +111,9 @@ Python 3.10 New Type Hints
     ELSE
         Should Be Equal    ${types}    arg: {"key": 1}, type: <class 'str'>
     END
+
+Keyword With Named Only Arguments
+    Kw With Named Arguments    arg=1
 
 
 *** Keywords ***

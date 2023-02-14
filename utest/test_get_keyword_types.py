@@ -192,3 +192,8 @@ def test_keyword_optional_with_none(lib_types):
 def test_keyword_union_with_none(lib_types):
     types = lib_types.get_keyword_types("keyword_union_with_none")
     assert types == {"arg": typing.Union[type(None), typing.Dict, str]}
+
+
+def test_kw_with_named_arguments(lib_types: DynamicTypesAnnotationsLibrary):
+    types = lib_types.get_keyword_types("kw_with_named_arguments")
+    assert types == {}

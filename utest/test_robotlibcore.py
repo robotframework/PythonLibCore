@@ -132,6 +132,13 @@ def test_keyword_only_arguments_for_get_keyword_arguments():
     assert args("keyword_with_deco_and_signature") == [("arg1", False), ("arg2", False)]
 
 
+def test_named_only_argumens():
+    args = DynamicTypesAnnotationsLibrary(1).get_keyword_arguments
+    assert args("kw_with_named_arguments") == ["*", "arg"]
+    assert args("kw_with_many_named_arguments") == ["*", "arg1", "arg2"]
+    assert args("kw_with_named_arguments_and_variable_number_args") == ["*varargs", "arg"]
+
+
 def test_get_keyword_documentation():
     doc = DynamicLibrary().get_keyword_documentation
     assert doc("function") == ""
