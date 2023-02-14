@@ -132,6 +132,12 @@ def lint(ctx):
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
     command = [
         "robotidy",
+        "--transform",
+        "RenameKeywords",
+        "--transform",
+        "RenameTestCases",
+        "-c",
+        "RenameTestCases:capitalize_each_word=True",
         "--lineseparator",
         "unix",
         "atest/",

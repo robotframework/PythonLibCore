@@ -229,18 +229,22 @@ class KeywordBuilder:
     @classmethod
     def _get_var_args(cls, arg_spec):
         if arg_spec.varargs:
-            return ["*%s" % arg_spec.varargs]
+            return [f"*{arg_spec.varargs}"]
         return []
 
     @classmethod
     def _get_kwargs(cls, arg_spec):
-        return ["**%s" % arg_spec.varkw] if arg_spec.varkw else []
+        return [f"**{arg_spec.varkw}"] if arg_spec.varkw else []
 
     @classmethod
     def _get_kw_only(cls, arg_spec):
         kw_only_args = []
+        kw_only_defaults = arg_spec.kwonlydefaults if arg_spec.kwonlydefaults else []
         for arg in arg_spec.kwonlyargs:
-            if not arg_spec.kwonlydefaults or arg not in arg_spec.kwonlydefaults:
+            if not arg_spec.varargs and arg not in kw_only_defaults and not kw_only_args:
+                kw_only_args.append("*")
+                kw_only_args.append(arg)
+            elif arg not in kw_only_defaults:
                 kw_only_args.append(arg)
             else:
                 value = arg_spec.kwonlydefaults.get(arg, "")

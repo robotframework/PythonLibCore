@@ -156,3 +156,19 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
     @keyword
     def keyword_union_with_none(self, arg: Union[None, Dict, str] = None):
         return f"arg: {arg}, type: {type(arg)}"
+
+    @keyword
+    def kw_with_named_arguments(self, *, arg):
+        print(arg)
+        return f"arg: {arg}, type: {type(arg)}"
+
+    @keyword
+    def kw_with_many_named_arguments(self, *, arg1, arg2):
+        print(arg1)
+        print(arg2)
+        return f"arg1: {arg1}, type: {type(arg1)}, arg2: {arg2}, type: {type(arg2)}"
+
+    @keyword
+    def kw_with_named_arguments_and_variable_number_args(self, *varargs, arg):
+        print(arg)
+        return f"arg: {arg}, type: {type(arg)}"
