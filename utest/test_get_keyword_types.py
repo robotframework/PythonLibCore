@@ -197,3 +197,8 @@ def test_keyword_union_with_none(lib_types):
 def test_kw_with_named_arguments(lib_types: DynamicTypesAnnotationsLibrary):
     types = lib_types.get_keyword_types("kw_with_named_arguments")
     assert types == {}
+
+
+def test_kw_with_many_named_arguments_with_default(lib_types: DynamicTypesAnnotationsLibrary):
+    types = lib_types.get_keyword_types("kw_with_many_named_arguments_with_default")
+    assert types == {'arg2': int}
