@@ -21,13 +21,13 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 from dataclasses import dataclass
-from typing import Any, List, Optional, get_type_hints
+from typing import Any, Callable, List, Optional, get_type_hints
 
 from robot.api.deco import keyword  # noqa F401
 from robot.errors import DataError
 from robot.utils import Importer  # noqa F401
 
-__version__ = "4.1.1"
+__version__ = "4.1.2"
 
 
 class PythonLibCoreException(Exception):
@@ -196,20 +196,18 @@ class KeywordBuilder:
     def _get_arguments(cls, function):
         unwrap_function = cls.unwrap(function)
         arg_spec = cls._get_arg_spec(unwrap_function)
-        argument_specification = cls._get_default_and_named_args(arg_spec, function)
-        argument_specification.extend(cls._get_var_args(arg_spec))
-        kw_only_args = cls._get_kw_only(arg_spec)
-        if kw_only_args:
-            argument_specification.extend(kw_only_args)
+        argument_specification = cls._get_args(arg_spec, function)
+        argument_specification.extend(cls._get_varargs(arg_spec))
+        argument_specification.extend(cls._get_named_only_args(arg_spec))
         argument_specification.extend(cls._get_kwargs(arg_spec))
         return argument_specification
 
     @classmethod
-    def _get_arg_spec(cls, function):
+    def _get_arg_spec(cls, function: Callable):
         return inspect.getfullargspec(function)
 
     @classmethod
-    def _get_default_and_named_args(cls, arg_spec, function):
+    def _get_args(cls, arg_spec: inspect.FullArgSpec, function: Callable):
         args = cls._drop_self_from_args(function, arg_spec)
         args.reverse()
         defaults = list(arg_spec.defaults) if arg_spec.defaults else []
@@ -223,33 +221,30 @@ class KeywordBuilder:
         return formated_args
 
     @classmethod
-    def _drop_self_from_args(cls, function, arg_spec):
+    def _drop_self_from_args(cls, function: Callable, arg_spec: inspect.FullArgSpec):
         return arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args
 
     @classmethod
-    def _get_var_args(cls, arg_spec):
-        if arg_spec.varargs:
-            return [f"*{arg_spec.varargs}"]
-        return []
+    def _get_varargs(cls, arg_spec: inspect.FullArgSpec) -> list:
+        return [f"*{arg_spec.varargs}"] if arg_spec.varargs else []
 
     @classmethod
-    def _get_kwargs(cls, arg_spec):
+    def _get_kwargs(cls, arg_spec: inspect.FullArgSpec) -> list:
         return [f"**{arg_spec.varkw}"] if arg_spec.varkw else []
 
     @classmethod
-    def _get_kw_only(cls, arg_spec):
-        kw_only_args = []
+    def _get_named_only_args(cls, arg_spec: inspect.FullArgSpec) -> list:
+        rf_spec = []
+        kw_only_args = arg_spec.kwonlyargs if arg_spec.kwonlyargs else []
+        if not arg_spec.varargs and kw_only_args:
+            rf_spec.append("*")
         kw_only_defaults = arg_spec.kwonlydefaults if arg_spec.kwonlydefaults else []
-        for arg in arg_spec.kwonlyargs:
-            if not arg_spec.varargs and arg not in kw_only_defaults and not kw_only_args:
-                kw_only_args.append("*")
-                kw_only_args.append(arg)
-            elif arg not in kw_only_defaults:
-                kw_only_args.append(arg)
+        for kw_only_arg in kw_only_args:
+            if kw_only_arg in kw_only_defaults:
+                rf_spec.append((kw_only_arg, kw_only_defaults[kw_only_arg]))
             else:
-                value = arg_spec.kwonlydefaults.get(arg, "")
-                kw_only_args.append((arg, value))
-        return kw_only_args
+                rf_spec.append(kw_only_arg)
+        return rf_spec
 
     @classmethod
     def _get_types(cls, function):

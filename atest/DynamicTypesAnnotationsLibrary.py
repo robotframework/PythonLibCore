@@ -178,3 +178,12 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         print(arg1)
         print(arg2)
         return f"arg1: {arg1}, type: {type(arg1)}, arg2: {arg2}, type: {type(arg2)}"
+
+    @keyword
+    def kw_with_positional_and_named_arguments(self, arg1, *, arg2: int):
+        return f"arg1: {arg1}, type: {type(arg1)}, arg2: {arg2}, type: {type(arg2)}"
+
+    @keyword
+    def kw_with_positional_and_named_arguments_with_defaults(self, arg1: int = 1, *, arg2: str = "foobar"):
+        return f"arg1: {arg1}, type: {type(arg1)}, arg2: {arg2}, type: {type(arg2)}"
+

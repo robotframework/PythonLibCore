@@ -17,7 +17,7 @@ Keyword Names
     IF    $LIBRARY == "ExtendExistingLibrary"    Keyword In Extending Library
 
 Method Without @keyword Are Not Keyowrds
-    [Documentation]    FAIL GLOB:    No keyword with name 'Not keyword' found.*
+    [Documentation]    FAIL GLOB:    No keyword with name 'Not Keyword' found.*
     Not Keyword
 
 Arguments
