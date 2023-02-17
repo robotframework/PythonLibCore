@@ -16,9 +16,9 @@ Keyword Names
     Cust Omna Me
     IF    $LIBRARY == "ExtendExistingLibrary"    Keyword In Extending Library
 
-Method without @keyword are not keyowrds
+Method Without @keyword Are Not Keyowrds
     [Documentation]    FAIL GLOB:    No keyword with name 'Not keyword' found.*
-    Not keyword
+    Not Keyword
 
 Arguments
     [Template]    Return value should be
