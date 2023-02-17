@@ -203,11 +203,11 @@ class KeywordBuilder:
         return argument_specification
 
     @classmethod
-    def _get_arg_spec(cls, function: Callable):
+    def _get_arg_spec(cls, function: Callable) -> inspect.FullArgSpec:
         return inspect.getfullargspec(function)
 
     @classmethod
-    def _get_args(cls, arg_spec: inspect.FullArgSpec, function: Callable):
+    def _get_args(cls, arg_spec: inspect.FullArgSpec, function: Callable) -> list:
         args = cls._drop_self_from_args(function, arg_spec)
         args.reverse()
         defaults = list(arg_spec.defaults) if arg_spec.defaults else []
@@ -221,7 +221,7 @@ class KeywordBuilder:
         return formated_args
 
     @classmethod
-    def _drop_self_from_args(cls, function: Callable, arg_spec: inspect.FullArgSpec):
+    def _drop_self_from_args(cls, function: Callable, arg_spec: inspect.FullArgSpec) -> list:
         return arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args
 
     @classmethod
@@ -271,9 +271,8 @@ class KeywordBuilder:
         return hints
 
     @classmethod
-    def _args_as_list(cls, function, arg_spec):
-        function_args = []
-        function_args.extend(cls._drop_self_from_args(function, arg_spec))
+    def _args_as_list(cls, function, arg_spec) -> list:
+        function_args = cls._drop_self_from_args(function, arg_spec)
         if arg_spec.varargs:
             function_args.append(arg_spec.varargs)
         function_args.extend(arg_spec.kwonlyargs or [])
