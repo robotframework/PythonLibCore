@@ -137,6 +137,7 @@ def test_named_only_argumens():
     assert args("kw_with_named_arguments") == ["*", "arg"]
     assert args("kw_with_many_named_arguments") == ["*", "arg1", "arg2"]
     assert args("kw_with_named_arguments_and_variable_number_args") == ["*varargs", "arg"]
+    assert args("kw_with_many_named_arguments_with_default") == ["*", "arg1", "arg2"]
 
 
 def test_get_keyword_documentation():
