@@ -202,3 +202,7 @@ def test_kw_with_named_arguments(lib_types: DynamicTypesAnnotationsLibrary):
 def test_kw_with_many_named_arguments_with_default(lib_types: DynamicTypesAnnotationsLibrary):
     types = lib_types.get_keyword_types("kw_with_many_named_arguments_with_default")
     assert types == {'arg2': int}
+    types = lib_types.get_keyword_types("kw_with_positional_and_named_arguments_with_defaults")
+    assert types == {"arg1": int, "arg2": str}
+    types = lib_types.get_keyword_types("kw_with_positional_and_named_arguments")
+    assert types == {"arg2": int}
