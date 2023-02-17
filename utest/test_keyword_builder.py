@@ -38,7 +38,7 @@ def test_positional_and_named(lib):
     assert spec.argument_specification == ["arg1", "arg2", ("named1", "string1"), ("named2", 123)]
 
 
-def test_named_only(lib):
+def test_named_only_default_only(lib):
     spec = KeywordBuilder.build(lib.default_only)
     assert spec.argument_specification == [("named1", "string1"), ("named2", 123)]
 
