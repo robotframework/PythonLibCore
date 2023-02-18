@@ -38,6 +38,10 @@ class PluginError(PythonLibCoreException):
     pass
 
 
+class NoKeywordFound(PythonLibCoreException):
+    pass
+
+
 class HybridCore:
     def __init__(self, library_components):
         self.keywords = {}
@@ -48,7 +52,7 @@ class HybridCore:
         self.__set_library_listeners(library_components)
 
     def add_library_components(self, library_components):
-        self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)
+        self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)  # type: ignore
         for component in library_components:
             for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, "robot_name"):
@@ -123,6 +127,8 @@ class DynamicCore(HybridCore):
 
     def get_keyword_arguments(self, name):
         spec = self.keywords_spec.get(name)
+        if not spec:
+            raise NoKeywordFound(f"Could not find keyword: {name}")
         return spec.argument_specification
 
     def get_keyword_tags(self, name):
@@ -132,6 +138,8 @@ class DynamicCore(HybridCore):
         if name == "__intro__":
             return inspect.getdoc(self) or ""
         spec = self.keywords_spec.get(name)
+        if not spec:
+            raise NoKeywordFound(f"Could not find keyword: {name}")
         return spec.documentation
 
     def get_keyword_types(self, name):
@@ -142,7 +150,7 @@ class DynamicCore(HybridCore):
 
     def __get_keyword(self, keyword_name):
         if keyword_name == "__init__":
-            return self.__init__
+            return self.__init__  # type: ignore
         if keyword_name.startswith("__") and keyword_name.endswith("__"):
             return None
         method = self.keywords.get(keyword_name)
@@ -234,11 +242,11 @@ class KeywordBuilder:
 
     @classmethod
     def _get_named_only_args(cls, arg_spec: inspect.FullArgSpec) -> list:
-        rf_spec = []
+        rf_spec: list = []
         kw_only_args = arg_spec.kwonlyargs if arg_spec.kwonlyargs else []
         if not arg_spec.varargs and kw_only_args:
             rf_spec.append("*")
-        kw_only_defaults = arg_spec.kwonlydefaults if arg_spec.kwonlydefaults else []
+        kw_only_defaults = arg_spec.kwonlydefaults if arg_spec.kwonlydefaults else {}
         for kw_only_arg in kw_only_args:
             if kw_only_arg in kw_only_defaults:
                 rf_spec.append((kw_only_arg, kw_only_defaults[kw_only_arg]))
@@ -320,7 +328,7 @@ class PluginParser:
         return DynamicCore(plugins).get_keyword_names()
 
     def _string_to_modules(self, modules):
-        parsed_modules = []
+        parsed_modules: list = []
         if not modules:
             return parsed_modules
         for module in modules.split(","):
