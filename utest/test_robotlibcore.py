@@ -1,6 +1,6 @@
 import pytest
 
-from robotlibcore import HybridCore
+from robotlibcore import HybridCore, NoKeywordFound
 from HybridLibrary import HybridLibrary
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
@@ -117,7 +117,7 @@ def test_get_keyword_arguments():
     assert args("kwargs_only") == ["**kws"]
     assert args("all_arguments") == ["mandatory", ("default", "value"), "*varargs", "**kwargs"]
     assert args("__init__") == [("arg", None)]
-    with pytest.raises(AttributeError):
+    with pytest.raises(NoKeywordFound):
         args("__foobar__")
 
 

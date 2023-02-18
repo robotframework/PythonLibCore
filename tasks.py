@@ -146,6 +146,8 @@ def lint(ctx):
         command.insert(1, "--check")
         command.insert(1, "--diff")
     ctx.run(" ".join(command))
+    print("Run mypy")
+    ctx.run("mypy --exclude .venv --show-error-codes --config-file mypy.ini src/")
 
 
 @task
