@@ -14,12 +14,11 @@ dropping Python 3.7 support.
 All issues targeted for Python Library Core v4.2.0 can be found
 from the `issue tracker`_.
 
-**REMOVE ``--pre`` from the next command with final releases.**
 If you have pip_ installed, just run
 
 ::
 
-   pip install --pre --upgrade pip install robotframework-pythonlibcore
+   pip install --upgrade pip install robotframework-pythonlibcore
 
 to install the latest available release or use
 
