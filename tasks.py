@@ -6,7 +6,7 @@ from invoke import task
 from rellu import ReleaseNotesGenerator, Version, initialize_labels
 from rellu.tasks import clean  # noqa
 
-assert Path.cwd() == Path(__file__).parent
+assert Path.cwd() == Path(__file__).parent  # noqa: S101
 
 
 REPOSITORY = "robotframework/PythonLibCore"
@@ -50,7 +50,7 @@ Python Library Core {version} was released on {date}.
 
 
 @task
-def set_version(ctx, version):
+def set_version(ctx, version):  # noqa: ARG001
     """Set project version in ``src/robotlibcore.py`` file.
 
     Args:
@@ -60,7 +60,7 @@ def set_version(ctx, version):
     - Final version like 3.0 or 3.1.2.
     - Alpha, beta or release candidate with ``a``, ``b`` or ``rc`` postfix,
       respectively, and an incremented number like 3.0a1 or 3.0.1rc1.
-    - Development version with ``.dev`` postix and an incremented number like
+    - Development version with ``.dev`` postfix and an incremented number like
       3.0.dev1 or 3.1a1.dev2.
 
     When the given version is ``dev``, the existing version number is updated
@@ -73,13 +73,13 @@ def set_version(ctx, version):
 
 
 @task
-def print_version(ctx):
+def print_version(ctx):  # noqa: ARG001
     """Print the current project version."""
     print(Version(path=VERSION_PATH))
 
 
 @task
-def release_notes(ctx, version=None, username=None, password=None, write=False):
+def release_notes(ctx, version=None, username=None, password=None, write=False):  # noqa: FBT002, ARG001
     """Generates release notes based on issues in the issue tracker.
 
     Args:
@@ -88,7 +88,7 @@ def release_notes(ctx, version=None, username=None, password=None, write=False):
         username: GitHub username.
         password: GitHub password.
         write:    When set to True, write release notes to a file overwriting
-                  possible existing file. Otherwise just print them to the
+                  possible existing file. Otherwise, just print them to the
                   terminal.
 
     Username and password can also be specified using ``GITHUB_USERNAME`` and
@@ -98,12 +98,16 @@ def release_notes(ctx, version=None, username=None, password=None, write=False):
     """
     version = Version(version, VERSION_PATH)
     file = RELEASE_NOTES_PATH if write else sys.stdout
-    generator = ReleaseNotesGenerator(REPOSITORY, RELEASE_NOTES_TITLE, RELEASE_NOTES_INTRO)
+    generator = ReleaseNotesGenerator(
+        REPOSITORY,
+        RELEASE_NOTES_TITLE,
+        RELEASE_NOTES_INTRO,
+    )
     generator.generate(version, username, password, file)
 
 
 @task
-def init_labels(ctx, username=None, password=None):
+def init_labels(ctx, username=None, password=None):  # noqa: ARG001
     """Initialize project by setting labels in the issue tracker.
 
     Args:
@@ -121,14 +125,17 @@ def init_labels(ctx, username=None, password=None):
 
 @task
 def lint(ctx):
-    print("Run flake8")
-    ctx.run("flake8 --config .flake8 src/ tasks.py utest/run.py atest/run.py")
-    print("Run black")
-    ctx.run("black --target-version py37 --line-length 120 src/ tasks.py utest/run.py atest/run.py")
-    print("Run isort")
-    ctx.run("isort src/ tasks.py utest/run.py atest/run.py")
-    print("Run tidy")
     in_ci = os.getenv("GITHUB_WORKFLOW")
+    print("Run ruff")
+    ruff_cmd = ["ruff", "check"]
+    if not in_ci:
+        ruff_cmd.append("--fix")
+    ruff_cmd.append("./src")
+    ruff_cmd.append("./tasks.py")
+    ctx.run(" ".join(ruff_cmd))
+    print("Run black")
+    ctx.run("black src/ tasks.py utest/run.py atest/run.py")
+    print("Run tidy")
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
     command = [
         "robotidy",
@@ -146,8 +153,6 @@ def lint(ctx):
         command.insert(1, "--check")
         command.insert(1, "--diff")
     ctx.run(" ".join(command))
-    print("Run mypy")
-    ctx.run("mypy --exclude .venv --show-error-codes --config-file mypy.ini src/")
 
 
 @task
@@ -161,5 +166,5 @@ def utest(ctx):
 
 
 @task(utest, atest)
-def test(ctx):
+def test(ctx):  # noqa: ARG001
     pass

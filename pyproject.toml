@@ -1,0 +1,53 @@
+[tool.black]
+target-version = ['py38']
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+fixable = ["ALL"]
+target-version = "py38"
+select = [
+    "F",
+    "E",
+    "W",
+    "C90",
+    "I",
+    "N",
+    "YTT",
+    "S",
+    "BLE",
+    "FBT",
+    "B",
+    "A",
+    "COM",
+    "CPY",
+    "C4",
+    "T10",
+    "EM",
+    "EXE",
+    "FA",
+    "ISC",
+    "ICN",
+    "G",
+    "PIE",
+    "PYI",
+    "Q",
+    "RSE",
+    "RET",
+    "SLF",
+    "SIM",
+    "TCH",
+    "INT",
+    "ARG",
+    "PTH",
+    "ERA",
+    "PL",
+    "PERF",
+    "RUF"
+]
+
+[tool.ruff.mccabe]
+max-complexity = 9
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"

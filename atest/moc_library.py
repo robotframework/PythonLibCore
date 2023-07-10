@@ -39,7 +39,13 @@ class MockLibrary:
     def args_with_type_hints(self, arg1, arg2, arg3: str, arg4: None) -> bool:
         pass
 
-    def self_and_keyword_only_types(x: 'MockLibrary', mandatory, *varargs: int, other: bool, **kwargs: int):
+    def self_and_keyword_only_types(
+            x: 'MockLibrary',  # noqa: N805
+            mandatory,
+            *varargs: int,
+            other: bool,
+            **kwargs: int
+    ):
         pass
 
     def optional_none(self, xxx, arg1: Optional[str] = None, arg2: Optional[str] = None, arg3=False):

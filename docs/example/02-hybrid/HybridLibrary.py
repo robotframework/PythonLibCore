@@ -1,4 +1,3 @@
-from robot.api import logger
 
 from calculator import Calculator
 from stringtools import StringTools
@@ -6,7 +5,7 @@ from waiter import Waiter
 
 
 class HybridLibrary(Calculator, StringTools, Waiter):
-    def __init__(self, separator: str = ";"):
+    def __init__(self, separator: str = ";") -> None:
         self.separator = separator
 
     def get_keyword_names(self):

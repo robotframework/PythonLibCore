@@ -23,14 +23,14 @@ import os
 from dataclasses import dataclass
 from typing import Any, Callable, List, Optional, Union, get_type_hints
 
-from robot.api.deco import keyword  # noqa F401
+from robot.api.deco import keyword  # noqa: F401
 from robot.errors import DataError
-from robot.utils import Importer  # noqa F401
+from robot.utils import Importer
 
 __version__ = "4.2.0"
 
 
-class PythonLibCoreException(Exception):
+class PythonLibCoreException(Exception):  # noqa: N818
     pass
 
 
@@ -43,7 +43,7 @@ class NoKeywordFound(PythonLibCoreException):
 
 
 class HybridCore:
-    def __init__(self, library_components):
+    def __init__(self, library_components: List) -> None:
         self.keywords = {}
         self.keywords_spec = {}
         self.attributes = {}
@@ -51,7 +51,7 @@ class HybridCore:
         self.add_library_components([self])
         self.__set_library_listeners(library_components)
 
-    def add_library_components(self, library_components):
+    def add_library_components(self, library_components: List):
         self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)  # type: ignore
         for component in library_components:
             for name, func in self.__get_members(component):
@@ -84,13 +84,17 @@ class HybridCore:
         if inspect.ismodule(component):
             return inspect.getmembers(component)
         if inspect.isclass(component):
+            msg = f"Libraries must be modules or instances, got class {component.__name__} instead."
             raise TypeError(
-                "Libraries must be modules or instances, got " "class {!r} instead.".format(component.__name__)
+                msg,
             )
         if type(component) != component.__class__:
+            msg = (
+                "Libraries must be modules or new-style class instances, "
+                f"got old-style class {component.__class__.__name__} instead."
+            )
             raise TypeError(
-                "Libraries must be modules or new-style class "
-                "instances, got old-style class {!r} instead.".format(component.__class__.__name__)
+                msg,
             )
         return self.__get_members_from_instance(component)
 
@@ -104,7 +108,10 @@ class HybridCore:
     def __getattr__(self, name):
         if name in self.attributes:
             return self.attributes[name]
-        raise AttributeError("{!r} object has no attribute {!r}".format(type(self).__name__, name))
+        msg = "{!r} object has no attribute {!r}".format(type(self).__name__, name)
+        raise AttributeError(
+            msg,
+        )
 
     def __dir__(self):
         my_attrs = super().__dir__()
@@ -128,7 +135,8 @@ class DynamicCore(HybridCore):
     def get_keyword_arguments(self, name):
         spec = self.keywords_spec.get(name)
         if not spec:
-            raise NoKeywordFound(f"Could not find keyword: {name}")
+            msg = f"Could not find keyword: {name}"
+            raise NoKeywordFound(msg)
         return spec.argument_specification
 
     def get_keyword_tags(self, name):
@@ -139,7 +147,8 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self) or ""
         spec = self.keywords_spec.get(name)
         if not spec:
-            raise NoKeywordFound(f"Could not find keyword: {name}")
+            msg = f"Could not find keyword: {name}"
+            raise NoKeywordFound(msg)
         return spec.documentation
 
     def get_keyword_types(self, name):
@@ -229,7 +238,11 @@ class KeywordBuilder:
         return formated_args
 
     @classmethod
-    def _drop_self_from_args(cls, function: Callable, arg_spec: inspect.FullArgSpec) -> list:
+    def _drop_self_from_args(
+        cls,
+        function: Callable,
+        arg_spec: inspect.FullArgSpec,
+    ) -> list:
         return arg_spec.args[1:] if inspect.ismethod(function) else arg_spec.args
 
     @classmethod
@@ -268,7 +281,7 @@ class KeywordBuilder:
         function = cls.unwrap(function)
         try:
             hints = get_type_hints(function)
-        except Exception:
+        except Exception:  # noqa: BLE001
             hints = function.__annotations__
         arg_spec = cls._get_arg_spec(function)
         all_args = cls._args_as_list(function, arg_spec)
@@ -297,14 +310,19 @@ class KeywordBuilder:
 
 
 class KeywordSpecification:
-    def __init__(self, argument_specification=None, documentation=None, argument_types=None):
+    def __init__(
+        self,
+        argument_specification=None,
+        documentation=None,
+        argument_types=None,
+    ) -> None:
         self.argument_specification = argument_specification
         self.documentation = documentation
         self.argument_types = argument_types
 
 
 class PluginParser:
-    def __init__(self, base_class: Optional[Any] = None, python_object=None):
+    def __init__(self, base_class: Optional[Any] = None, python_object=None) -> None:
         self._base_class = base_class
         self._python_object = python_object if python_object else []
 
@@ -332,8 +350,7 @@ class PluginParser:
         if not modules:
             return parsed_modules
         for module in self._modules_splitter(modules):
-            module = module.strip()
-            module_and_args = module.split(";")
+            module_and_args = module.strip().split(";")
             module_name = module_and_args.pop(0)
             kw_args = {}
             args = []
@@ -343,8 +360,7 @@ class PluginParser:
                     kw_args[key] = value
                 else:
                     args.append(argument)
-            module = Module(module=module_name, args=args, kw_args=kw_args)
-            parsed_modules.append(module)
+            parsed_modules.append(Module(module=module_name, args=args, kw_args=kw_args))
         return parsed_modules
 
     def _modules_splitter(self, modules: Union[str, List[str]]):

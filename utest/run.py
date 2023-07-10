@@ -5,12 +5,16 @@ import sys
 from os.path import abspath, dirname, join
 
 import pytest
-from robot.version import VERSION as rf_version
+from robot.version import VERSION as RF_VERSION
 
 curdir = dirname(abspath(__file__))
 atest_dir = join(curdir, "..", "atest")
 python_version = platform.python_version()
-xunit_report = join(atest_dir, "results", "xunit-python-{}-robot{}.xml".format(python_version, rf_version))
+xunit_report = join(
+    atest_dir,
+    "results",
+    "xunit-python-{}-robot{}.xml".format(python_version, RF_VERSION),
+)
 src = join(curdir, "..", "src")
 sys.path.insert(0, src)
 sys.path.insert(0, atest_dir)

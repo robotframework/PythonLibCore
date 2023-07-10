@@ -1,10 +1,8 @@
-import pytest
 import typing
-
 from typing import List, Union
 
-from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
-from DynamicTypesAnnotationsLibrary import CustomObject
+import pytest
+from DynamicTypesAnnotationsLibrary import CustomObject, DynamicTypesAnnotationsLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
 
 

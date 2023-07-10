@@ -1,9 +1,8 @@
 from enum import Enum
 from functools import wraps
-from typing import List, Union, NewType, Optional, Tuple, Dict
+from typing import Dict, List, NewType, Optional, Tuple, Union
 
 from robot.api import logger
-
 from robotlibcore import DynamicCore, keyword
 
 UserId = NewType('UserId', int)
@@ -28,14 +27,14 @@ def _my_deco(old_args: Tuple[str, str], new_args: Tuple[str, str]):
 
 class CustomObject:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
 
 class DynamicTypesAnnotationsLibrary(DynamicCore):
 
-    def __init__(self, arg: str):
+    def __init__(self, arg: str) -> None:
         DynamicCore.__init__(self, [])
         self.instance_attribute = 'not keyword'
         self.arg = arg
@@ -74,7 +73,11 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return arg
 
     @keyword
-    def keyword_default_and_annotation(self: 'DynamicTypesAnnotationsLibrary', arg1: int, arg2: Union[bool, str] = False) -> str:
+    def keyword_default_and_annotation(
+            self: 'DynamicTypesAnnotationsLibrary',
+            arg1: int,
+            arg2: Union[bool, str] = False
+    ) -> str:
         return '{}: {}, {}: {}'.format(arg1, type(arg1), arg2, type(arg2))
 
     @keyword(types={'arg': str})
@@ -90,7 +93,10 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return '{}: {}, {}: {}'.format(arg1, type(arg1), arg2, type(arg2))
 
     @keyword
-    def keyword_exception_annotations(self: 'DynamicTypesAnnotationsLibrary', arg: 'NotHere'):
+    def keyword_exception_annotations(
+            self: 'DynamicTypesAnnotationsLibrary',
+            arg: 'NotHere'  # noqa F821
+    ):
         return arg
 
     @keyword
@@ -124,7 +130,15 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return f'{arg}, {vararg}, {some}'
 
     @keyword
-    def keyword_all_args(self: 'DynamicTypesAnnotationsLibrary', mandatory, positional=1, *varargs, other, value=False, **kwargs):
+    def keyword_all_args(
+            self: 'DynamicTypesAnnotationsLibrary',
+            mandatory,
+            positional=1,
+            *varargs,
+            other,
+            value=False,
+            **kwargs
+    ):
         return True
 
     @keyword
@@ -132,8 +146,13 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return True
 
     @keyword
-    def keyword_self_and_keyword_only_types(x: 'DynamicTypesAnnotationsLibrary', mandatory, *varargs: int, other: bool,
-                                            **kwargs: int):
+    def keyword_self_and_keyword_only_types(
+            x: 'DynamicTypesAnnotationsLibrary',  # noqa: N805
+            mandatory,
+            *varargs: int,
+            other: bool,
+            **kwargs: int
+        ):
         return (f'{mandatory}: {type(mandatory)}, {varargs}: {type(varargs)}, '
                 f'{other}: {type(other)}, {kwargs}: {type(kwargs)}')
 

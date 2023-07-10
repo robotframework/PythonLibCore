@@ -5,7 +5,7 @@ from PluginWithBaseLib import BaseClass
 
 class MyPluginBase(BaseClass):
 
-    def __init__(self, arg):
+    def __init__(self, arg) -> None:
         self.arg = int(arg)
 
     @keyword

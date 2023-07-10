@@ -2,8 +2,10 @@ pytest
 pytest-cov
 pytest-mockito
 robotstatuschecker
-flake8
-black
-isort
-mypy
+black >= 23.3.0
+ruff >= 0.0.277
 robotframework-tidy
+invoke >= 1.7.3
+rellu >= 0.7
+twine
+wheel

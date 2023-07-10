@@ -1,13 +1,12 @@
-from robotlibcore import HybridCore, keyword
-
 import librarycomponents
+from robotlibcore import HybridCore, keyword
 
 
 class HybridLibrary(HybridCore):
     """General library documentation."""
     class_attribute = 'not keyword'
 
-    def __init__(self):
+    def __init__(self) -> None:
         components = [librarycomponents,
                       librarycomponents.Names(),
                       librarycomponents.Arguments(),

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import re
-from os.path import abspath, join, dirname
-from setuptools import find_packages, setup
+from os.path import abspath, dirname, join
 
+from setuptools import find_packages, setup
 
 CURDIR = dirname(abspath(__file__))
 

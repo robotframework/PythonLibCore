@@ -2,10 +2,9 @@ import inspect
 from os import path
 
 import pytest
-from mockito.matchers import Any
-
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
+from mockito.matchers import Any
 
 
 @pytest.fixture(scope="module")

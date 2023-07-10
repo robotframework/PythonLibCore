@@ -5,7 +5,7 @@ from PluginWithPythonObjectsLib import BaseWithPython
 
 class MyPluginWithPythonObjects(BaseWithPython):
 
-    def __init__(self, py1, py2, rf1, rf2):
+    def __init__(self, py1, py2, rf1, rf2) -> None:
         self.rf1 = int(rf1)
         self.rf2 = int(rf2)
         super().__init__(py1, py2)
