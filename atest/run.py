@@ -6,7 +6,7 @@ from os.path import abspath, dirname, isdir, join
 from pathlib import Path
 
 from robot import rebot, run
-from robot.version import VERSION as rf_version
+from robot.version import VERSION as RF_VERSION
 from robotstatuschecker import process_output
 
 library_variants = ["Hybrid", "Dynamic", "ExtendExisting"]
@@ -20,7 +20,10 @@ plugin_api = join(curdir, "plugin_api")
 sys.path.insert(0, join(curdir, "..", "src"))
 python_version = platform.python_version()
 for variant in library_variants:
-    output = join(outdir, "lib-{}-python-{}-robot-{}.xml".format(variant, python_version, rf_version))
+    output = join(
+        outdir,
+        "lib-{}-python-{}-robot-{}.xml".format(variant, python_version, RF_VERSION),
+    )
     rc = run(
         tests,
         name=variant,
@@ -33,13 +36,24 @@ for variant in library_variants:
     if rc > 250:
         sys.exit(rc)
     process_output(output, verbose=False)
-output = join(outdir, "lib-DynamicTypesLibrary-python-{}-robot-{}.xml".format(python_version, rf_version))
+output = join(
+    outdir,
+    "lib-DynamicTypesLibrary-python-{}-robot-{}.xml".format(python_version, RF_VERSION),
+)
 exclude = "py310" if sys.version_info < (3, 10) else ""
-rc = run(tests_types, name="Types", output=output, report=None, log=None, loglevel="debug", exclude=exclude)
+rc = run(
+    tests_types,
+    name="Types",
+    output=output,
+    report=None,
+    log=None,
+    loglevel="debug",
+    exclude=exclude,
+)
 if rc > 250:
     sys.exit(rc)
 process_output(output, verbose=False)
-output = join(outdir, "lib-PluginApi-python-{}-robot-{}.xml".format(python_version, rf_version))
+output = join(outdir, "lib-PluginApi-python-{}-robot-{}.xml".format(python_version, RF_VERSION))
 rc = run(plugin_api, name="Plugin", output=output, report=None, log=None, loglevel="debug")
 if rc > 250:
     sys.exit(rc)
@@ -54,8 +68,8 @@ rc = rebot(
     **dict(
         name="Acceptance Tests",
         outputdir=outdir,
-        log="log-python-{}-robot-{}.html".format(python_version, rf_version),
-        report="report-python-{}-robot-{}.html".format(python_version, rf_version),
+        log="log-python-{}-robot-{}.html".format(python_version, RF_VERSION),
+        report="report-python-{}-robot-{}.html".format(python_version, RF_VERSION),
     ),
 )
 if rc == 0:

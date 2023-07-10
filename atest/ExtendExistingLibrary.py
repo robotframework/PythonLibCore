@@ -3,7 +3,7 @@ from HybridLibrary import HybridLibrary, keyword
 
 class ExtendExistingLibrary(HybridLibrary):
 
-    def __init__(self):
+    def __init__(self) -> None:
         HybridLibrary.__init__(self)
         self.add_library_components([ExtendingComponent()])
 

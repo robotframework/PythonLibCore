@@ -1,7 +1,6 @@
-import pytest
-
-from robotlibcore import Module, PluginParser, PluginError
 import my_plugin_test
+import pytest
+from robotlibcore import Module, PluginError, PluginParser
 
 
 @pytest.fixture(scope="module")

@@ -2,7 +2,6 @@ import functools
 import sys
 
 from robot import version as rf_version
-
 from robotlibcore import DynamicCore, keyword
 
 
@@ -19,7 +18,7 @@ def deco_wraps(func):
 
 class DynamicTypesLibrary(DynamicCore):
 
-    def __init__(self, arg=False):
+    def __init__(self, arg=False) -> None:
         DynamicCore.__init__(self, [])
         self.instance_attribute = 'not keyword'
         self.arg = arg

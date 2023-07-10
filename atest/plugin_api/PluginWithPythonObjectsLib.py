@@ -4,14 +4,14 @@ from robotlibcore import DynamicCore, PluginParser
 
 
 class BaseWithPython:
-    def __init__(self, py1, py2):
+    def __init__(self, py1, py2) -> None:
         self.py1 = py1
         self.py2 = py2
 
 
 class PluginWithPythonObjectsLib(DynamicCore):
 
-    def __init__(self, plugins):
+    def __init__(self, plugins) -> None:
         plugin_parser = PluginParser(BaseWithPython, [8, 9])
         parsed_plugins = plugin_parser.parse_plugins(plugins)
         self._plugin_keywords = plugin_parser.get_plugin_keywords(plugins)

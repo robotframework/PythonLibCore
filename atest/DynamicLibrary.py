@@ -1,13 +1,12 @@
-from robotlibcore import DynamicCore, keyword
-
 import librarycomponents
+from robotlibcore import DynamicCore, keyword
 
 
 class DynamicLibrary(DynamicCore):
     """General library documentation."""
     class_attribute = 'not keyword'
 
-    def __init__(self, arg=None):
+    def __init__(self, arg=None) -> None:
         """Library init doc."""
         components = [librarycomponents,
                       librarycomponents.Names(),

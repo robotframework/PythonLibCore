@@ -13,7 +13,7 @@ class TestClass:
 
 class LibraryBase:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.x = 1
 
     def base(self):
@@ -32,7 +32,7 @@ class TestClassWithBase(LibraryBase):
 
 class TestPluginWithPythonArgs(LibraryBase):
 
-    def __init__(self, python_class, rf_arg):
+    def __init__(self, python_class, rf_arg) -> None:
         self.python_class = python_class
         self.rf_arg = rf_arg
         super().__init__()

@@ -1,9 +1,9 @@
-import pytest
 import typing
 
-from robotlibcore import KeywordBuilder
-from moc_library import MockLibrary
+import pytest
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
+from moc_library import MockLibrary
+from robotlibcore import KeywordBuilder
 
 
 @pytest.fixture

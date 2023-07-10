@@ -5,7 +5,7 @@ class ListenerCore(DynamicCore):
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.keyword_name = None
         self.keyword_args = {}
         self.ROBOT_LISTENER_API_VERSION = 2
@@ -16,7 +16,9 @@ class ListenerCore(DynamicCore):
 
     @keyword
     def listener_core(self, arg: str):
-        assert arg == self.keyword_args.get("args", [None])[0], "First argument should be detected by listener, but was not."
+        assert arg == self.keyword_args.get(
+            "args", [None]
+        )[0], "First argument should be detected by listener, but was not."
 
     def start_keyword(self, name, args):
         self.keyword_name = name
@@ -25,7 +27,7 @@ class ListenerCore(DynamicCore):
 
 class FirstComponent:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.ROBOT_LISTENER_API_VERSION = 2
         self.suite_name = ''
 
@@ -39,7 +41,7 @@ class FirstComponent:
 
 class SecondComponent:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.listener = ExternalListener()
 
     @keyword
@@ -51,7 +53,7 @@ class ExternalListener:
 
     ROBOT_LISTENER_API_VERSION = 3
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.test = None
 
     def start_test(self, test, _):

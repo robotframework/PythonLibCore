@@ -5,7 +5,7 @@ from robotlibcore import DynamicCore, PluginParser
 
 class PluginLib(DynamicCore):
 
-    def __init__(self, plugins):
+    def __init__(self, plugins) -> None:
         plugin_parser = PluginParser()
         parsed_plugins = plugin_parser.parse_plugins(plugins)
         self._plugin_keywords = plugin_parser.get_plugin_keywords(plugins)
