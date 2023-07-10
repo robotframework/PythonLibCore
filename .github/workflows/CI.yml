@@ -27,6 +27,9 @@ jobs:
     - name: Run ruff
       run: |
         ruff check ./src tasks.py
+    - name: Run tidy
+      run: |
+        robotidy --transform RenameKeywords --transform RenameTestCases -c RenameTestCases:capitalize_each_word=True --lineseparator unix atest/
     - name: Run balck
       run: |
         black --config pyproject.toml --check src/
