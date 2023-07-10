@@ -56,7 +56,7 @@ Backwards incompatible changes
 Drop Python 3.7 support (`#125`_)
 ---------------------------------
 Python 3.7 has been end of life for while and it is time to drop
-support for Python 3.7. 
+support for Python 3.7.
 
 Full list of fixes and enhancements
 ===================================
