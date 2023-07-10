@@ -84,7 +84,7 @@ class HybridCore:
         if inspect.ismodule(component):
             return inspect.getmembers(component)
         if inspect.isclass(component):
-            msg = f"Libraries must be modules or instances, got class {component.__name__} instead."
+            msg = f"Libraries must be modules or instances, got class '{component.__name__}' instead."
             raise TypeError(
                 msg,
             )

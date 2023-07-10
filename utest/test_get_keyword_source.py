@@ -39,7 +39,7 @@ def lib_path_types(cur_dir):
 
 def test_location_in_main(lib, lib_path):
     source = lib.get_keyword_source("keyword_in_main")
-    assert source == "%s:20" % lib_path
+    assert source == f"{lib_path}:19"
 
 
 def test_location_in_class(lib, lib_path_components):
@@ -49,7 +49,7 @@ def test_location_in_class(lib, lib_path_components):
 
 def test_decorator_wrapper(lib_types, lib_path_types):
     source = lib_types.get_keyword_source("keyword_wrapped")
-    assert source == "%s:74" % lib_path_types
+    assert source == f"{lib_path_types}:73"
 
 
 def test_location_in_class_custom_keyword_name(lib, lib_path_components):
@@ -66,7 +66,7 @@ def test_no_line_number(lib, lib_path, when):
 def test_no_path(lib, when):
     when(lib)._DynamicCore__get_keyword_path(Any()).thenReturn(None)
     source = lib.get_keyword_source("keyword_in_main")
-    assert source == ":20"
+    assert source == ":19"
 
 
 def test_no_path_and_no_line_number(lib, when):
@@ -78,7 +78,7 @@ def test_no_path_and_no_line_number(lib, when):
 
 def test_def_in_decorator(lib_types, lib_path_types):
     source = lib_types.get_keyword_source("keyword_with_def_deco")
-    assert source == "%s:68" % lib_path_types
+    assert source == f"{lib_path_types}:67"
 
 
 def test_error_in_getfile(lib, when):
