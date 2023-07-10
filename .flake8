@@ -1,6 +1,0 @@
-[flake8]
-exclude =
-    __pycache__,
-ignore = E203
-max-line-length = 120
-max-complexity = 10

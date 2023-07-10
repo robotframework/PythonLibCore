@@ -24,12 +24,12 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Run flake8
+    - name: Run ruff
       run: |
-        flake8 --config .flake8 src/
+        ruff check ./src tasks.py
     - name: Run balck
       run: |
-        black --target-version py36 --line-length 120 --check src/
+        black --config pyproject.toml --check src/
     - name: Run unit tests
       run: |
         python utest/run.py
