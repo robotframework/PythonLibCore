@@ -21,7 +21,7 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, get_type_hints
+from typing import Any, Callable, List, Optional, Union, get_type_hints
 
 from robot.api.deco import keyword  # noqa F401
 from robot.errors import DataError
@@ -304,11 +304,11 @@ class KeywordSpecification:
 
 
 class PluginParser:
-    def __init__(self, base_class: Optional[Any] = None, python_object: List[Any] = []):
+    def __init__(self, base_class: Optional[Any] = None, python_object=None):
         self._base_class = base_class
-        self._python_object = python_object
+        self._python_object = python_object if python_object else []
 
-    def parse_plugins(self, plugins: str) -> List:
+    def parse_plugins(self, plugins: Union[str, List[str]]) -> List:
         imported_plugins = []
         importer = Importer("test library")
         for parsed_plugin in self._string_to_modules(plugins):
@@ -327,11 +327,11 @@ class PluginParser:
     def get_plugin_keywords(self, plugins: List):
         return DynamicCore(plugins).get_keyword_names()
 
-    def _string_to_modules(self, modules):
+    def _string_to_modules(self, modules: Union[str, List[str]]):
         parsed_modules: list = []
         if not modules:
             return parsed_modules
-        for module in modules.split(","):
+        for module in self._modules_splitter(modules):
             module = module.strip()
             module_and_args = module.split(";")
             module_name = module_and_args.pop(0)
@@ -346,3 +346,11 @@ class PluginParser:
             module = Module(module=module_name, args=args, kw_args=kw_args)
             parsed_modules.append(module)
         return parsed_modules
+
+    def _modules_splitter(self, modules: Union[str, List[str]]):
+        if isinstance(modules, str):
+            for module in modules.split(","):
+                yield module
+        else:
+            for module in modules:
+                yield module
