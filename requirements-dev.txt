@@ -2,10 +2,9 @@ pytest
 pytest-cov
 pytest-mockito
 robotstatuschecker
-black >= 23.3.0
-ruff >= 0.0.277
+black >= 23.7.0
+ruff >= 0.0.286
 robotframework-tidy
-invoke >= 1.7.3
-rellu >= 0.7
+invoke >= 2.2.0
 twine
 wheel
