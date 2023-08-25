@@ -25,7 +25,7 @@ select = [
     "T10",
     "EM",
     "EXE",
-    "FA",
+    # "FA",
     "ISC",
     "ICN",
     "G",
