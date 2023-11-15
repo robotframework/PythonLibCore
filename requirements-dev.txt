@@ -8,3 +8,6 @@ robotframework-tidy
 invoke >= 2.2.0
 twine
 wheel
+rellu >= 0.7
+twine
+wheel
