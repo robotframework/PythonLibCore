@@ -229,9 +229,6 @@ class KeywordBuilder:
             hints =  get_type_hints(function)
         except Exception:  # noqa: BLE001
             hints = function.__annotations__
-        for arg, hint in hints.items():
-            if isinstance(hint, ForwardRef):
-                hint = hint.__forward_arg__
         return hints
 
     @classmethod
