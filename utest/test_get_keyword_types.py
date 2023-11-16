@@ -4,6 +4,7 @@ from typing import List, Union
 import pytest
 from DynamicTypesAnnotationsLibrary import CustomObject, DynamicTypesAnnotationsLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
+from lib_future_annotation import lib_future_annotation, Location
 
 
 @pytest.fixture(scope="module")
@@ -14,6 +15,11 @@ def lib():
 @pytest.fixture(scope="module")
 def lib_types():
     return DynamicTypesAnnotationsLibrary("aaa")
+
+
+@pytest.fixture(scope="module")
+def lib_annotation():
+    return lib_future_annotation()
 
 
 def test_using_keyword_types(lib):
@@ -204,3 +210,9 @@ def test_kw_with_many_named_arguments_with_default(lib_types: DynamicTypesAnnota
     assert types == {"arg1": int, "arg2": str}
     types = lib_types.get_keyword_types("kw_with_positional_and_named_arguments")
     assert types == {"arg2": int}
+
+
+def test_lib_annotations(lib_annotation: lib_future_annotation):
+    types = lib_annotation.get_keyword_types("future_annotations")
+    expected = {"arg1": Location}
+    assert types == expected
