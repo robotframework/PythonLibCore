@@ -140,8 +140,6 @@ def lint(ctx):
     command = [
         "robotidy",
         "--transform",
-        "RenameKeywords",
-        "--transform",
         "RenameTestCases",
         "-c",
         "RenameTestCases:capitalize_each_word=True",

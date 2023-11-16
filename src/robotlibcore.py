@@ -21,7 +21,7 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, Union, get_type_hints, ForwardRef
+from typing import Any, Callable, List, Optional, Union, get_type_hints
 
 from robot.api.deco import keyword  # noqa: F401
 from robot.errors import DataError
@@ -226,7 +226,7 @@ class KeywordBuilder:
     @classmethod
     def _get_type_hint(cls, function: Callable):
         try:
-            hints =  get_type_hints(function)
+            hints = get_type_hints(function)
         except Exception:  # noqa: BLE001
             hints = function.__annotations__
         return hints
