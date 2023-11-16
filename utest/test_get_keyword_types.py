@@ -214,5 +214,5 @@ def test_kw_with_many_named_arguments_with_default(lib_types: DynamicTypesAnnota
 
 def test_lib_annotations(lib_annotation: lib_future_annotation):
     types = lib_annotation.get_keyword_types("future_annotations")
-    expected = {"arg1": Location}
+    expected = {"arg": Location}
     assert types == expected
