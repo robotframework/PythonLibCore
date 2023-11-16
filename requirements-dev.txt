@@ -11,3 +11,4 @@ wheel
 rellu >= 0.7
 twine
 wheel
+typing-extensions >= 4.5.0

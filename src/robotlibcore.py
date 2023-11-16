@@ -21,7 +21,7 @@ https://github.com/robotframework/PythonLibCore
 import inspect
 import os
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, Union, get_type_hints
+from typing import Any, Callable, List, Optional, Union, get_type_hints, ForwardRef
 
 from robot.api.deco import keyword  # noqa: F401
 from robot.errors import DataError
@@ -224,6 +224,17 @@ class KeywordBuilder:
         return inspect.getfullargspec(function)
 
     @classmethod
+    def _get_type_hint(cls, function: Callable):
+        try:
+            hints =  get_type_hints(function)
+        except Exception:  # noqa: BLE001
+            hints = function.__annotations__
+        for arg, hint in hints.items():
+            if isinstance(hint, ForwardRef):
+                hint = hint.__forward_arg__
+        return hints
+
+    @classmethod
     def _get_args(cls, arg_spec: inspect.FullArgSpec, function: Callable) -> list:
         args = cls._drop_self_from_args(function, arg_spec)
         args.reverse()
@@ -279,10 +290,7 @@ class KeywordBuilder:
     @classmethod
     def _get_typing_hints(cls, function):
         function = cls.unwrap(function)
-        try:
-            hints = get_type_hints(function)
-        except Exception:  # noqa: BLE001
-            hints = function.__annotations__
+        hints = cls._get_type_hint(function)
         arg_spec = cls._get_arg_spec(function)
         all_args = cls._args_as_list(function, arg_spec)
         for arg_with_hint in list(hints):
