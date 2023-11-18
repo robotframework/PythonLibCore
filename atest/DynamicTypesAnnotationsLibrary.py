@@ -56,7 +56,7 @@ class DynamicTypesAnnotationsLibrary(DynamicCore):
         return arg
 
     @keyword
-    def keyword_define_return_type(self, arg: str) -> None:
+    def keyword_define_return_type(self, arg: str) -> Union[List[str], str]:
         logger.info(arg)
         return None
 

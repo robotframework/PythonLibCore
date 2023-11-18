@@ -80,7 +80,7 @@ def test_keyword_new_type(lib_types):
 
 def test_keyword_return_type(lib_types):
     types = lib_types.get_keyword_types("keyword_define_return_type")
-    assert types == {"arg": str}
+    assert types == {"arg": str, 'return': Union[List[str], str]}
 
 
 def test_keyword_forward_references(lib_types):
@@ -105,7 +105,7 @@ def test_keyword_with_annotation_external_class(lib_types):
 
 def test_keyword_with_annotation_and_default_part2(lib_types):
     types = lib_types.get_keyword_types("keyword_default_and_annotation")
-    assert types == {"arg1": int, "arg2": Union[bool, str]}
+    assert types == {"arg1": int, "arg2": Union[bool, str], 'return': str}
 
 
 def test_keyword_with_robot_types_and_annotations(lib_types):
@@ -125,7 +125,7 @@ def test_keyword_with_robot_types_and_bool_annotations(lib_types):
 
 def test_init_args(lib_types):
     types = lib_types.get_keyword_types("__init__")
-    assert types == {"arg": str}
+    assert types == {"arg": str, "return": type(None)}
 
 
 def test_dummy_magic_method(lib):
@@ -140,7 +140,7 @@ def test_varargs(lib):
 
 def test_init_args_with_annotation(lib_types):
     types = lib_types.get_keyword_types("__init__")
-    assert types == {"arg": str}
+    assert types == {"arg": str, "return": type(None)}
 
 
 def test_exception_in_annotations(lib_types):

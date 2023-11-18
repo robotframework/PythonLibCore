@@ -291,8 +291,8 @@ class KeywordBuilder:
         arg_spec = cls._get_arg_spec(function)
         all_args = cls._args_as_list(function, arg_spec)
         for arg_with_hint in list(hints):
-            # remove return and self statements
-            if arg_with_hint not in all_args:
+            # remove self statements
+            if arg_with_hint not in [*all_args, "return"]:
                 hints.pop(arg_with_hint)
         return hints
 

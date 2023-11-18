@@ -70,7 +70,7 @@ def test_types_disabled_in_keyword_deco(lib):
 
 def test_types_(lib):
     spec = KeywordBuilder.build(lib.args_with_type_hints)
-    assert spec.argument_types == {"arg3": str, "arg4": type(None)}
+    assert spec.argument_types == {"arg3": str, "arg4": type(None), "return": bool}
 
 
 def test_types(lib):
