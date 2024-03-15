@@ -4,9 +4,9 @@ line-length = 120
 
 [tool.ruff]
 line-length = 120
-fixable = ["ALL"]
+lint.fixable = ["ALL"]
 target-version = "py38"
-select = [
+lint.select = [
     "F",
     "E",
     "W",
@@ -46,8 +46,8 @@ select = [
     "RUF"
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 9
 
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
