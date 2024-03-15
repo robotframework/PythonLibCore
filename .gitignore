@@ -100,6 +100,9 @@ ENV/
 # PyCharm project settings
 .idea
 
+# VSCode project settings
+.vscode
+
 # Robot Ouput files
 log.html
 output.xml
