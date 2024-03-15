@@ -1,0 +1,11 @@
+{
+    "normal_keyword": {
+        "name": "other_name",
+        "doc": "This is new doc"
+    },
+    "name_changed": {
+        "name": "name_changed_again",
+        "doc": "This is also replaced.\n\nnew line."
+    }
+    
+}

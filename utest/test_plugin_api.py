@@ -1,4 +1,4 @@
-import my_plugin_test
+from helpers import my_plugin_test
 import pytest
 from robotlibcore import Module, PluginError, PluginParser
 
@@ -37,22 +37,22 @@ def test_plugins_string_to_modules(plugin_parser):
     ]
 
 
-def test_parse_plugins(plugin_parser):
-    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass")
+def test_parse_plugins(plugin_parser: PluginParser):
+    plugins = plugin_parser.parse_plugins("helpers.my_plugin_test.TestClass")
     assert len(plugins) == 1
     assert isinstance(plugins[0], my_plugin_test.TestClass)
-    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass,my_plugin_test.TestClassWithBase")
+    plugins = plugin_parser.parse_plugins("helpers.my_plugin_test.TestClass,helpers.my_plugin_test.TestClassWithBase")
     assert len(plugins) == 2
     assert isinstance(plugins[0], my_plugin_test.TestClass)
     assert isinstance(plugins[1], my_plugin_test.TestClassWithBase)
 
 
 def test_parse_plugins_as_list(plugin_parser):
-    plugins = plugin_parser.parse_plugins(["my_plugin_test.TestClass"])
+    plugins = plugin_parser.parse_plugins(["helpers.my_plugin_test.TestClass"])
     assert len(plugins) == 1
     assert isinstance(plugins[0], my_plugin_test.TestClass)
     plugins = plugin_parser.parse_plugins(
-        ["my_plugin_test.TestClass", "my_plugin_test.TestClassWithBase"]
+        ["helpers.my_plugin_test.TestClass", "helpers.my_plugin_test.TestClassWithBase"]
     )
     assert len(plugins) == 2
     assert isinstance(plugins[0], my_plugin_test.TestClass)
@@ -61,16 +61,16 @@ def test_parse_plugins_as_list(plugin_parser):
 
 def test_parse_plugins_with_base():
     parser = PluginParser(my_plugin_test.LibraryBase)
-    plugins = parser.parse_plugins("my_plugin_test.TestClassWithBase")
+    plugins = parser.parse_plugins("helpers.my_plugin_test.TestClassWithBase")
     assert len(plugins) == 1
     assert isinstance(plugins[0], my_plugin_test.TestClassWithBase)
     with pytest.raises(PluginError) as excinfo:
-        parser.parse_plugins("my_plugin_test.TestClass")
-    assert "Plugin does not inherit <class 'my_plugin_test.LibraryBase'>" in str(excinfo.value)
+        parser.parse_plugins("helpers.my_plugin_test.TestClass")
+    assert "Plugin does not inherit <class 'helpers.my_plugin_test.LibraryBase'>" in str(excinfo.value)
 
 
 def test_plugin_keywords(plugin_parser):
-    plugins = plugin_parser.parse_plugins("my_plugin_test.TestClass,my_plugin_test.TestClassWithBase")
+    plugins = plugin_parser.parse_plugins("helpers.my_plugin_test.TestClass,helpers.my_plugin_test.TestClassWithBase")
     keywords = plugin_parser.get_plugin_keywords(plugins)
     assert len(keywords) == 2
     assert keywords[0] == "another_keyword"
@@ -83,7 +83,7 @@ def test_plugin_python_objects():
         y = 2
     python_object = PythonObject()
     parser = PluginParser(my_plugin_test.LibraryBase, [python_object])
-    plugins = parser.parse_plugins("my_plugin_test.TestPluginWithPythonArgs;4")
+    plugins = parser.parse_plugins("helpers.my_plugin_test.TestPluginWithPythonArgs;4")
     assert len(plugins) == 1
     plugin = plugins[0]
     assert plugin.python_class.x == 1

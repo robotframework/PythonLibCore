@@ -1,8 +1,10 @@
+import json
 import pytest
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 from HybridLibrary import HybridLibrary
 from robotlibcore import HybridCore, NoKeywordFound
+from approvaltests.approvals import verify, verify_all
 
 
 @pytest.fixture(scope="module")
@@ -10,89 +12,22 @@ def dyn_lib():
     return DynamicLibrary()
 
 
-def test_keyword_names():
-    expected = [
-        "Custom name",
-        'Embedded arguments "${here}"',
-        "all_arguments",
-        "defaults",
-        "doc_and_tags",
-        "function",
-        "keyword_in_main",
-        "kwargs_only",
-        "mandatory",
-        "method",
-        "multi_line_doc",
-        "one_line_doc",
-        "tags",
-        "varargs_and_kwargs",
-    ]
-    assert HybridLibrary().get_keyword_names() == expected
-    assert DynamicLibrary().get_keyword_names() == expected
+def test_keyword_names_hybrid():
+    verify(json.dumps(HybridLibrary().get_keyword_names(), indent=4))
 
 
-def test_dir():
-    expected = [
-        "Custom name",
-        'Embedded arguments "${here}"',
-        "_DynamicCore__get_keyword",
-        "_DynamicCore__get_keyword_line",
-        "_DynamicCore__get_keyword_path",
-        "_HybridCore__get_component_listeners",
-        "_HybridCore__get_manually_registered_listeners",
-        "_HybridCore__get_members",
-        "_HybridCore__get_members_from_instance",
-        "_HybridCore__set_library_listeners",
-        "_other_name_here",
-        "add_library_components",
-        "all_arguments",
-        "attributes",
-        "class_attribute",
-        "defaults",
-        "doc_and_tags",
-        "embedded",
-        "function",
-        "get_keyword_arguments",
-        "get_keyword_documentation",
-        "get_keyword_names",
-        "get_keyword_source",
-        "get_keyword_tags",
-        "get_keyword_types",
-        "instance_attribute",
-        "keyword_in_main",
-        "keywords",
-        "keywords_spec",
-        "kwargs_only",
-        "mandatory",
-        "method",
-        "multi_line_doc",
-        "not_keyword_in_main",
-        "one_line_doc",
-        "run_keyword",
-        "tags",
-        "varargs_and_kwargs",
-    ]
-    assert [a for a in dir(DynamicLibrary()) if a[:2] != "__"] == expected
-    expected = [
-        e
-        for e in expected
-        if e
-        not in (
-            "_DynamicCore__get_typing_hints",
-            "_DynamicCore__get_keyword",
-            "_DynamicCore__get_keyword_line",
-            "_DynamicCore__get_keyword_path",
-            "_DynamicCore__join_defaults_with_types",
-            "get_keyword_arguments",
-            "get_keyword_documentation",
-            "get_keyword_source",
-            "get_keyword_tags",
-            "parse_plugins",
-            "run_keyword",
-            "get_keyword_types",
-        )
-    ]
-    assert [a for a in dir(HybridLibrary()) if a[:2] != "__"] == expected
+def test_keyword_names_dynamic():
+     verify(json.dumps(DynamicLibrary().get_keyword_names(), indent=4)) 
+
+def test_dir_dyn_lib():
+    result = [a for a in dir(DynamicLibrary()) if a[:2] != "__"]
+    result = json.dumps(result, indent=4)
+    verify(result)
+
+def test_dir_hubrid_lib():
+    result =  [a for a in dir(HybridLibrary()) if a[:2] != "__"]
+    result = json.dumps(result, indent=4)
+    verify(result)
 
 
 def test_getattr():

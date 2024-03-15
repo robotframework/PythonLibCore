@@ -19,10 +19,13 @@ examples see the project pages at
 https://github.com/robotframework/PythonLibCore
 """
 import inspect
+import json
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Callable, List, Optional, Union, get_type_hints
 
+from robot.api import logger
 from robot.api.deco import keyword  # noqa: F401
 from robot.errors import DataError
 from robot.utils import Importer
@@ -42,27 +45,46 @@ class NoKeywordFound(PythonLibCoreException):
     pass
 
 
+def _translation(translation: Optional[Path] = None):
+    if translation and isinstance(translation, Path) and translation.is_file():
+        with translation.open("r") as file:
+            try:
+                return json.load(file)
+            except json.decoder.JSONDecodeError:
+                logger.warn(f"Could not find file: {translation}")
+                return {}
+    else:
+        return {}
+
+
 class HybridCore:
-    def __init__(self, library_components: List) -> None:
+    def __init__(self, library_components: List, translation: Optional[Path] = None) -> None:
         self.keywords = {}
         self.keywords_spec = {}
         self.attributes = {}
-        self.add_library_components(library_components)
-        self.add_library_components([self])
+        translation_data = _translation(translation)
+        self.add_library_components(library_components, translation_data)
+        self.add_library_components([self], translation_data)
         self.__set_library_listeners(library_components)
 
-    def add_library_components(self, library_components: List):
-        self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__)  # type: ignore
+    def add_library_components(self, library_components: List, translation: Optional[dict] = None):
+        translation = translation if translation else {}
+        self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__, translation)  # type: ignore
         for component in library_components:
             for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, "robot_name"):
                     kw = getattr(component, name)
-                    kw_name = func.robot_name or name
+                    kw_name = self.__get_keyword_name(func, name, translation)
                     self.keywords[kw_name] = kw
-                    self.keywords_spec[kw_name] = KeywordBuilder.build(kw)
+                    self.keywords_spec[kw_name] = KeywordBuilder.build(kw, translation)
                     # Expose keywords as attributes both using original
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
+
+    def __get_keyword_name(self, func: Callable, name: str, translation: dict):
+        if name in translation:
+            return translation[name]["name"]
+        return func.robot_name or name
 
     def __set_library_listeners(self, library_components: list):
         listeners = self.__get_manually_registered_listeners()
@@ -198,12 +220,23 @@ class DynamicCore(HybridCore):
 
 class KeywordBuilder:
     @classmethod
-    def build(cls, function):
+    def build(cls, function, translation: Optional[dict] = None):
+        translation = translation if translation else {}
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
-            documentation=inspect.getdoc(function) or "",
+            documentation=cls.get_doc(function, translation),
             argument_types=cls._get_types(function),
         )
+
+    @classmethod
+    def get_doc(cls, function, translation: dict):
+        if kw := cls._get_kw_transtation(function, translation):
+            return kw["doc"]
+        return inspect.getdoc(function) or ""
+
+    @classmethod
+    def _get_kw_transtation(cls, function, translation: dict):
+        return translation.get(function.__name__, {})
 
     @classmethod
     def unwrap(cls, function):

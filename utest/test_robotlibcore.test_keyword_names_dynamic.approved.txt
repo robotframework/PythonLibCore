@@ -1,0 +1,16 @@
+[
+    "Custom name",
+    "Embedded arguments \"${here}\"",
+    "all_arguments",
+    "defaults",
+    "doc_and_tags",
+    "function",
+    "keyword_in_main",
+    "kwargs_only",
+    "mandatory",
+    "method",
+    "multi_line_doc",
+    "one_line_doc",
+    "tags",
+    "varargs_and_kwargs"
+]
