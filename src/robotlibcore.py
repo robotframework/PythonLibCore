@@ -51,7 +51,7 @@ def _translation(translation: Optional[Path] = None):
             try:
                 return json.load(file)
             except json.decoder.JSONDecodeError:
-                logger.warn(f"Could not find file: {translation}")
+                logger.warn(f"Could not convert json file {translation} to dictionary.")
                 return {}
     else:
         return {}
