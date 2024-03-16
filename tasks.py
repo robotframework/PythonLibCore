@@ -132,9 +132,10 @@ def lint(ctx):
         ruff_cmd.append("--fix")
     ruff_cmd.append("./src")
     ruff_cmd.append("./tasks.py")
+    ruff_cmd.append("./utest")
     ctx.run(" ".join(ruff_cmd))
     print("Run black")
-    ctx.run("black src/ tasks.py utest/run.py atest/run.py")
+    ctx.run("black src/ tasks.py utest atest/run.py")
     print("Run tidy")
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
     command = [

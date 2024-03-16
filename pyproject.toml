@@ -46,6 +46,14 @@ lint.select = [
     "RUF"
 ]
 
+[tool.ruff.lint.extend-per-file-ignores]
+"utest/*" = [
+    "S",
+    "SLF",
+    "PLR",
+    "B018"
+]
+
 [tool.ruff.lint.mccabe]
 max-complexity = 9
 

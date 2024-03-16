@@ -4,7 +4,7 @@ from typing import List, Union
 import pytest
 from DynamicTypesAnnotationsLibrary import CustomObject, DynamicTypesAnnotationsLibrary
 from DynamicTypesLibrary import DynamicTypesLibrary
-from lib_future_annotation import lib_future_annotation, Location
+from lib_future_annotation import Location, lib_future_annotation
 
 
 @pytest.fixture(scope="module")
@@ -80,7 +80,7 @@ def test_keyword_new_type(lib_types):
 
 def test_keyword_return_type(lib_types):
     types = lib_types.get_keyword_types("keyword_define_return_type")
-    assert types == {"arg": str, 'return': Union[List[str], str]}
+    assert types == {"arg": str, "return": Union[List[str], str]}
 
 
 def test_keyword_forward_references(lib_types):
@@ -105,7 +105,7 @@ def test_keyword_with_annotation_external_class(lib_types):
 
 def test_keyword_with_annotation_and_default_part2(lib_types):
     types = lib_types.get_keyword_types("keyword_default_and_annotation")
-    assert types == {"arg1": int, "arg2": Union[bool, str], 'return': str}
+    assert types == {"arg1": int, "arg2": Union[bool, str], "return": str}
 
 
 def test_keyword_with_robot_types_and_annotations(lib_types):
@@ -205,7 +205,7 @@ def test_kw_with_named_arguments(lib_types: DynamicTypesAnnotationsLibrary):
 
 def test_kw_with_many_named_arguments_with_default(lib_types: DynamicTypesAnnotationsLibrary):
     types = lib_types.get_keyword_types("kw_with_many_named_arguments_with_default")
-    assert types == {'arg2': int}
+    assert types == {"arg2": int}
     types = lib_types.get_keyword_types("kw_with_positional_and_named_arguments_with_defaults")
     assert types == {"arg1": int, "arg2": str}
     types = lib_types.get_keyword_types("kw_with_positional_and_named_arguments")

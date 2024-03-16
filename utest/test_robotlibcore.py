@@ -1,10 +1,11 @@
 import json
+
 import pytest
+from approvaltests.approvals import verify
 from DynamicLibrary import DynamicLibrary
 from DynamicTypesAnnotationsLibrary import DynamicTypesAnnotationsLibrary
 from HybridLibrary import HybridLibrary
 from robotlibcore import HybridCore, NoKeywordFound
-from approvaltests.approvals import verify, verify_all
 
 
 @pytest.fixture(scope="module")
@@ -17,15 +18,17 @@ def test_keyword_names_hybrid():
 
 
 def test_keyword_names_dynamic():
-     verify(json.dumps(DynamicLibrary().get_keyword_names(), indent=4)) 
+    verify(json.dumps(DynamicLibrary().get_keyword_names(), indent=4))
+
 
 def test_dir_dyn_lib():
     result = [a for a in dir(DynamicLibrary()) if a[:2] != "__"]
     result = json.dumps(result, indent=4)
     verify(result)
 
+
 def test_dir_hubrid_lib():
-    result =  [a for a in dir(HybridLibrary()) if a[:2] != "__"]
+    result = [a for a in dir(HybridLibrary()) if a[:2] != "__"]
     result = json.dumps(result, indent=4)
     verify(result)
 
