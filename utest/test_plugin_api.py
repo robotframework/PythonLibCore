@@ -1,5 +1,5 @@
-from helpers import my_plugin_test
 import pytest
+from helpers import my_plugin_test
 from robotlibcore import Module, PluginError, PluginParser
 
 
@@ -19,17 +19,17 @@ def test_plugins_string_to_modules(plugin_parser):
     result = plugin_parser._string_to_modules("path.to.MyLibrary,path.to.OtherLibrary")
     assert result == [
         Module("path.to.MyLibrary", [], {}),
-        Module("path.to.OtherLibrary", [], {})
+        Module("path.to.OtherLibrary", [], {}),
     ]
     result = plugin_parser._string_to_modules("path.to.MyLibrary , path.to.OtherLibrary")
     assert result == [
         Module("path.to.MyLibrary", [], {}),
-        Module("path.to.OtherLibrary", [], {})
+        Module("path.to.OtherLibrary", [], {}),
     ]
     result = plugin_parser._string_to_modules("path.to.MyLibrary;foo;bar , path.to.OtherLibrary;1")
     assert result == [
         Module("path.to.MyLibrary", ["foo", "bar"], {}),
-        Module("path.to.OtherLibrary", ["1"], {})
+        Module("path.to.OtherLibrary", ["1"], {}),
     ]
     result = plugin_parser._string_to_modules("PluginWithKwArgs.py;kw1=Text1;kw2=Text2")
     assert result == [
@@ -52,7 +52,7 @@ def test_parse_plugins_as_list(plugin_parser):
     assert len(plugins) == 1
     assert isinstance(plugins[0], my_plugin_test.TestClass)
     plugins = plugin_parser.parse_plugins(
-        ["helpers.my_plugin_test.TestClass", "helpers.my_plugin_test.TestClassWithBase"]
+        ["helpers.my_plugin_test.TestClass", "helpers.my_plugin_test.TestClassWithBase"],
     )
     assert len(plugins) == 2
     assert isinstance(plugins[0], my_plugin_test.TestClass)
@@ -81,6 +81,7 @@ def test_plugin_python_objects():
     class PythonObject:
         x = 1
         y = 2
+
     python_object = PythonObject()
     parser = PluginParser(my_plugin_test.LibraryBase, [python_object])
     plugins = parser.parse_plugins("helpers.my_plugin_test.TestPluginWithPythonArgs;4")
@@ -88,4 +89,3 @@ def test_plugin_python_objects():
     plugin = plugins[0]
     assert plugin.python_class.x == 1
     assert plugin.python_class.y == 2
-

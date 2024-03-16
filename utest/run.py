@@ -2,23 +2,19 @@
 import argparse
 import platform
 import sys
-from os.path import abspath, dirname, join
+from pathlib import Path
 
 import pytest
 from robot.version import VERSION as RF_VERSION
 
-curdir = dirname(abspath(__file__))
-atest_dir = join(curdir, "..", "atest")
+curdir = Path(__file__).parent
+atest_dir = curdir / ".." / "atest"
 python_version = platform.python_version()
-xunit_report = join(
-    atest_dir,
-    "results",
-    "xunit-python-{}-robot{}.xml".format(python_version, RF_VERSION),
-)
-src = join(curdir, "..", "src")
+xunit_report = atest_dir / "results" / f"xunit-python-{python_version}-robot{RF_VERSION}.xml"
+src = curdir / ".." / "src"
 sys.path.insert(0, src)
 sys.path.insert(0, atest_dir)
-helpers = join(curdir, "helpers")
+helpers = curdir / "helpers"
 sys.path.append(helpers)
 
 parser = argparse.ArgumentParser()
