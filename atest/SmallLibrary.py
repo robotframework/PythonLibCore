@@ -9,6 +9,9 @@ class SmallLibrary(DynamicCore):
 
     def __init__(self, translation: Optional[Path] = None):
         """__init__ documentation."""
+        if not isinstance(translation, Path):
+            logger.warn("Convert to Path")
+            translation = Path(translation)
         logger.warn(translation.absolute())
         logger.warn(type(translation))
         
