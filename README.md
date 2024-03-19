@@ -11,11 +11,11 @@ the library side. PythonLibCore eases the problem by providing simpler
 interface and handling all the requirements towards the Robot Framework
 library APIs.
 
-Code is stable and version 1.0 is already used by
+Code is stable and is already used by
 [SeleniumLibrary](https://github.com/robotframework/SeleniumLibrary/)
 and
-[WhiteLibrary](https://pypi.org/project/robotframework-whitelibrary/).
-The version 2.0 support changes in the Robot Framework 3.2.
+[Browser library](https://github.com/MarketSquare/robotframework-browser/).
+Project supports two latest version of Robot Framework.
 
 [![Version](https://img.shields.io/pypi/v/robotframework-pythonlibcore.svg)](https://pypi.python.org/pypi/robotframework-pythonlibcore/)
 [![Actions Status](https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg)](https://github.com/robotframework/PythonLibCore/actions)
