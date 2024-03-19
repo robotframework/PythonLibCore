@@ -17,7 +17,9 @@ and
 [WhiteLibrary](https://pypi.org/project/robotframework-whitelibrary/).
 The version 2.0 support changes in the Robot Framework 3.2.
 
-[![image](https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg?branch=master)](https://github.com/robotframework/PythonLibCore)
+[![Version](https://img.shields.io/pypi/v/robotframework-pythonlibcore.svg)](https://pypi.python.org/pypi/robotframework-pythonlibcore/)
+[![Actions Status](https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg)](https://github.com/robotframework/PythonLibCore/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Usage
 
