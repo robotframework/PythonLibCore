@@ -6,6 +6,13 @@
     "name_changed": {
         "name": "name_changed_again",
         "doc": "This is also replaced.\n\nnew line."
+    },
+    "__init__": {
+        "name": "__init__",
+        "doc": "Replaces init docs with this one."
+    },
+    "__intro__": {
+        "name": "__intro__",
+        "doc": "New __intro__ documentation is here."
     }
-    
 }

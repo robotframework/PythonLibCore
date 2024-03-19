@@ -70,6 +70,7 @@ class HybridCore:
     def add_library_components(self, library_components: List, translation: Optional[dict] = None):
         translation = translation if translation else {}
         self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__, translation)  # type: ignore
+        self.__replace_intro_doc(translation)
         for component in library_components:
             for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, "robot_name"):
@@ -85,6 +86,10 @@ class HybridCore:
         if name in translation:
             return translation[name]["name"]
         return func.robot_name or name
+
+    def __replace_intro_doc(self, translation: dict):
+        if "__intro__" in translation:
+            self.__doc__ = translation["__intro__"].get("doc", "")
 
     def __set_library_listeners(self, library_components: list):
         listeners = self.__get_manually_registered_listeners()
