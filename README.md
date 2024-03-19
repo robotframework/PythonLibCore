@@ -1,6 +1,4 @@
----
-title: Python Library Core
----
+# Python Library Core
 
 Tools to ease creating larger test libraries for [Robot
 Framework](http://robotframework.org) using Python. The Robot Framework
@@ -21,32 +19,27 @@ The version 2.0 support changes in the Robot Framework 3.2.
 
 [![image](https://github.com/robotframework/PythonLibCore/workflows/CI/badge.svg?branch=master)](https://github.com/robotframework/PythonLibCore)
 
-# Usage
+## Usage
 
 There are two ways to use PythonLibCore, either by
-[HybridCore]{.title-ref} or by using [DynamicCore]{.title-ref}.
-[HybridCore]{.title-ref} provides support for the hybrid library API and
-[DynamicCore]{.title-ref} provides support for dynamic library API.
+`HybridCore` or by using `DynamicCore`. `HybridCore` provides support for
+the hybrid library API and `DynamicCore` provides support for dynamic library API.
 Consult the Robot Framework [User
 Guide](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#creating-test-libraries),
 for choosing the correct API for library.
 
 Regardless which library API is chosen, both have similar requirements.
 
-1)  Library must inherit either the [HybridCore]{.title-ref} or
-    [DynamicCore]{.title-ref}.
+1)  Library must inherit either the `HybridCore` or `DynamicCore`.
 2)  Library keywords must be decorated with Robot Framework
     [\@keyword](https://github.com/robotframework/robotframework/blob/master/src/robot/api/deco.py)
     decorator.
 3)  Provide a list of class instances implementing keywords to
-    [library_components]{.title-ref} argument in the
-    [HybridCore]{.title-ref} or [DynamicCore]{.title-ref}
-    [\_\_init\_\_]{.title-ref}.
+    `library_components` argument in the `HybridCore` or `DynamicCore` `__init__`.
 
-It is also possible implement keywords in the library main class, by
-marking method with [\@keyword]{.title-ref} as keywords. It is not
-requires pass main library instance in the
-[library_components]{.title-ref} argument.
+It is also possible implement keywords in the library main class, by marking method with
+`@keyword` as keywords. It is not required pass main library instance in the
+`library_components` argument.
 
 All keyword, also keywords implemented in the classes outside of the
 main library are available in the library instance as methods. This
@@ -150,6 +143,6 @@ class MyPlugi:
 
 Then Library can be imported in Robot Framework side like this:
 
-``` bash
+``` robotframework
 Library    ${CURDIR}/PluginLib.py    plugins=${CURDIR}/MyPlugin.py
 ```
