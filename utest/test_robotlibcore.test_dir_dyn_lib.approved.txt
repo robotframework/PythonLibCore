@@ -9,6 +9,7 @@
     "_HybridCore__get_manually_registered_listeners",
     "_HybridCore__get_members",
     "_HybridCore__get_members_from_instance",
+    "_HybridCore__replace_intro_doc",
     "_HybridCore__set_library_listeners",
     "_other_name_here",
     "add_library_components",
