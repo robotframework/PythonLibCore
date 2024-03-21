@@ -84,7 +84,8 @@ class HybridCore:
 
     def __get_keyword_name(self, func: Callable, name: str, translation: dict):
         if name in translation:
-            return translation[name]["name"]
+            if new_name := translation[name].get("name"):
+                return new_name
         return func.robot_name or name
 
     def __replace_intro_doc(self, translation: dict):
@@ -236,7 +237,8 @@ class KeywordBuilder:
     @classmethod
     def get_doc(cls, function, translation: dict):
         if kw := cls._get_kw_transtation(function, translation):
-            return kw["doc"]
+            if "doc" in kw:
+                return kw["doc"]
         return inspect.getdoc(function) or ""
 
     @classmethod
