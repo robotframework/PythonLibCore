@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8, 3.11.1]
-        rf-version: [5.0.1, 6.1.0]
+        rf-version: [5.0.1, 7.0.0]
 
     steps:
     - uses: actions/checkout@v4
