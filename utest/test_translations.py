@@ -34,3 +34,25 @@ def test_init_and_lib_docs(lib: SmallLibrary):
     assert init.documentation == "Replaces init docs with this one."
     doc = lib.get_keyword_documentation("__intro__")
     assert doc == "New __intro__ documentation is here."
+
+
+def test_not_translated(lib: SmallLibrary):
+    keywords = lib.keywords_spec
+    assert "not_translated" in keywords
+    doc = lib.get_keyword_documentation("not_translated")
+    assert doc == "This is not replaced."
+
+
+def test_doc_not_translated(lib: SmallLibrary):
+    keywords = lib.keywords_spec
+    assert "doc_not_translated" not in keywords
+    assert "this_is_replaced" in keywords
+    doc = lib.get_keyword_documentation("this_is_replaced")
+    assert doc == "This is not replaced also."
+
+
+def test_kw_not_translated_but_doc_is(lib: SmallLibrary):
+    keywords = lib.keywords_spec
+    assert "kw_not_translated" in keywords
+    doc = lib.get_keyword_documentation("kw_not_translated")
+    assert doc == "Here is new doc"

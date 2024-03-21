@@ -14,5 +14,12 @@
     "__intro__": {
         "name": "__intro__",
         "doc": "New __intro__ documentation is here."
+    },
+    "doc_not_translated": {
+        "name": "this_is_replaced"
+    }
+    ,
+    "kw_not_translated": {
+        "doc": "Here is new doc"
     }
 }
