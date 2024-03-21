@@ -148,3 +148,87 @@ Then Library can be imported in Robot Framework side like this:
 ``` robotframework
 Library    ${CURDIR}/PluginLib.py    plugins=${CURDIR}/MyPlugin.py
 ```
+
+# Translation
+
+PLC supports translation of keywords names and documentation, but arguments names, tags and types
+can not be currently translated. Translation is provided as a file containing
+[Json](https://www.json.org/json-en.html) and as a
+[Path](https://docs.python.org/3/library/pathlib.html) object. Translation is provided in
+`translation` argument in the `HybridCore` or `DynamicCore` `__init__`. Providing translation
+file is optional, also it is not mandatory to provide translation to all keyword.
+
+The keys of json are the methods names, not the keyword names, which implements keyword. Value
+of key is json object which contains two keys: `name` and `doc`. `name` key contains the keyword
+translated name and `doc` contains keyword translated documentation. Providing
+`doc` and `name` is optional, example translation json file can only provide translations only
+to keyword names or only to documentatin. But it is always recomended to provide translation to
+both `name` and `doc`.
+
+Library class documentation and instance documetation has special keys, `__init__` key will
+replace instance documentation and `__intro__` will replace libary class documentation.
+
+## Example
+
+If there is library like this:
+```python
+from pathlib import Path
+
+from robotlibcore import DynamicCore, keyword
+
+class SmallLibrary(DynamicCore):
+    """Library documentation."""
+
+    def __init__(self, translation: Path):
+        """__init__ documentation."""
+        DynamicCore.__init__(self, [], translation.absolute())
+
+    @keyword(tags=["tag1", "tag2"])
+    def normal_keyword(self, arg: int, other: str) -> str:
+        """I have doc
+
+        Multiple lines.
+        Other line.
+        """
+        data = f"{arg} {other}"
+        print(data)
+        return data
+
+    def not_keyword(self, data: str) -> str:
+        print(data)
+        return data
+
+    @keyword(name="This Is New Name", tags=["tag1", "tag2"])
+    def name_changed(self, some: int, other: int) -> int:
+        """This one too"""
+        print(f"{some} {type(some)}, {other} {type(other)}")
+        return some + other
+```
+
+And when there is translation file like:
+```json
+{
+    "normal_keyword": {
+        "name": "other_name",
+        "doc": "This is new doc"
+    },
+    "name_changed": {
+        "name": "name_changed_again",
+        "doc": "This is also replaced.\n\nnew line."
+    },
+    "__init__": {
+        "name": "__init__",
+        "doc": "Replaces init docs with this one."
+    },
+    "__intro__": {
+        "name": "__intro__",
+        "doc": "New __intro__ documentation is here."
+    },
+}
+```
+Then `normal_keyword` is translated to `other_name`. Also this keyword documentions is
+translted to `This is new doc`. The keyword is `name_changed` is translted to
+`name_changed_again` keyword and keyword documentation is translted to
+`This is also replaced.\n\nnew line.`. The library class documentation is translated
+to `Replaces init docs with this one.` and class documentation is translted to
+`New __intro__ documentation is here.`
