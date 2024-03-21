@@ -30,6 +30,7 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+        robot --version
     - name: Run ruff
       run: |
         ruff check ./src tasks.py
