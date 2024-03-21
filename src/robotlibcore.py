@@ -83,7 +83,7 @@ class HybridCore:
                     self.attributes[name] = self.attributes[kw_name] = kw
 
     def __get_keyword_name(self, func: Callable, name: str, translation: dict):
-        if name in translation:
+        if name in translation:  # noqa: SIM102
             if new_name := translation[name].get("name"):
                 return new_name
         return func.robot_name or name
@@ -236,7 +236,7 @@ class KeywordBuilder:
 
     @classmethod
     def get_doc(cls, function, translation: dict):
-        if kw := cls._get_kw_transtation(function, translation):
+        if kw := cls._get_kw_transtation(function, translation):  # noqa: SIM102
             if "doc" in kw:
                 return kw["doc"]
         return inspect.getdoc(function) or ""

@@ -28,6 +28,7 @@ def test_translations_docs(lib: SmallLibrary):
     kw = keywords["name_changed_again"]
     assert kw.documentation == "This is also replaced.\n\nnew line."
 
+
 def test_init_and_lib_docs(lib: SmallLibrary):
     keywords = lib.keywords_spec
     init = keywords["__init__"]
