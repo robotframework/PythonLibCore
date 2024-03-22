@@ -30,7 +30,7 @@ from robot.api.deco import keyword  # noqa: F401
 from robot.errors import DataError
 from robot.utils import Importer
 
-__version__ = "4.3.0"
+__version__ = "4.4.0"
 
 
 class PythonLibCoreException(Exception):  # noqa: N818
