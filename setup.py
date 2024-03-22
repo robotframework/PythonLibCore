@@ -23,7 +23,7 @@ Framework :: Robot Framework
 """.strip().splitlines()
 with open(join(CURDIR, 'src', 'robotlibcore.py')) as f:
     VERSION = re.search('\n__version__ = "(.*)"', f.read()).group(1)
-with open(join(CURDIR, 'README.rst')) as f:
+with open(join(CURDIR, 'README.md')) as f:
     LONG_DESCRIPTION = f.read()
 
 DESCRIPTION = ('Tools to ease creating larger test libraries for '
@@ -37,6 +37,7 @@ setup(
     license          = 'Apache License 2.0',
     description      = DESCRIPTION,
     long_description = LONG_DESCRIPTION,
+    long_description_content_type = "text/markdown",
     keywords         = 'robotframework testing testautomation library development',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
