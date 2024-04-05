@@ -57,35 +57,47 @@ def _translation(translation: Optional[Path] = None):
         return {}
 
 
+def _translated_keywords(translation_data: dict) -> list:
+    return [item.get("name") for item in translation_data.values() if item.get("name")]
+
+
 class HybridCore:
     def __init__(self, library_components: List, translation: Optional[Path] = None) -> None:
         self.keywords = {}
         self.keywords_spec = {}
         self.attributes = {}
         translation_data = _translation(translation)
-        self.add_library_components(library_components, translation_data)
-        self.add_library_components([self], translation_data)
+        translated_kw_names = _translated_keywords(translation_data)
+        self.add_library_components(library_components, translation_data, translated_kw_names)
+        self.add_library_components([self], translation_data, translated_kw_names)
         self.__set_library_listeners(library_components)
 
-    def add_library_components(self, library_components: List, translation: Optional[dict] = None):
+    def add_library_components(
+        self,
+        library_components: List,
+        translation: Optional[dict] = None,
+        translated_kw_names: Optional[list] = None,
+    ):
         translation = translation if translation else {}
+        translated_kw_names = translated_kw_names if translated_kw_names else []
         self.keywords_spec["__init__"] = KeywordBuilder.build(self.__init__, translation)  # type: ignore
         self.__replace_intro_doc(translation)
         for component in library_components:
             for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, "robot_name"):
                     kw = getattr(component, name)
-                    kw_name = self.__get_keyword_name(func, name, translation)
+                    kw_name = self.__get_keyword_name(func, name, translation, translated_kw_names)
                     self.keywords[kw_name] = kw
                     self.keywords_spec[kw_name] = KeywordBuilder.build(kw, translation)
                     # Expose keywords as attributes both using original
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
 
-    def __get_keyword_name(self, func: Callable, name: str, translation: dict):
-        if name in translation:  # noqa: SIM102
-            if new_name := translation[name].get("name"):
-                return new_name
+    def __get_keyword_name(self, func: Callable, name: str, translation: dict, translated_kw_names: list):
+        if name in translated_kw_names:
+            return name
+        if name in translation and translation[name].get("name"):
+            return translation[name].get("name")
         return func.robot_name or name
 
     def __replace_intro_doc(self, translation: dict):

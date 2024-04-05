@@ -4,6 +4,13 @@ from typing import Optional
 from robot.api import logger
 from robotlibcore import DynamicCore, keyword
 
+class KeywordClass:
+
+    @keyword(name="Execute SomeThing")
+    def execute_something(self):
+        """This is old"""
+        print("Name is here")
+
 class SmallLibrary(DynamicCore):
     """Library documentation."""
 
@@ -12,10 +19,7 @@ class SmallLibrary(DynamicCore):
         if not isinstance(translation, Path):
             logger.warn("Convert to Path")
             translation = Path(translation)
-        logger.warn(translation.absolute())
-        logger.warn(type(translation))
-
-        DynamicCore.__init__(self, [], translation.absolute())
+        DynamicCore.__init__(self, [KeywordClass()], translation.absolute())
 
     @keyword(tags=["tag1", "tag2"])
     def normal_keyword(self, arg: int, other: str) -> str:
@@ -32,7 +36,7 @@ class SmallLibrary(DynamicCore):
         print(data)
         return data
 
-    @keyword(name="This Is New Name", tags=["tag1", "tag2"])
+    @keyword(name="Name ChanGed", tags=["tag1", "tag2"])
     def name_changed(self, some: int, other: int) -> int:
         """This one too"""
         print(f"{some} {type(some)}, {other} {type(other)}")
