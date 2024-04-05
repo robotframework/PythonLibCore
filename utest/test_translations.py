@@ -57,3 +57,11 @@ def test_kw_not_translated_but_doc_is(lib: SmallLibrary):
     assert "kw_not_translated" in keywords
     doc = lib.get_keyword_documentation("kw_not_translated")
     assert doc == "Here is new doc"
+
+
+def test_rf_name_not_in_keywords():
+    translation = Path(__file__).parent.parent / "atest" / "translation.json"
+    lib = SmallLibrary(translation=translation)
+    kw = lib.keywords
+    assert "Execute SomeThing" not in kw, f"Execute SomeThing should not be present: {kw}"
+    assert len(kw) == 6, f"Too many keywords: {kw}"

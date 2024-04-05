@@ -21,5 +21,9 @@
     ,
     "kw_not_translated": {
         "doc": "Here is new doc"
+    },
+    "execute_something": {
+        "name": "tee_jotain",
+        "doc": "Uusi kirja."
     }
 }
