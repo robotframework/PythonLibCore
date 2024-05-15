@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import re
-from os.path import abspath, dirname, join
+from pathlib import Path
+from os.path import join
 
 from setuptools import find_packages, setup
 
-CURDIR = dirname(abspath(__file__))
+CURDIR = Path(__file__).parent
 
 CLASSIFIERS = """
 Development Status :: 5 - Production/Stable
@@ -21,10 +22,11 @@ Programming Language :: Python :: Implementation :: PyPy
 Topic :: Software Development :: Testing
 Framework :: Robot Framework
 """.strip().splitlines()
-with open(join(CURDIR, 'src', 'robotlibcore.py')) as f:
-    VERSION = re.search('\n__version__ = "(.*)"', f.read()).group(1)
-with open(join(CURDIR, 'README.md')) as f:
-    LONG_DESCRIPTION = f.read()
+
+version_file = Path(CURDIR / 'src' / 'robotlibcore' / '__init__.py')
+VERSION = re.search('\n__version__ = "(.*)"', version_file.read_text()).group(1)
+
+LONG_DESCRIPTION = Path(CURDIR / 'README.md').read_text()
 
 DESCRIPTION = ('Tools to ease creating larger test libraries for '
                'Robot Framework using Python.')
@@ -43,6 +45,5 @@ setup(
     classifiers      = CLASSIFIERS,
     python_requires  = '>=3.8, <4',
     package_dir      = {'': 'src'},
-    packages         = find_packages('src'),
-    py_modules       = ['robotlibcore'],
+    packages         = ["robotlibcore","robotlibcore.core", "robotlibcore.keywords", "robotlibcore.plugin", "robotlibcore.utils"]
 )

@@ -10,7 +10,7 @@ assert Path.cwd() == Path(__file__).parent  # noqa: S101
 
 
 REPOSITORY = "robotframework/PythonLibCore"
-VERSION_PATH = Path("src/robotlibcore.py")
+VERSION_PATH = Path("src/robotlibcore/__init__.py")
 RELEASE_NOTES_PATH = Path("docs/PythonLibCore-{version}.rst")
 RELEASE_NOTES_TITLE = "Python Library Core {version}"
 RELEASE_NOTES_INTRO = """
