@@ -11,6 +11,7 @@ assert Path.cwd() == Path(__file__).parent  # noqa: S101
 
 REPOSITORY = "robotframework/PythonLibCore"
 VERSION_PATH = Path("src/robotlibcore/__init__.py")
+VERSION_PATTERN = '__version__ = "(.*)"'
 RELEASE_NOTES_PATH = Path("docs/PythonLibCore-{version}.rst")
 RELEASE_NOTES_TITLE = "Python Library Core {version}"
 RELEASE_NOTES_INTRO = """
@@ -67,7 +68,7 @@ def set_version(ctx, version):  # noqa: ARG001
     to the next suitable development version. For example, 3.0 -> 3.0.1.dev1,
     3.1.1 -> 3.1.2.dev1, 3.2a1 -> 3.2a2.dev1, 3.2.dev1 -> 3.2.dev2.
     """
-    version = Version(version, VERSION_PATH)
+    version = Version(version, VERSION_PATH, VERSION_PATTERN)
     version.write()
     print(version)
 
