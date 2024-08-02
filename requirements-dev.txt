@@ -1,3 +1,4 @@
+uv
 pytest
 pytest-cov
 pytest-mockito
