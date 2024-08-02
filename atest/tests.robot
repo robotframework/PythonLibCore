@@ -14,7 +14,7 @@ Keyword Names
     Method
     Custom Name
     Cust Omna Me
-    IF    $LIBRARY == "ExtendExistingLibrary"    Keyword In Extending Library
+    IF    "$LIBRARY" == "ExtendExistingLibrary"    Keyword In Extending Library
 
 Method Without @keyword Are Not Keyowrds
     [Documentation]    FAIL GLOB:    No keyword with name 'Not Keyword' found.*
