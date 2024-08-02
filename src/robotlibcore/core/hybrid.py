@@ -88,7 +88,7 @@ class HybridCore:
             raise TypeError(
                 msg,
             )
-        if type(component) != component.__class__:
+        if type(component) is component.__class__:
             msg = (
                 "Libraries must be modules or new-style class instances, "
                 f"got old-style class {component.__class__.__name__} instead."
