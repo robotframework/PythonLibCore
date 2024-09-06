@@ -166,5 +166,5 @@ def utest(ctx):
 
 
 @task(utest, atest)
-def test(ctx):  # noqa: ARG001
+def test(ctx):
     pass
