@@ -1,5 +1,6 @@
 import pytest
 from helpers import my_plugin_test
+
 from robotlibcore import Module, PluginError, PluginParser
 
 
