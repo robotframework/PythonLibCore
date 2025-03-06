@@ -51,6 +51,13 @@ public API.
 The example in below demonstrates how the PythonLibCore can be used with
 a library.
 
+## Installation
+To install this library, run the following command in your terminal:
+``` bash
+pip install robotframework-pythonlibcore
+```
+This command installs the latest version of `robotframework-pythonlibcore`, ensuring you have all the current features and updates.
+
 # Example
 
 ``` python
