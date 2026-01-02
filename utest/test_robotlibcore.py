@@ -104,3 +104,13 @@ def test_library_cannot_be_class():
     with pytest.raises(TypeError) as exc_info:
         HybridCore([HybridLibrary])
     assert str(exc_info.value) == "Libraries must be modules or instances, got class 'HybridLibrary' instead."
+
+def test_get_library_attr():
+    class TestClass(HybridCore):
+        def __init__(self):
+            self.a  = self.b *2
+            super().__init__()
+
+    with pytest.raises(AttributeError):
+        TestClass()
+

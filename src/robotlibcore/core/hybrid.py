@@ -106,6 +106,8 @@ class HybridCore:
             yield name, getattr(owner, name)
 
     def __getattr__(self, name):
+        if name == "attributes":
+            return super().__getattribute__(name)
         if name in self.attributes:
             return self.attributes[name]
         msg = "{!r} object has no attribute {!r}".format(type(self).__name__, name)
