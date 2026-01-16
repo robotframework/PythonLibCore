@@ -33,10 +33,10 @@ __all__ = [
     "HybridCore",
     "KeywordBuilder",
     "KeywordSpecification",
-    "PluginParser",
-    "keyword",
+    "Module",
     "NoKeywordFound",
     "PluginError",
+    "PluginParser",
     "PythonLibCoreException",
-    "Module",
+    "keyword",
 ]
