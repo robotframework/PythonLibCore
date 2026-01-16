@@ -35,7 +35,7 @@ for variant in library_variants:
     )
     if rc > 250:
         sys.exit(rc)
-    process_output(output, verbose=False)
+    process_output(output)
 output = join(
     outdir,
     "lib-DynamicTypesLibrary-python-{}-robot-{}.xml".format(python_version, RF_VERSION),
@@ -52,12 +52,12 @@ rc = run(
 )
 if rc > 250:
     sys.exit(rc)
-process_output(output, verbose=False)
+process_output(output)
 output = join(outdir, "lib-PluginApi-python-{}-robot-{}.xml".format(python_version, RF_VERSION))
 rc = run(plugin_api, name="Plugin", output=output, report=None, log=None, loglevel="debug")
 if rc > 250:
     sys.exit(rc)
-process_output(output, verbose=False)
+process_output(output)
 print("\nCombining results.")
 library_variants.append("DynamicTypesLibrary")
 xml_files = [str(xml_file) for xml_file in Path(outdir).glob("*.xml")]
