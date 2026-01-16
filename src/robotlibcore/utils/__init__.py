@@ -25,4 +25,4 @@ class Module:
     kw_args: dict
 
 
-__all__ = ["Module", "NoKeywordFound", "PluginError", "PythonLibCoreException", "_translation", "_translated_keywords"]
+__all__ = ["Module", "NoKeywordFound", "PluginError", "PythonLibCoreException", "_translated_keywords", "_translation"]
