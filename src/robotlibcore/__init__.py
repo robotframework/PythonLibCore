@@ -26,7 +26,7 @@ from robotlibcore.keywords import KeywordBuilder, KeywordSpecification
 from robotlibcore.plugin import PluginParser
 from robotlibcore.utils import Module, NoKeywordFound, PluginError, PythonLibCoreException
 
-__version__ = "4.4.1"
+__version__ = "4.5.0"
 
 __all__ = [
     "DynamicCore",
