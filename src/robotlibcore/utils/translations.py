@@ -22,7 +22,7 @@ from robot.api import logger
 
 def _translation(translation: Optional[Path] = None):
     if translation and isinstance(translation, Path) and translation.is_file():
-        with translation.open("r") as file:
+        with translation.open("r", encoding="utf-8") as file:
             try:
                 return json.load(file)
             except json.decoder.JSONDecodeError:
