@@ -12,5 +12,5 @@ wheel
 rellu >= 0.7
 twine
 wheel
-typing-extensions >= 4.5.0
+typing-extensions >= 4.15.0
 approvaltests >= 17.4.3
