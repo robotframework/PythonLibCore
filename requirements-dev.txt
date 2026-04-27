@@ -4,7 +4,7 @@ pytest-cov
 pytest-mockito
 robotstatuschecker
 black >= 25.11.0
-ruff >= 0.5.5
+ruff >= 0.15.12
 robotframework-tidy
 invoke >= 3.0.3
 twine
