@@ -6,7 +6,7 @@ robotstatuschecker
 black >= 23.7.0
 ruff >= 0.5.5
 robotframework-tidy
-invoke >= 2.2.0
+invoke >= 3.0.3
 twine
 wheel
 rellu >= 0.7
