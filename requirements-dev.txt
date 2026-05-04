@@ -9,7 +9,7 @@ robotframework-tidy
 invoke >= 3.0.3
 twine
 wheel
-rellu >= 0.7
+rellu >= 2.0.2
 twine
 wheel
 typing-extensions >= 4.15.0
