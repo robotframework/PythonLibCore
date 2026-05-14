@@ -12,15 +12,15 @@ from the
 
 If you have pip_ installed, just run
 
-::
-
+```bash
    pip install --upgrade pip install robotframework-pythonlibcore
+```
 
 to install the latest available release or use
 
-::
-
+```bash
    pip install pip install robotframework-pythonlibcore==4.5.1
+```
 
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
