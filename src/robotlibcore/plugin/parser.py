@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from __future__ import annotations
 
 import inspect
-from typing import Any, List, Optional, Union
+from typing import Any
 
-from robot.errors import DataError
-from robot.utils import Importer
+from robot.errors import DataError  # type: ignore
+from robot.utils import Importer  # type: ignore
 
 from robotlibcore.core import DynamicCore
 from robotlibcore.utils import Module, PluginError
 
 
 class PluginParser:
-    def __init__(self, base_class: Optional[Any] = None, python_object=None) -> None:
+    def __init__(self, base_class: Any | None = None, python_object=None) -> None:
         self._base_class = base_class
         self._python_object = python_object if python_object else []
 
-    def parse_plugins(self, plugins: Union[str, List[str]]) -> List:
+    def parse_plugins(self, plugins: str | list[str]) -> list:
         imported_plugins = []
         importer = Importer("test library")
         for parsed_plugin in self._string_to_modules(plugins):
@@ -43,10 +44,10 @@ class PluginParser:
             imported_plugins.append(plugin)
         return imported_plugins
 
-    def get_plugin_keywords(self, plugins: List):
+    def get_plugin_keywords(self, plugins: list):
         return DynamicCore(plugins).get_keyword_names()
 
-    def _string_to_modules(self, modules: Union[str, List[str]]):
+    def _string_to_modules(self, modules: str | list[str]):
         parsed_modules: list = []
         if not modules:
             return parsed_modules
@@ -64,7 +65,7 @@ class PluginParser:
             parsed_modules.append(Module(module=module_name, args=args, kw_args=kw_args))
         return parsed_modules
 
-    def _modules_splitter(self, modules: Union[str, List[str]]):
+    def _modules_splitter(self, modules: str | list[str]):
         if isinstance(modules, str):
             for module in modules.split(","):
                 yield module

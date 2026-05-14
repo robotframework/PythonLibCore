@@ -1,11 +1,41 @@
-[tool.black]
-target-version = ['py38']
-line-length = 120
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotframework-pythonlibcore"
+dynamic = ["version"]
+authors = [
+    {name = "Tatu Aalto", email = "aalto.tatu@gmail.com"},
+]
+description = "Tools to ease creating larger test libraries for Robot Framework using Python."
+readme = "README.md"
+license = "Apache-2.0"
+keywords = ["robotframework", "testing", "testautomation", "library", "development"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Testing",
+    "Framework :: Robot Framework",
+]
+requires-python = ">=3.10, <4"
+
+[project.urls]
+Homepage = "https://github.com/robotframework/PythonLibCore"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "robotlibcore.__version__"}
 
 [tool.ruff]
 line-length = 120
+target-version = "py310"
 lint.fixable = ["ALL"]
-target-version = "py38"
 lint.select = [
     "F",
     "E",
@@ -19,13 +49,10 @@ lint.select = [
     "FBT",
     "B",
     "A",
-    "COM",
-    "CPY",
     "C4",
     "T10",
     "EM",
     "EXE",
-    # "FA",
     "ISC",
     "ICN",
     "G",
@@ -46,13 +73,8 @@ lint.select = [
     "RUF"
 ]
 
-[tool.ruff.lint.extend-per-file-ignores]
-"utest/*" = [
-    "S",
-    "SLF",
-    "PLR",
-    "B018"
-]
+[tool.ruff.lint.per-file-ignores]
+"utest/*" = ["S", "SLF", "B018", "PLR"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 9
