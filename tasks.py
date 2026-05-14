@@ -12,24 +12,26 @@ assert Path.cwd() == Path(__file__).parent  # noqa: S101
 REPOSITORY = "robotframework/PythonLibCore"
 VERSION_PATH = Path("src/robotlibcore/__init__.py")
 VERSION_PATTERN = '__version__ = "(.*)"'
-RELEASE_NOTES_PATH = Path("docs/PythonLibCore-{version}.rst")
+RELEASE_NOTES_PATH = Path("docs/PythonLibCore-{version}.md")
 RELEASE_NOTES_TITLE = "Python Library Core {version}"
 RELEASE_NOTES_INTRO = """
-`Python Library Core`_ is a generic component making it easier to create
-bigger `Robot Framework`_ test libraries. Python Library Core {version} is
-a new release with **UPDATE** enhancements and bug fixes. **MORE intro stuff**
+[Python Library Core](https://github.com/robotframework/PythonLibCore)
+is a generic component making it easier to create bigger
+[Robot Framework](http://robotframework.org) test libraries. Python Library Core
+{version} is a new release with **UPDATE** enhancements and bug fixes.
+**MORE intro stuff**
 
 **REMOVE this section with final releases or otherwise if release notes contain
 all issues.**
 All issues targeted for Python Library Core {version.milestone} can be found
-from the `issue tracker`_.
+from the
+[issue tracker](https://github.com/robotframework/PythonLibCore/issues?q=milestone%3A{version.milestone}).
 
-**REMOVE ``--pre`` from the next command with final releases.**
 If you have pip_ installed, just run
 
 ::
 
-   pip install --pre --upgrade pip install robotframework-pythonlibcore
+   pip install --upgrade pip install robotframework-pythonlibcore
 
 to install the latest available release or use
 
@@ -41,12 +43,6 @@ to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
 Python Library Core {version} was released on {date}.
-
-.. _PythonLibCore: https://github.com/robotframework/PythonLibCore
-.. _Robot Framework: http://robotframework.org
-.. _pip: http://pip-installer.org
-.. _PyPI: https://pypi.python.org/pypi/robotframework-robotlibcore
-.. _issue tracker: https://github.com/robotframework/PythonLibCore/issues?q=milestone%3A{version.milestone}
 """
 
 

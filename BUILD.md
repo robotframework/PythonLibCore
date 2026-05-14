@@ -119,8 +119,8 @@ respectively.
 
 5.  Add, commit and push:
 
-        git add docs/PythonLibCore-$VERSION.rst
-        git commit -m "Release notes for $VERSION" docs/PythonLibCore-$VERSION.rst
+        git add docs/PythonLibCore-$VERSION.md
+        git commit -m "Release notes for $VERSION" docs/PythonLibCore-$VERSION.md
         git push
 
 6.  Update later if necessary. Writing release notes is typically the
