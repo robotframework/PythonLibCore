@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from robot.api import logger
 from robotlibcore import DynamicCore, keyword
@@ -14,12 +14,14 @@ class KeywordClass:
 class SmallLibrary(DynamicCore):
     """Library documentation."""
 
-    def __init__(self, translation: Optional[Path] = None):
+    def __init__(self, translation: Optional[Union[Path, dict]] = None):
         """__init__ documentation."""
-        if not isinstance(translation, Path):
+        if isinstance(translation, (dict, Path)):
+            DynamicCore.__init__(self, [KeywordClass()], translation)
+        else:
             logger.warn("Convert to Path")
             translation = Path(translation)
-        DynamicCore.__init__(self, [KeywordClass()], translation.absolute())
+            DynamicCore.__init__(self, [KeywordClass()], translation.absolute())
 
     @keyword(tags=["tag1", "tag2"])
     def normal_keyword(self, arg: int, other: str) -> str:

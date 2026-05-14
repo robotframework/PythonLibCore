@@ -158,37 +158,37 @@ Library    ${CURDIR}/PluginLib.py    plugins=${CURDIR}/MyPlugin.py
 
 # Translation
 
-PLC supports translation of keywords names and documentation, but arguments names, tags and types
-can not be currently translated. Translation is provided as a file containing
-[Json](https://www.json.org/json-en.html) and as a
-[Path](https://docs.python.org/3/library/pathlib.html) object. Translation is provided in
-`translation` argument in the `HybridCore` or `DynamicCore` `__init__`. Providing translation
-file is optional, also it is not mandatory to provide translation to all keyword.
+PLC supports translation of keywords names and documentation. Translations must be provided in 
+the `translation` argument in the `HybridCore`  or `DynamicCore` `__init__`, either as a 
+dictionary or through a [Path](https://docs.python.org/3/library/pathlib.html) to a 
+[JSON](https://www.json.org/json-en.html) file. Providing translation data is optional, also it 
+is not mandatory to provide translation to all keyword.
 
-The keys of json are the methods names, not the keyword names, which implements keyword. Value
-of key is json object which contains two keys: `name` and `doc`. `name` key contains the keyword
+The keys of the dictionary are the methods names, not the keyword names, which implements keyword. 
+Values are objects which contains two keys: `name` and `doc`. `name` key contains the keyword
 translated name and `doc` contains keyword translated documentation. Providing
-`doc` and `name` is optional, example translation json file can only provide translations only
-to keyword names or only to documentatin. But it is always recomended to provide translation to
+`doc` and `name` is optional, i.e. translations data can also provide translations only
+to keyword names or only to documentation. But it is always recommended to provide translation to
 both `name` and `doc`.
 
-Library class documentation and instance documetation has special keys, `__init__` key will
-replace instance documentation and `__intro__` will replace libary class documentation.
+Library class documentation and instance documentation has special keys, `__init__` key will
+replace instance documentation and `__intro__` will replace library class documentation.
+
+> [!NOTE]
+> Arguments names, tags and types can not be currently translated.
 
 ## Example
 
 If there is library like this:
 ```python
-from pathlib import Path
-
 from robotlibcore import DynamicCore, keyword
 
 class SmallLibrary(DynamicCore):
     """Library documentation."""
 
-    def __init__(self, translation: Path):
+    def __init__(self):
         """__init__ documentation."""
-        DynamicCore.__init__(self, [], translation.absolute())
+        DynamicCore.__init__(self, [])
 
     @keyword(tags=["tag1", "tag2"])
     def normal_keyword(self, arg: int, other: str) -> str:
@@ -212,8 +212,22 @@ class SmallLibrary(DynamicCore):
         return some + other
 ```
 
-And when there is translation file like:
-```json
+And we want to translate it as follows:
+
+- keyword `normal_keyword` to `other_name`
+  - its documentation to `This is new doc`
+- keyword `name_changed` to `name_changed_again`
+  - its documentation to `This is also replaced.\n\nnew line.`.
+- the library constructor documentation to `Replaces init docs with this one.`
+- the library documentation to `New __intro__ documentation is here.`
+
+
+### Provide Translation As File
+
+To provide the translation as a file, simply pass the path to a JSON file containing the translations:
+
+```jsonc
+// my_translation.json
 {
     "normal_keyword": {
         "name": "other_name",
@@ -230,12 +244,76 @@ And when there is translation file like:
     "__intro__": {
         "name": "__intro__",
         "doc": "New __intro__ documentation is here."
-    },
+    }
 }
 ```
-Then `normal_keyword` is translated to `other_name`. Also this keyword documentions is
-translted to `This is new doc`. The keyword is `name_changed` is translted to
-`name_changed_again` keyword and keyword documentation is translted to
-`This is also replaced.\n\nnew line.`. The library class documentation is translated
-to `Replaces init docs with this one.` and class documentation is translted to
-`New __intro__ documentation is here.`
+
+```python
+from pathlib import Path
+
+class SmallLibrary(DynamicCore):
+    """Library documentation."""
+
+    def __init__(self):
+        """__init__ documentation."""
+        DynamicCore.__init__(self, [], translation=Path("/path/to/my_translation.json"))
+
+    # ...
+```
+
+> [!IMPORTANT]
+> Translation files passed as paths must always be in JSON format.
+
+### Provide Translation As Dictionary
+
+You can also pass the translation data as a dictionary:
+
+```python
+import json
+from pathlib import Path
+
+class SmallLibrary(DynamicCore):
+    """Library documentation."""
+
+    def __init__(self):
+        """__init__ documentation."""
+        translation_data = json.loads(Path("/path/to/my_translation.json").read_text(encoding="utf-8"))
+        DynamicCore.__init__(self, [], translation=translation_data)
+
+    # ...
+```
+
+This also allows you to use other data formats such as YAML:
+
+```yaml
+normal_keyword:
+  name: other_name
+  doc: This is new doc
+name_changed:
+  name: name_changed_again
+  doc: |
+    This is also replaced.
+
+    new line.
+__init__:
+  name: __init__
+  doc: Replaces init docs with this one.
+__intro__:
+  name: __intro__
+  doc: New __intro__ documentation is here.
+```
+
+```python
+import yaml
+from pathlib import Path
+
+class SmallLibrary(DynamicCore):
+    """Library documentation."""
+
+    def __init__(self, translation_file: Path):
+        """__init__ documentation."""
+        translation_data = yaml.safe_load(translation_file.read_text(encoding="utf-8"))
+        DynamicCore.__init__(self, [], translation=translation_data)
+
+    # ...
+```
