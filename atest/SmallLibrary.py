@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional, Union
 
 from robot.api import logger
 from robotlibcore import DynamicCore, keyword
@@ -14,7 +13,7 @@ class KeywordClass:
 class SmallLibrary(DynamicCore):
     """Library documentation."""
 
-    def __init__(self, translation: Optional[Union[Path, dict]] = None):
+    def __init__(self, translation: Path | dict | None = None):
         """__init__ documentation."""
         if isinstance(translation, (dict, Path)):
             DynamicCore.__init__(self, [KeywordClass()], translation)
