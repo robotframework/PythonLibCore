@@ -19,14 +19,16 @@ from pathlib import Path
 from robot.api import logger
 
 
-def _translation(translation: Path | None = None):
-    if translation and isinstance(translation, Path) and translation.is_file():
+def _translation(translation: Path | dict | None = None):
+    if isinstance(translation, Path) and translation.is_file():
         with translation.open("r", encoding="utf-8") as file:
             try:
                 return json.load(file)
             except json.decoder.JSONDecodeError:
                 logger.warn(f"Could not convert json file {translation} to dictionary.")
                 return {}
+    elif isinstance(translation, dict):
+        return translation
     else:
         return {}
 

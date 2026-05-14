@@ -22,7 +22,7 @@ from robotlibcore.utils import _translated_keywords, _translation
 
 
 class HybridCore:
-    def __init__(self, library_components: list, translation: Path | None = None) -> None:
+    def __init__(self, library_components: list, translation: Path | dict | None = None) -> None:
         self.keywords: dict = {}
         self.keywords_spec: dict = {}
         self.attributes: dict = {}
