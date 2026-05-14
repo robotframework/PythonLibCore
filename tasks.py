@@ -123,31 +123,25 @@ def init_labels(ctx, username=None, password=None):  # noqa: ARG001
 @task
 def lint(ctx):
     in_ci = os.getenv("GITHUB_WORKFLOW")
-    print("Run ruff")
+    print("Run ruff format")
+    ruff_format_cmd = ["ruff", "format"]
+    ruff_format_cmd.extend(["./src", "./tasks.py", "./utest", "./atest/run.py"])
+    ctx.run(" ".join(ruff_format_cmd))
+    print("Run ruff check")
     ruff_cmd = ["ruff", "check"]
     if not in_ci:
         ruff_cmd.append("--fix")
-    ruff_cmd.append("./src")
-    ruff_cmd.append("./tasks.py")
-    ruff_cmd.append("./utest")
+    ruff_cmd.extend(["./src", "./tasks.py", "./utest"])
     ctx.run(" ".join(ruff_cmd))
-    print("Run black")
-    ctx.run("black src/ tasks.py utest atest/run.py")
-    print("Run tidy")
+    print("Run mypy")
+    ctx.run("mypy ./src ")
+    print("Run robocop")
     print(f"Lint Robot files {'in ci' if in_ci else ''}")
-    command = [
-        "robotidy",
-        "--transform",
-        "RenameTestCases",
-        "-c",
-        "RenameTestCases:capitalize_each_word=True",
-        "--lineseparator",
-        "unix",
-        "atest/",
-    ]
+    command = ["robocop", "format"]
     if in_ci:
         command.insert(1, "--check")
         command.insert(1, "--diff")
+    command.append("atest/")
     ctx.run(" ".join(command))
 
 

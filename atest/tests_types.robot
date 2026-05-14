@@ -117,10 +117,11 @@ Keyword With Named Only Arguments
     Kw With Named Arguments    arg=1
 
 SmallLibray With New Name
-    ${data} =    SmallLibrary.Other Name    123   abc
+    ${data} =    SmallLibrary.Other Name    123    abc
     Should Be Equal    ${data}    123 abc
-    ${data} =    SmallLibrary.name_changed_again    1   2
+    ${data} =    SmallLibrary.name_changed_again    1    2
     Should Be Equal As Integers    ${data}    3
+
 
 *** Keywords ***
 Import DynamicTypesAnnotationsLibrary In Python 3.10 Only

@@ -11,17 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from __future__ import annotations
 
 import inspect
-from typing import Callable, Optional, get_type_hints
+from typing import Callable, get_type_hints
 
 from .specification import KeywordSpecification
 
 
 class KeywordBuilder:
     @classmethod
-    def build(cls, function, translation: Optional[dict] = None):
+    def build(cls, function, translation: dict | None = None):
         translation = translation if translation else {}
         return KeywordSpecification(
             argument_specification=cls._get_arguments(function),
@@ -146,4 +146,4 @@ class KeywordBuilder:
         if not arg_spec.defaults:
             return {}
         names = arg_spec.args[-len(arg_spec.defaults) :]
-        return zip(names, arg_spec.defaults)
+        return zip(names, arg_spec.defaults, strict=False)

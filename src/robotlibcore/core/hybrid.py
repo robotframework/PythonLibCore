@@ -15,17 +15,17 @@
 
 import inspect
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable
 
 from robotlibcore.keywords import KeywordBuilder
 from robotlibcore.utils import _translated_keywords, _translation
 
 
 class HybridCore:
-    def __init__(self, library_components: List, translation: Optional[Path] = None) -> None:
-        self.keywords = {}
-        self.keywords_spec = {}
-        self.attributes = {}
+    def __init__(self, library_components: list, translation: Path | None = None) -> None:
+        self.keywords: dict = {}
+        self.keywords_spec: dict = {}
+        self.attributes: dict = {}
         translation_data = _translation(translation)
         translated_kw_names = _translated_keywords(translation_data)
         self.add_library_components(library_components, translation_data, translated_kw_names)
@@ -34,9 +34,9 @@ class HybridCore:
 
     def add_library_components(
         self,
-        library_components: List,
-        translation: Optional[dict] = None,
-        translated_kw_names: Optional[list] = None,
+        library_components: list,
+        translation: dict | None = None,
+        translated_kw_names: list | None = None,
     ):
         translation = translation if translation else {}
         translated_kw_names = translated_kw_names if translated_kw_names else []
@@ -58,7 +58,7 @@ class HybridCore:
             return name
         if name in translation and translation[name].get("name"):
             return translation[name].get("name")
-        return func.robot_name or name
+        return getattr(func, "robot_name", None) or name
 
     def __replace_intro_doc(self, translation: dict):
         if "__intro__" in translation:

@@ -11,16 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 from robot.api import logger
 
 
-def _translation(translation: Optional[Path] = None):
+def _translation(translation: Path | None = None):
     if translation and isinstance(translation, Path) and translation.is_file():
         with translation.open("r", encoding="utf-8") as file:
             try:
