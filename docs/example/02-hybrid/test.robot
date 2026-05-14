@@ -1,9 +1,10 @@
 *** Settings ***
-Library    HybridLibrary
+Library     HybridLibrary
+
 
 *** Test Cases ***
 Join Stings
-    ${data} =    Join Strings    kala    is     big
+    ${data} =    Join Strings    kala    is    big
     Should Be Equal    ${data}    kala is big
 
 Sum Values
@@ -15,9 +16,9 @@ Wait Something To Happen
     Should Be Equal    ${data}    tidii tidii and 6
 
 Join Strings With Separator
-    ${data} =    Join String With Separator    Foo    Bar   Tidii   separator=|-|
+    ${data} =    Join String With Separator    Foo    Bar    Tidii    separator=|-|
     Should Be Equal    ${data}    Foo|-|Bar|-|Tidii
-    ${data} =    Join String With Separator    Foo    Bar   Tidii
+    ${data} =    Join String With Separator    Foo    Bar    Tidii
     Should Be Equal    ${data}    Foo;Bar;Tidii
 
 Waiter Is Not Keyword

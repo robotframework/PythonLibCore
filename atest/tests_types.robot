@@ -6,9 +6,10 @@ Library     SmallLibrary.py    ${ALL_TRANSLATIONS}    AS    TranslatedLibraryDic
 
 
 *** Variables ***
-${CUSTOM NONE} =    ${None}
-&{TRANSLATION_1}=    name=Name Changed Through Dict    doc=A translated docstring.
+${CUSTOM NONE} =        ${None}
+&{TRANSLATION_1}=       name=Name Changed Through Dict    doc=A translated docstring.
 &{ALL_TRANSLATIONS}=    name_changed=${TRANSLATION_1}
+
 
 *** Test Cases ***
 Keyword Default Argument As Abject None
@@ -125,7 +126,7 @@ SmallLibray With New Name
     Should Be Equal As Integers    ${data}    3
 
 TranslatedLibraryDict With New Name
-    ${data} =    TranslatedLibraryDict.Name Changed Through Dict    1   2
+    ${data} =    TranslatedLibraryDict.Name Changed Through Dict    1    2
     Should Be Equal As Integers    ${data}    3
 
 
