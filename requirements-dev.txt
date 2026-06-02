@@ -3,7 +3,7 @@ pytest
 pytest-cov
 pytest-mockito
 robotstatuschecker
-ruff >= 0.15.14
+ruff >= 0.15.15
 robotframework-robocop >= 8.2.9
 invoke >= 3.0.3
 twine
