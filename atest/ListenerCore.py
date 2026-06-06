@@ -36,7 +36,8 @@ class FirstComponent:
 
     @keyword
     def first_component(self, arg: str):
-        assert arg == self.suite_name, f"Suite name '{self.suite_name}' should be detected by listener, but was not."
+        name = self.suite_name
+        assert name == arg, f"Test suite name {name} does not match expected {arg}."
 
 
 class SecondComponent:
@@ -46,7 +47,9 @@ class SecondComponent:
 
     @keyword
     def second_component(self, arg: str):
-        assert self.listener.test.name == arg, "Test case name should be detected by listener, but was not."
+        name = self.listener.test.name
+        assert name == arg, f"Test case name {name} does not match expected {arg}."
+
 
 
 class ExternalListener:

@@ -1,5 +1,6 @@
 *** Settings ***
 Library     ListenerCore.py
+Library     ListenerExample.py
 
 
 *** Test Cases ***
@@ -22,4 +23,7 @@ Tests The Suite Name
     ...    to the suite name from _start_suite.
     ...
     ...    It uses an independent class as listener which is manually set.
-    First Component    Tests Listener
+    First Component    Listener
+
+Test With Listener Example
+    Keyword With Listener    Test With Listener Example    False

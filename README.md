@@ -156,15 +156,63 @@ Then Library can be imported in Robot Framework side like this:
 Library    ${CURDIR}/PluginLib.py    plugins=${CURDIR}/MyPlugin.py
 ```
 
+# Listener
+
+PLC supports
+[library listeners](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#libraries-as-listeners),
+also listener can be defined in the class that defines keywords. PLC will automatically detect
+is class is also listener and set the `ROBOT_LIBRARY_LISTENER` as a list. List will contains all
+the class instances that are marked as listeners.
+
+Example:
+```python
+from robot.running.model import TestCase
+from robot.result.model import TestCase as TestCaseResult
+
+from robotlibcore import DynamicCore, keyword
+
+
+class ListenerExample(DynamicCore):
+
+    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+
+    def __init__(self):
+        self.ROBOT_LIBRARY_LISTENER = self
+        components = [KeywordsWithListener()]
+        super().__init__(components)
+
+
+
+class KeywordsWithListener:
+    ROBOT_LISTENER_API_VERSION = 3
+
+    def __init__(self):
+        self.test = None
+
+
+    def start_test(self, data: TestCase, result: TestCaseResult):
+        self.test = data.name
+        self.passed = result.passed
+
+    @keyword
+    def keyword_with_listener(self, name: str, status: bool):
+        assert name == self.test, f"Test case name {name} does not match expected {self.test}"
+        assert status == self.passed, f"Test case status {status} does not match expected {self.passed} {type(self.passed)}"
+
+```
+
+In the example, `KeywordsWithListener` acts as a listener and the `start_test` method is
+called each time a test starts.
+
 # Translation
 
-PLC supports translation of keywords names and documentation. Translations must be provided in 
-the `translation` argument in the `HybridCore`  or `DynamicCore` `__init__`, either as a 
-dictionary or through a [Path](https://docs.python.org/3/library/pathlib.html) to a 
-[JSON](https://www.json.org/json-en.html) file. Providing translation data is optional, also it 
+PLC supports translation of keywords names and documentation. Translations must be provided in
+the `translation` argument in the `HybridCore`  or `DynamicCore` `__init__`, either as a
+dictionary or through a [Path](https://docs.python.org/3/library/pathlib.html) to a
+[JSON](https://www.json.org/json-en.html) file. Providing translation data is optional, also it
 is not mandatory to provide translation to all keyword.
 
-The keys of the dictionary are the methods names, not the keyword names, which implements keyword. 
+The keys of the dictionary are the methods names, not the keyword names, which implements keyword.
 Values are objects which contains two keys: `name` and `doc`. `name` key contains the keyword
 translated name and `doc` contains keyword translated documentation. Providing
 `doc` and `name` is optional, i.e. translations data can also provide translations only
