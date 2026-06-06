@@ -17,6 +17,7 @@ if isdir(outdir):
 tests = join(curdir, "tests.robot")
 tests_types = join(curdir, "tests_types.robot")
 plugin_api = join(curdir, "plugin_api")
+listener_api = join(curdir, "tests_listener.robot")
 sys.path.insert(0, join(curdir, "..", "src"))
 python_version = platform.python_version()
 for variant in library_variants:
@@ -58,6 +59,13 @@ rc = run(plugin_api, name="Plugin", output=output, report=None, log=None, loglev
 if rc > 250:
     sys.exit(rc)
 process_output(output)
+
+output = join(outdir, f"lib-Listener-python-{python_version}-robot-{RF_VERSION}.xml")
+rc = run(listener_api, name="Listener", output=output, report=None, log=None, loglevel="debug")
+if rc > 250:
+    sys.exit(rc)
+process_output(output)
+
 print("\nCombining results.")
 library_variants.append("DynamicTypesLibrary")
 xml_files = [str(xml_file) for xml_file in Path(outdir).glob("*.xml")]
