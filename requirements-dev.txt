@@ -13,4 +13,4 @@ twine
 wheel
 typing-extensions >= 4.16.0
 approvaltests >= 19.0.0
-mypy == 2.2.0
+mypy == 2.3.0
