@@ -12,5 +12,5 @@ rellu >= 2.0.2
 twine
 wheel
 typing-extensions >= 4.16.0
-approvaltests >= 19.0.0
+approvaltests >= 19.1.0
 mypy == 2.3.0
