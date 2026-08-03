@@ -116,10 +116,10 @@ class Library2(object):
 
 It is possible to create plugin API to a library by using PythonLibCore.
 This allows extending library with external Python classes. Plugins can
-be imported during library import time, example by defining argumet in
+be imported during library import time, example by defining argument in
 library [\_\_init\_\_]{.title-ref} which allows defining the plugins. It
-is possible to define multiple plugins, by seperating plugins with with
-comma. Also it is possible to provide arguments to plugin by seperating
+is possible to define multiple plugins, by separating plugins with with
+comma. Also it is possible to provide arguments to plugin by separating
 arguments with semicolon.
 
 ``` python
