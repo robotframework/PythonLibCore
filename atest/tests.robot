@@ -1,9 +1,9 @@
 *** Settings ***
-Library     ${LIBRARY}.py
+Library    ${LIBRARY}.py
 
 
 *** Variables ***
-${LIBRARY}      DynamicLibrary
+${LIBRARY}    DynamicLibrary
 
 
 *** Test Cases ***
