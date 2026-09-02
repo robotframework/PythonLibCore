@@ -1,8 +1,8 @@
 *** Settings ***
-Library     DynamicTypesLibrary.py
-Library     DynamicTypesAnnotationsLibrary.py    xxx
-Library     SmallLibrary.py    ${CURDIR}/translation.json
-Library     SmallLibrary.py    ${ALL_TRANSLATIONS}    AS    TranslatedLibraryDict
+Library    DynamicTypesLibrary.py
+Library    DynamicTypesAnnotationsLibrary.py    xxx
+Library    SmallLibrary.py    ${CURDIR}/translation.json
+Library    SmallLibrary.py    ${ALL_TRANSLATIONS}    AS    TranslatedLibraryDict
 
 
 *** Variables ***
