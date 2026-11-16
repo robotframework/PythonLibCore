@@ -4,7 +4,7 @@ pytest-cov
 pytest-mockito
 robotstatuschecker
 ruff >= 0.17.4
-robotframework-robocop >= 9.1.2
+robotframework-robocop >= 9.4.0
 invoke >= 3.0.3
 twine
 wheel
